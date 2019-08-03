@@ -34,6 +34,7 @@
     <link rel="alternate stylesheet" type="text/css" href="{{asset('src/css/schemes/leather.css')}}" title="leather" media="all" />
     <link rel="alternate stylesheet" type="text/css" href="{{asset('src/css/schemes/denim.css')}}" title="denim" media="all" />
     <link rel="alternate stylesheet" type="text/css" href="{{asset('src/css/schemes/scarlet.css')}}" title="scarlet" media="all" />
+    
   </head>
   <body>
     <div class="global-wrapper clearfix" id="global-wrapper">
@@ -688,7 +689,7 @@
                   </li>
                   <br>
                   <li>
-                    <a href="" data-effect="mfp-move-from-top" class="">Sell On Bplus
+                    <a href="{{url('seller_login')}}" data-effect="mfp-move-from-top" class="">Sell On Bplus
                     </a>
                   </li>
                   <br>

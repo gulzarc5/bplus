@@ -30,3 +30,10 @@ Route::get('product_saller', function () {
 Route::get('product_details', function () {
     return view('web.product.product_details');
 });
+
+Route::get('seller_login', function () {
+    return view('web.seller.seller_login');
+});
+Route::get('seller_register', function () {
+    return view('web.seller.seller_register');
+});
