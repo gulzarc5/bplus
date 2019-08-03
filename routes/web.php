@@ -127,6 +127,24 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 		Route::get('View/Brand/Mapped/List', 'ConfigurationController@ViewMappedBrandList')->name('admin.view_mapped_brand_list');
 		Route::get('Ajax/Brand/Mapped/List', 'ConfigurationController@ajaxMappedBrandList')->name('admin.ajax_mapped_brand_list');
 		
+
+		//*******************State Routes*********************
+
+		Route::get('State/Add', 'ConfigurationController@ViewStateForm')->name('admin.view_state_form');
+		Route::post('State/Add', 'ConfigurationController@AddStateForm')->name('admin.add_state');
+		Route::get('State/Edit/{id}', 'ConfigurationController@EditState')->name('admin.edit_state');
+		Route::post('State/Update', 'ConfigurationController@updateState')->name('admin.update_state');
+		Route::get('State/Delete/{id}', 'ConfigurationController@deleteState')->name('admin.delete_state');
+
+		//*******************City Routes*********************
+
+		Route::get('City/Add', 'ConfigurationController@ViewCityForm')->name('admin.view_city_form');
+		Route::post('City/Add', 'ConfigurationController@AddCity')->name('admin.add_city');
+		Route::get('City/List', 'ConfigurationController@cityList')->name('admin.city_list');
+		Route::get('Ajax/City/List', 'ConfigurationController@ajaxCityList')->name('admin.ajax_city_list');
+		Route::get('City/Edit/{id}', 'ConfigurationController@EditCity')->name('admin.edit_city');
+		Route::post('City/Update', 'ConfigurationController@updateCity')->name('admin.update_city');
+		Route::get('City/Delete/{id}', 'ConfigurationController@deleteCity')->name('admin.delete_city');
 	});
 
 });

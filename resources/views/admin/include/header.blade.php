@@ -39,6 +39,12 @@
     <link href="{{asset('admin/src_files/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('admin/src_files/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('admin/src_files/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
+
+    {{-- pnotify --}}
+    <link href="{{asset('admin/src_files/vendors/pnotify/dist/pnotify.css')}}" rel="stylesheet">
+    <link href="{{asset('admin/src_files/vendors/pnotify/dist/pnotify.buttons.css')}}" rel="stylesheet">
+    <link href="{{asset('admin/src_files/vendors/pnotify/dist/pnotify.nonblock.css')}}" rel="stylesheet">
+
     <!-- Custom Theme Style -->
     <link href="{{asset('admin/src_files/build/css/custom.min.css')}}" rel="stylesheet">
   </head>
@@ -156,6 +162,19 @@
                         </ul>
                       </li>
 
+                      <li><a><i class="fa fa-bar-chart-o"></i>State <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                          <li><a href="{{route('admin.view_state_form')}}">Add New State</a></li>
+                        </ul>
+                      </li>
+
+                      <li><a><i class="fa fa-bar-chart-o"></i>City <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                          <li><a href="{{route('admin.view_city_form')}}">Add New City</a></li>
+                          <li><a href="{{route('admin.city_list')}}">City List</a></li>
+                        </ul>
+                      </li>
+
                     </ul>
                   </li>
 
@@ -194,9 +213,7 @@
               </div>
 
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                <li><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
              <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
                   @csrf
               </form>
