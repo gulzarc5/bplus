@@ -11,10 +11,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="images/favicon.ico" type="image/ico" />
+  <link rel="icon" href="{{asset('admin/src_files/logo/icon.png')}}" type="image/ico" />
 
     <title>Bplus</title>
-    <link rel="icon" href="{{ asset('images/logo_icon.png')}}" type="image/icon type">
+    <link rel="icon" href="{{asset('admin/src_files/logo/icon.png')}}" type="image/icon type">
 
 
     <!-- Bootstrap -->
@@ -56,8 +56,8 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="{{route('admin.deshboard')}}" class="site_title">
-                <img src="{{ asset('images/logo.png')}}" height="70">
+              <a href="{{route('seller.deshboard')}}" class="site_title">
+                <img src="{{asset('admin/src_files/logo/logo.png')}}" height="70">
               </a>
             </div>
 
@@ -65,11 +65,11 @@
 
             <!-- menu profile quick info -->
             <div class="profile clearfix">
-            {{--   <div class="profile_pic">
-                <img src="images/img.jpg" alt="..." class="img-circle profile_img">
+              {{-- <div class="profile_pic">
+                <img src="{{asset('admin/src_files/logo/logo.png')}}" alt="..." class="img-circle profile_img">
               </div> --}}
               <div class="profile_info">
-                <span>Welcome,<b>Admin</b></span>
+                <span>Welcome,<br><b>{{ Auth::guard('seller')->user()->name}}</b></span>
                 
               </div>
             </div>
@@ -82,33 +82,26 @@
               <div class="menu_section">
                 <h3>General</h3>
                 <ul class="nav side-menu">
-                  <li><a href="{{ route('admin.deshboard')}}"><i class="fa fa-home"></i> Home </span></a>
+                  <li><a href="{{ route('seller.deshboard')}}"><i class="fa fa-home"></i> Home </span></a>
                   </li>
-                  <li><a><i class="fa fa-edit"></i> Users <span class="fa fa-chevron-down"></span></a>
-                     <ul class="nav child_menu">
-                        <li><a>Sellers<span class="fa fa-chevron-down"></span></a>
-                          <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Active Sellers</a>
-                            </li>
-                            <li><a href="#level2_1">InActive Sellers</a>
-                            </li>
-                          </ul>
-                        </li>
 
-                        <li><a>Buyers<span class="fa fa-chevron-down"></span></a>
-                          <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Active Buyers</a>
-                            </li>
-                            <li><a href="#level2_1">InActive Buyers</a>
-                            </li>
-                          </ul>
-                        </li>
+                  <li>
+                    <a>
+                      <i class="fa fa-desktop"></i>My Profile<span class="fa fa-chevron-down"></span>
+                    </a>
+                    <ul class="nav child_menu">
+                      <li><a href="{{route('seller.MyprofileForm')}}">My Profile</a></li>
+                      <li><a href="{{route('seller.change_password_form')}}">Change Password</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-desktop"></i>Products<span class="fa fa-chevron-down"></span></a>
+
+                  <li>
+                    <a>
+                      <i class="fa fa-desktop"></i>Products<span class="fa fa-chevron-down"></span>
+                    </a>
                     <ul class="nav child_menu">
-                      <li><a href="{{route('admin.add_product_form')}}">Add New Product</a></li>
-                      <li><a href="{{route('admin.product_list')}}">List Of Products</a></li>
+                      <li><a href="{{route('seller.add_product_form')}}">Add New Product</a></li>
+                      <li><a href="{{route('seller.product_list')}}">List Of Products</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-table"></i> Orders <span class="fa fa-chevron-down"></span></a>
@@ -118,68 +111,6 @@
                       <li><a href="tables_dynamic.html">Delivered Orders</a></li>
                     </ul>
                   </li>
-
-                  <li><a><i class="fa fa-bar-chart-o"></i> Configuration <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a><i class="fa fa-bar-chart-o"></i>Category <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                          <li><a href="{{route('admin.add_main_category_form')}}">Add Category</a></li>
-                          <li><a href="{{route('admin.add_first_category_form')}}">Add First Category</a></li>
-                          <li><a href="{{route('admin.add_second_category_form')}}">Add Second Category</a></li>
-                        </ul>
-                      </li>
-
-                      <li><a><i class="fa fa-bar-chart-o"></i>Sizes <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                          <li><a href="{{route('admin.add_size_name_form')}}">Add Size Name</a></li>
-                          <li><a href="{{route('admin.add_size_form')}}">Add Size</a></li>
-                          <li><a href="{{route('admin.size_list')}}">Size List</a></li>
-                        </ul>
-                      </li>
-
-                      <li><a><i class="fa fa-bar-chart-o"></i>Colors <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                          <li><a href="{{route('admin.add_color_name_form')}}">Add New Color</a></li>
-                          <li><a href="{{route('admin.map_color_form')}}">Map Color</a></li>
-                          <li><a href="{{route('admin.view_color_list')}}">Colors List</a></li>
-                        </ul>
-                      </li>
-
-                      <li><a><i class="fa fa-bar-chart-o"></i>Varients <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                          <li><a href="{{route('admin.add_varient_name_form')}}">Add Varient Name</a></li>
-                           <li><a href="{{route('admin.varient_name_list')}}">Varient Name List</a></li>
-                           <li><a href="{{route('admin.map_varient_form')}}">Map Varient</a></li>
-                          <li><a href="{{route('admin.view_mapped_varient_list')}}">Mapped Varient List</a></li>
-                        </ul>
-                      </li>
-
-                      <li><a><i class="fa fa-bar-chart-o"></i>Brand <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                          <li><a href="{{route('admin.add_brand_name_form')}}">Add Brand Name</a></li>
-                           <li><a href="{{route('admin.brand_name_list')}}">Brand Name List</a></li>
-                           <li><a href="{{route('admin.map_brand_form')}}">Map Brand</a></li>
-                          <li><a href="{{route('admin.view_mapped_brand_list')}}">Mapped Brand List</a></li>
-                        </ul>
-                      </li>
-
-                      <li><a><i class="fa fa-bar-chart-o"></i>State <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                          <li><a href="{{route('admin.view_state_form')}}">Add New State</a></li>
-                        </ul>
-                      </li>
-
-                      <li><a><i class="fa fa-bar-chart-o"></i>City <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                          <li><a href="{{route('admin.view_city_form')}}">Add New City</a></li>
-                          <li><a href="{{route('admin.city_list')}}">City List</a></li>
-                        </ul>
-                      </li>
-
-                    </ul>
-                  </li>
-
-
                 </ul>
               </div>
 
@@ -215,7 +146,7 @@
 
               <ul class="nav navbar-nav navbar-right">
                 <li><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
-             <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+             <form id="logout-form" action="{{ route('seller.logout') }}" method="POST" style="display: none;">
                   @csrf
               </form>
 

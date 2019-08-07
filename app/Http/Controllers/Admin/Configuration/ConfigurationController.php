@@ -1076,4 +1076,10 @@ class ConfigurationController extends Controller
              return redirect()->back()->with('error','Something Went Wrong Please Try Again');
        }
     }
+
+    public function cityWithState($id)
+    {
+       $city = DB::table('city')->where('state_id',$id)->get()->pluck('name','id');
+       return $city;
+    }
 }

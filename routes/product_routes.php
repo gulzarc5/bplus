@@ -4,7 +4,7 @@ Route::group(['namespace'=> 'Products','prefix'=>'Products'], function(){
 
 	Route::get('/Add/Form', 'ProductController@viewProductAddForm')->name('admin.add_product_form');
 
-	Route::get('ajax/form/load/data/{category}/{first_category}/{second_category}','ProductController@ajaxGetLoadFormData');
+	
 
 	Route::post('/Add', 'ProductController@addNewProduct')->name('admin.add_new_product');
 

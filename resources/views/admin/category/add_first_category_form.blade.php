@@ -64,9 +64,7 @@
                         @endif
 	                	
 	            	</div>
-	            	{{ Form::close() }}
-
-	            	
+	            	{{ Form::close() }}	            	
 
 	            </div>
 	        </div>
@@ -106,7 +104,7 @@
                             	@foreach($firstCategoryList as $category)
                                 <tr class="even pointer">
                                     <td class=" ">{{ $count++ }}</td>
-                                    <td class=" ">{{ $category['name'] }}</td>
+                                    <td class=" ">{{ $category->name }}</td>
                                     <td>{{ $category->Category->name}}</td>
                                     <td class=" ">
                                         @if($category['status'] == '1')

@@ -13,11 +13,13 @@
 
 require __DIR__.'/frontend.php';
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+
 
 Auth::routes();
+
+require __DIR__.'/seller_routes.php';
+
+
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -26,10 +28,12 @@ Route::post('/admin/login', 'Admin\AdminLoginController@adminLogin');
 Route::post('/admin/logout', 'Admin\AdminLoginController@logout')->name('admin.logout');
 
 
+Route::get('City/list/{state_id}', 'Admin\Configuration\ConfigurationController@cityWithState')->name('city_fetch_with_state_id');
+
 
 Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin'],function(){
 
-	 require __DIR__.'/product_routes.php';
+	require __DIR__.'/product_routes.php';
 	 
 	Route::get('/deshboard', 'AdminDeshboardController@index')->name('admin.deshboard');
 	///////////////////////////////All Category////////////////////////////////
@@ -46,7 +50,7 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 		Route::post('/Add/First/Category', 'CategoryController@insertFirstCategory')->name('admin.add_first_category');
 		Route::get('/Edit/First/Category/{id}', 'CategoryController@editFirstCategory')->name('admin.edit_first_category');
 		Route::post('/Edit/First/Category', 'CategoryController@updateFirstCategory')->name('admin.update_first_category');
-		Route::get('first/Category/{id}', 'CategoryController@firstCategoryWithCategory');
+		
 		Route::get('/first/Status/Update/{first_id}/{status}','CategoryController@statusUpdateFirstCategory')->name('admin.first_category_status_update');
 		Route::get('/first/Delete/{first_id}','CategoryController@deleteFirstCategory')->name('admin.first_category_delete');
 
@@ -55,13 +59,13 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 		Route::post('/Add/Second/Category', 'CategoryController@insertSecondCategory')->name('admin.add_second_category');
 		Route::get('/Edit/Second/Category/{id}', 'CategoryController@editSecondCategory')->name('admin.edit_second_category');
 		Route::post('/Update/Second/Category', 'CategoryController@updateSecondCategory')->name('admin.update_second_category');
-		Route::get('second/Category/{id}', 'CategoryController@secondCategoryWithFirstCategory');
+		
 		Route::get('Second/Status/Update/{category_id}/{status}', 'CategoryController@secondStatusUpdate')->name('admin.second_category_status_update');
 		Route::get('Second/Delete/{category_id}', 'CategoryController@deleteSecondCategory')->name('admin.second_category_delete');
 
 
 	});
-	////////////////////////////////Configuration ////////////////////////////////////////////
+	//////////////Configuration ////////////////////////////////
 
 	Route::group(['namespace'=> 'Configuration'], function(){
 
@@ -145,6 +149,23 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 		Route::get('City/Edit/{id}', 'ConfigurationController@EditCity')->name('admin.edit_city');
 		Route::post('City/Update', 'ConfigurationController@updateCity')->name('admin.update_city');
 		Route::get('City/Delete/{id}', 'ConfigurationController@deleteCity')->name('admin.delete_city');
+	});
+
+});
+
+
+//////////////////// Routes For accessing admin And seller /////////////////////////////
+
+Route::group(['middleware'=>'auth:admin,seller','prefix'=>'admin','namespace'=>'Admin'],function(){
+
+	Route::group(['namespace'=> 'Category'], function(){
+		Route::get('first/Category/{id}', 'CategoryController@firstCategoryWithCategory');
+		Route::get('second/Category/{id}', 'CategoryController@secondCategoryWithFirstCategory');
+	});
+
+	Route::group(['namespace'=> 'Products','prefix'=>'Products'], function(){
+		Route::get('ajax/form/load/data/{category}/{first_category}/{second_category}','ProductController@ajaxGetLoadFormData');
+		
 	});
 
 });

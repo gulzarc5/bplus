@@ -24,6 +24,8 @@ class CreateSellerDetailsTable extends Migration
             $table->string('pin')->nullable();
             $table->string('gst')->nullable();
             $table->string('pan')->nullable();
+            $table->date('dob')->nullable();
+            $table->char('gender')->comment("M = Male, F = Female")->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

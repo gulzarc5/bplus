@@ -11,33 +11,50 @@
                 <div id="login-column" >
                 	<div  class="col-md-4"></div>
                     <div id="login-box" class="col-md-4">
-                        <form id="login-form" class="form" action="" method="post">
+
+                        {{ Form::open(array('url' => 'Seller/Login', 'method' => 'post')) }}
                             <h3 class="text-center text-info" style="text-decoration: underline;">Seller Login From</h3>
+
+                            @if (Session::has('message'))
+                                <div class="alert alert-success" >{{ Session::get('message') }}</div>
+                            @endif
+                            @if (Session::has('error'))
+                                <div class="alert alert-danger" >{{ Session::get('error') }}</div>
+                            @endif
+
                             <div style="margin-top: 38px;">
                             <div class="form-group">
-                                <label for="username" class="text-info"></label><br>
-                                <input type="text" name="username" id="username" class="form-control sell_login" placeholder="enter your user name">
-                                @if($errors->has('username'))
-	                    	<span class="invalid-feedback" role="alert" style="color:red">
-		                        <strong>{{ $errors->first('username') }}</strong>
-		                    </span>
-		              	@enderror
+                                <label for="email" class="text-info"></label><br>
+                                <input type="email" name="email" id="email" class="form-control sell_login" placeholder="Enter Your Email">
+
+                                @if ($message = Session::get('login_error'))
+                                  <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @endif
+                                @if($errors->has('email'))
+        	                    	<span class="invalid-feedback" role="alert" style="color:red">
+        		                        <strong>{{ $errors->first('email') }}</strong>
+        		                    </span>
+        		              	@enderror
                             </div>
                             <div class="form-group">
                                 <label for="password" class="text-info"></label><br>
-                                <input type="text" name="password" id="password" class="form-control sell_login" placeholder="enter your password">
+                                <input type="text" name="password" id="password" class="form-control sell_login" placeholder="Enter Your Password">
                                 @if($errors->has('password'))
-	                    	<span class="invalid-feedback" role="alert" style="color:red">
-		                        <strong>{{ $errors->first('password') }}</strong>
-		                    </span>
-		              	@enderror
+        	                    	<span class="invalid-feedback" role="alert" style="color:red">
+        		                        <strong>{{ $errors->first('password') }}</strong>
+        		                    </span>
+        		              	@enderror
                             </div>
                             <div class="form-group">
                             	<input type="submit" name="submit" class="btn btn-info btn-md" value="Login">
                                 <br><a href="{{url('seller_register')}}" class="text-info"> Create your Account here</a>
                             </div>
                         </div>
-                        </form>
+                       {{ Form::close() }}
+
+
                     </div>
                     <div class="col-md-4"></div>
                 </div>
