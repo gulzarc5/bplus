@@ -4073,7 +4073,7 @@ header.main {
 }
 .banner-category-img {
   margin-bottom: 13px;
-  width: 45px !important;
+  /*width: 45px !important;*/
   display: inline-block !important;
 }
 .banner-category-img-full {
