@@ -42,18 +42,7 @@
                                       <input type="text" class="form-control" name="tag_name"  placeholder="Enter Tag Name" value="{{ $product->tag_name }}">
 
                                     </div>
-                                    <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
-                                      <label for="size_wearing">Size Wearing</label>
-                                      <input type="text" class="form-control" name="size_wearing"  placeholder="Enter Size Wearing" value="{{ $product->size_wearing }}">
-                                    </div> 
                                                                 
-                                </div>
-
-                                <div class="form-row mb-3">
-                                    <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
-                                      <label for="fit_wearing">Fit Wearing</label>
-                                      <input type="text" class="form-control" name="fit_wearing"  placeholder="Enter Fit Wearing" value="{{ $product->fit_wearing }}">
-                                    </div>
                                 </div>
 
                                 <div class="form-row mb-3">
@@ -134,7 +123,37 @@
                                                 @endforeach
                                             @endif
                                         </select>
-                                    </div>                        
+                                    </div>  
+
+                                    <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+                                        <label for="mrp">M.R.P</label>
+                                        <input type="number" step="any" class="form-control" name="mrp"  placeholder="Enter Product M.R.P" value="{{ $product->mrp }}">
+                                        @if($errors->has('mrp'))
+                                            <span class="invalid-feedback" role="alert" style="color:red">
+                                                <strong>{{ $errors->first('mrp') }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+                                        <label for="price">Sell Price</label>
+                                        <input type="number" step="any" class="form-control" name="price"  placeholder="Enter Product Sell Price" value="{{ $product->price }}">
+                                        @if($errors->has('price'))
+                                            <span class="invalid-feedback" role="alert" style="color:red">
+                                                <strong>{{ $errors->first('price') }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>  
+
+                                    <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+                                        <label for="min_quantity">Min Order Quantity</label>
+                                        <input type="number" class="form-control" name="min_quantity"  placeholder="Enter Min Order Quantity" value="{{ $product->min_ord_qtty }}">
+                                        @if($errors->has('min_quantity'))
+                                            <span class="invalid-feedback" role="alert" style="color:red">
+                                                <strong>{{ $errors->first('min_quantity') }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>                      
                                 </div>
                             </div>
 

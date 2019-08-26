@@ -29,12 +29,6 @@
                       </tr>
                     @endif
 
-                    @if(!empty($product->size_wearing) && !empty($product->fit_wearing) )
-                      <tr>
-                        <th>Size & Fit : </th>
-                        <td>{{ $product->size_wearing }}  & {{ $product->fit_wearing }}</td>
-                      </tr>
-                    @endif
                     <tr>
                       <th>Brand : </th>
                       <td>{{ $product->brand_name }}</td>
@@ -102,52 +96,8 @@
               </div>
               <!-- /.row -->
               <hr>
-              <!-- Table row -->
-              <div class="row">
-                <div class="col-xs-12 table">
-                  <h5>Size Details</h5>
-                  <table class="table table-striped jambo_table bulk_action">
-                    <thead>
-                      <tr>
-                        <th>Sl</th>
-                        <th>Name</th>
-                        <th>Size</th>
-                        <th>MRP</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @if(isset($sizes) && !empty($sizes))
-                      @php
-                      $count = 1;
-                      @endphp
-                        @foreach($sizes as $size)
-                        <tr>
-                          <td>{{ $count++ }}</td>
-                          <td> {{ $size->s_name }} </td>
-                          <td> {{ $size->s_value }} </td>
-                          <td> {{ $size->mrp }} </td>
-                          <td> {{ $size->price }} </td>
-                          <td> {{ $size->stock }} </td>
-                          <td>
-                            @if($size->status == '1')
-                              <a class="btn btn-sm btn-success">Enabled</a>
-                            @else
-                              <a class="btn btn-sm btn-danger">Disabled</a>
-                            @endif
-                          </td>
-                        </tr>
-                        @endforeach
-                      @endif
-                    </tbody>
-                  </table>
-                </div>
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
 
+              @if(isset($colors) && !empty($colors))
               <div class="row">
                 <div class="col-xs-12 table">
                   <h5>Color Details</h5>
@@ -161,7 +111,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @if(isset($colors) && !empty($colors))
+                      
                         @php
                         $count_color = 1;
                         @endphp
@@ -179,52 +129,14 @@
                             </td>
                           </tr>
                         @endforeach
-                      @endif
+                     
                     </tbody>
                   </table>
                 </div>
                 <!-- /.col -->
               </div>
+              @endif
 
-              <div class="row">
-                <div class="col-xs-12 table">
-                  <h5>Varient Details</h5>
-                  <table class="table table-striped jambo_table bulk_action">
-                    <thead>
-                      <tr>
-                        <th>Sl</th>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-
-                       @if(isset($varients) && !empty($varients))
-                        @php
-                        $count_varient = 1;
-                        @endphp
-                        @foreach($varients as $varient)
-                          <tr>
-                            <td> {{ $count_varient++ }} </td>
-                            <td> {{ $varient->v_name }} </td>
-                            <td> {{ $varient->v_value }} </td>
-                            <td>
-                              @if($varient->status == '1')
-                                  <a class="btn btn-sm btn-success">Enabled</a>
-                                @else
-                                  <a class="btn btn-sm btn-danger">Disabled</a>
-                                @endif
-                            </td>
-                          </tr>
-                       @endforeach
-                      @endif
-
-                    </tbody>
-                  </table>
-                </div>
-                <!-- /.col -->
-              </div>
 
               <div class="row">
                 <button class="btn btn-primary" onclick="javascript:window.close()">Window Close</button>

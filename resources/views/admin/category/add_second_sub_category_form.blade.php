@@ -25,10 +25,10 @@
 	        <div>
 	            <div class="x_content">
 	            	@if(isset($second_category) && !empty($second_category))
-                        {{Form::model($second_category, ['method' => 'post','route'=>'admin.update_second_category'])}}
+                        {{Form::model($second_category, ['method' => 'post','route'=>'admin.update_second_category','enctype'=>'multipart/form-data'])}}
                         {{ Form::hidden('id',null,array('class' => 'form-control','placeholder'=>'Enter Category name')) }}
                     @else
-	            		{{ Form::open(['method' => 'post','route'=>'admin.add_second_category']) }}
+	            		{{ Form::open(['method' => 'post','route'=>'admin.add_second_category','enctype'=>'multipart/form-data']) }}
 	            	@endif
 
 	            	<div class="form-group">
@@ -63,14 +63,25 @@
 	            	</div>
 
 	            	<div class="form-group">
-	            		{{ Form::label('name', 'First Category Name')}}
+	            		{{ Form::label('name', 'Second Category Name')}}
 	            	 	{{ Form::text('name',null,array('class' => 'form-control','placeholder'=>'Enter Second Category name')) }}
 	            	 	@if($errors->has('name'))
 	                    	<span class="invalid-feedback" role="alert" style="color:red">
 		                        <strong>{{ $errors->first('name') }}</strong>
 		                    </span>
 		              	@enderror
-	            	 </div>
+	            	</div>
+
+	            	 <div class="form-group">
+                        {{ Form::label('image', 'Select Image')}}
+                        <input type="file" name="image" class="form-control">
+                        @if($errors->has('image'))
+                            <span class="invalid-feedback" role="alert" style="color:red">
+                                <strong>{{ $errors->first('image') }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+
 	            	<div class="form-group">
 		            	@if(isset($second_category) && !empty($second_category))
                             {{ Form::submit('Save', array('class'=>'btn btn-success')) }}
@@ -104,6 +115,7 @@
                                     <th class="column-title">Second category name</th>
                                     <th class="column-title">First category name</th>
                                     <th class="column-title">category name</th>
+                                    <th class="column-title">Image</th>
                                     <th class="column-title">Status</th>
                                     <th class="column-title">Action</th>
                             </thead>
@@ -121,6 +133,7 @@
                                     <td class=" ">{{ $category['name'] }}</td>
                                     <td>{{ $category->firstCategory->name }}</td>
                                     <td>{{ $category->Category->name }}</td>
+                                    <td><img src="{{ asset('images/category/second_category/thumb/'.$category['image'].'') }}" height="80px"></td>
                                     <td class=" ">
                                         @if($category['status'] == '1')
                                             <button class='btn btn-primary'>Enabled</button>

@@ -92,19 +92,21 @@
                         </div>
 
 
-    	            	<div class="form-group">
-                            {{ Form::label('size_value_id', 'Select First Category')}}
+                        <div class="form-row" id="size_div_append">
+                            <div class="col-md-6" style="margin: 0; padding: 0" >
+                                <div class="col-md-8" style="padding: 0" id="size_div">                                    
+                                    {{ Form::label('size_value_id', 'Select Size Value')}}
                 
-                            {!! Form::select('size_value_id',array('' => 'Please Select First Sub Category'),null, ['class' => 'form-control','id'=>'size_value_id']) !!}
-
-                            @if($errors->has('size_value_id'))
-                                <span class="invalid-feedback" role="alert" style="color:red">
-                                    <strong>{{ $errors->first('size_value_id') }}</strong>
-                                </span>
-                            @enderror
+                                    {!! Form::select('size_value_id[]',array('' => 'Please Select Size Value'),null, ['class' => 'form-control size_value_id']) !!}
+                                </div>
+                                <div class="col-md-3">
+                                    <a  class="btn btn-sm btn-primary" style="margin-top: 25px;" id="size_div_button"> More </a>
+                                </div>
+                            
+                            </div>
                         </div>
 
-    	            	<div class="form-group">
+    	            	<div class="form-group col-md-12">
     	            	 	@if(isset($first_category) && !empty($first_category))
                                 {{ Form::submit('Save', array('class'=>'btn btn-success')) }}
                             @else
@@ -212,10 +214,10 @@
                     success:function(data){
                         console.log(data);
                         var cat = JSON.parse(data);
-                        $("#size_value_id").html("<option value=''>Please Select Size Value</option>");
+                        $(".size_value_id").html("<option value=''>Please Select Size Value</option>");
 
                         $.each( cat, function( key, value ) {
-                            $("#size_value_id").append("<option value='"+key+"'>"+value+"</option>");
+                            $(".size_value_id").append("<option value='"+key+"'>"+value+"</option>");
                         });
 
                     }
@@ -223,5 +225,29 @@
             });
 
         })
+    </script>
+
+
+     <script type="text/javascript">
+        var varient_div_count = 1;
+        $("#size_div_button").click(function(){
+
+            var varhtml = $("#size_div").html();
+
+            var varient_html = '<div class="col-md-6" style="margin: 0; padding: 0" id="size_div'+varient_div_count+'">'+
+            '<div class="col-md-8" style="padding: 0">'+ varhtml  +'</div>'+
+                  '<div class="col-md-3">'+
+                    '<a class="btn btn-sm btn-danger" style="margin-top: 25px;" id="size_div_button'+varient_div_count+'" onclick="removeVarient('+varient_div_count+')"> Remove </a>'+
+                   '</div></div>';
+
+            varient_div_count++;
+            $("#size_div_append").append(varient_html);
+
+        });
+
+
+        function removeVarient(id) {
+            $("#size_div"+id).remove();
+        }
     </script>
  @endsection

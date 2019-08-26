@@ -18,6 +18,7 @@ require __DIR__.'/frontend.php';
 Auth::routes();
 
 require __DIR__.'/seller_routes.php';
+require __DIR__.'/user_routes.php';
 
 
 
@@ -34,6 +35,20 @@ Route::get('City/list/{state_id}', 'Admin\Configuration\ConfigurationController@
 Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin'],function(){
 
 	require __DIR__.'/product_routes.php';
+
+	//*************User Routes of Admin*********************
+	Route::group(['namespace'=> 'Users'], function(){
+		Route::get('/sellers/','UsersController@allSellers')->name('admin.allSellers');
+		Route::get('Ajax/sellers/','UsersController@ajaxAllSellers')->name('admin.ajaxAllSellers');
+
+		Route::get('/Buyers/','UsersController@allBuyers')->name('admin.allBuyers');
+		Route::get('Ajax/Buyers/','UsersController@ajaxAllBuyers')->name('admin.ajaxAllBuyers');
+
+		Route::get('/Seller/Details/{seller_id}','UsersController@sellerView')->name('admin.seller_view');
+		Route::get('/Seller/verification/{seller_id}','UsersController@sellerUpdateVerification')->name('admin.sellerUpdateVerification');
+		Route::get('/Seller/Status/{seller_id}/{status}','UsersController@sellerUpdateStatus')->name('admin.sellerUpdateStatus');
+	});
+
 	 
 	Route::get('/deshboard', 'AdminDeshboardController@index')->name('admin.deshboard');
 	///////////////////////////////All Category////////////////////////////////
@@ -70,28 +85,28 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 	Route::group(['namespace'=> 'Configuration'], function(){
 
 		//********************************Size Configuration Route***************************************
-		Route::get('/Add/Size/Name', 'ConfigurationController@viewSizeNameForm')->name('admin.add_size_name_form');
-		Route::post('/Add/Size/Name', 'ConfigurationController@AddSizeName')->name('admin.add_size_name');
-		Route::get('/Edit/Size/Name/{id}', 'ConfigurationController@EditSizeName')->name('admin.edit_size_name');
-		Route::post('/Update/Size/Name/', 'ConfigurationController@UpdateSizeName')->name('admin.update_size_name');
-		Route::get('/Update/Size/Name/Status/{name_id}/{status}', 'ConfigurationController@UpdateSizeNameStatus')->name('admin.update_size_name_status');
-		Route::get('/Delete/Size/Name/{id}', 'ConfigurationController@deleteSizeName')->name('admin.delete_size_name');
+		// Route::get('/Add/Size/Name', 'ConfigurationController@viewSizeNameForm')->name('admin.add_size_name_form');
+		// Route::post('/Add/Size/Name', 'ConfigurationController@AddSizeName')->name('admin.add_size_name');
+		// Route::get('/Edit/Size/Name/{id}', 'ConfigurationController@EditSizeName')->name('admin.edit_size_name');
+		// Route::post('/Update/Size/Name/', 'ConfigurationController@UpdateSizeName')->name('admin.update_size_name');
+		// Route::get('/Update/Size/Name/Status/{name_id}/{status}', 'ConfigurationController@UpdateSizeNameStatus')->name('admin.update_size_name_status');
+		// Route::get('/Delete/Size/Name/{id}', 'ConfigurationController@deleteSizeName')->name('admin.delete_size_name');
 
 
-		Route::get('/Add/Size/Value/{size_id}', 'ConfigurationController@AddSizeValueForm')->name('admin.add_size_value_form');
-		Route::post('/Add/Size/Value/', 'ConfigurationController@AddSizeValue')->name('admin.add_size_value');
-		Route::get('/Add/Size', 'ConfigurationController@viewSizeForm')->name('admin.add_size_form');
-		Route::post('/Add/Size', 'ConfigurationController@addSize')->name('admin.add_size');
-		Route::get('/size/values/{size_id}', 'ConfigurationController@AjaxSizeValues');
-		Route::get('ajax/size/{first_category}', 'ConfigurationController@AjaxSizeWithCategory');
-		Route::get('/size/values/Status/Update/{value_id}/{size_id}/{status}', 'ConfigurationController@sizeValueStatusUpdate')->name('admin.size_value_status_update');
-		Route::get('/size/value/Edit/{value_id}/{size_id}', 'ConfigurationController@sizeValueEdit')->name('admin.size_value_edit');
-		Route::post('/size/value/Update', 'ConfigurationController@sizeValueUpdate')->name('admin.size_value_update');
-		Route::get('/size/value/Delete/{value_id}/{size_id}', 'ConfigurationController@sizeValueDelete')->name('admin.size_value_delete');
+		// Route::get('/Add/Size/Value/{size_id}', 'ConfigurationController@AddSizeValueForm')->name('admin.add_size_value_form');
+		// Route::post('/Add/Size/Value/', 'ConfigurationController@AddSizeValue')->name('admin.add_size_value');
+		// Route::get('/Add/Size', 'ConfigurationController@viewSizeForm')->name('admin.add_size_form');
+		// Route::post('/Add/Size', 'ConfigurationController@addSize')->name('admin.add_size');
+		// Route::get('/size/values/{size_id}', 'ConfigurationController@AjaxSizeValues');
+		// Route::get('ajax/size/{first_category}', 'ConfigurationController@AjaxSizeWithCategory');
+		// Route::get('/size/values/Status/Update/{value_id}/{size_id}/{status}', 'ConfigurationController@sizeValueStatusUpdate')->name('admin.size_value_status_update');
+		// Route::get('/size/value/Edit/{value_id}/{size_id}', 'ConfigurationController@sizeValueEdit')->name('admin.size_value_edit');
+		// Route::post('/size/value/Update', 'ConfigurationController@sizeValueUpdate')->name('admin.size_value_update');
+		// Route::get('/size/value/Delete/{value_id}/{size_id}', 'ConfigurationController@sizeValueDelete')->name('admin.size_value_delete');
 
 
-		Route::get('/Size/List', 'ConfigurationController@sizeList')->name('admin.size_list');
-		Route::get('/Size/Lists', 'ConfigurationController@sizeLists')->name('admin.size_lists');
+		// Route::get('/Size/List', 'ConfigurationController@sizeList')->name('admin.size_list');
+		// Route::get('/Size/Lists', 'ConfigurationController@sizeLists')->name('admin.size_lists');
 
 		//********************Color Configuration Route*************************
 		Route::get('/Add/Color/Name', 'ConfigurationController@viewColorNameForm')->name('admin.add_color_name_form');
@@ -105,20 +120,20 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 
 		//********************Varient Configuration Route*************************
 		
-		Route::get('/Add/Varient/Name', 'ConfigurationController@viewVarientNameForm')->name('admin.add_varient_name_form');
-		Route::post('/Add/Varient/Name', 'ConfigurationController@addVarientName')->name('admin.add_varient_name');
-		Route::get('/Varient/Name/list', 'ConfigurationController@varientNameList')->name('admin.varient_name_list');
-		Route::get('/Add/Varient/Value/{varient_id}', 'ConfigurationController@viewVarientValueForm')->name('admin.varient_value_form');
-		Route::post('/Add/Varient/Value/', 'ConfigurationController@addVarientValue')->name('admin.add_varient_value');
+		// Route::get('/Add/Varient/Name', 'ConfigurationController@viewVarientNameForm')->name('admin.add_varient_name_form');
+		// Route::post('/Add/Varient/Name', 'ConfigurationController@addVarientName')->name('admin.add_varient_name');
+		// Route::get('/Varient/Name/list', 'ConfigurationController@varientNameList')->name('admin.varient_name_list');
+		// Route::get('/Add/Varient/Value/{varient_id}', 'ConfigurationController@viewVarientValueForm')->name('admin.varient_value_form');
+		// Route::post('/Add/Varient/Value/', 'ConfigurationController@addVarientValue')->name('admin.add_varient_value');
 
-		Route::get('Ajax/Varient/Name/List', 'ConfigurationController@ajaxVarientNameList')->name('admin.ajax_varient_name_list');
-		Route::get('/Add/varient/Map', 'ConfigurationController@viewMapVarientForm')->name('admin.map_varient_form');
-		Route::post('/Add/varient/Map', 'ConfigurationController@addMapVarient')->name('admin.map_varient_add');
+		// Route::get('Ajax/Varient/Name/List', 'ConfigurationController@ajaxVarientNameList')->name('admin.ajax_varient_name_list');
+		// Route::get('/Add/varient/Map', 'ConfigurationController@viewMapVarientForm')->name('admin.map_varient_form');
+		// Route::post('/Add/varient/Map', 'ConfigurationController@addMapVarient')->name('admin.map_varient_add');
 
-		Route::get('/Ajax/varient/{first_category}', 'ConfigurationController@AjaxVarientNames');
-		Route::get('/Ajax/varient/value/{varient_id}', 'ConfigurationController@AjaxVarientValueWithVarientId');
-		Route::get('View/Varient/Mapped/List', 'ConfigurationController@ViewMappedVarientList')->name('admin.view_mapped_varient_list');
-		Route::get('Ajax/Varient/Mapped/List', 'ConfigurationController@ajaxMappedVarientList')->name('admin.ajax_mapped_varient_list');
+		// Route::get('/Ajax/varient/{first_category}', 'ConfigurationController@AjaxVarientNames');
+		// Route::get('/Ajax/varient/value/{varient_id}', 'ConfigurationController@AjaxVarientValueWithVarientId');
+		// Route::get('View/Varient/Mapped/List', 'ConfigurationController@ViewMappedVarientList')->name('admin.view_mapped_varient_list');
+		// Route::get('Ajax/Varient/Mapped/List', 'ConfigurationController@ajaxMappedVarientList')->name('admin.ajax_mapped_varient_list');
 
 		//********************Brand Configuration Route*************************
 		Route::get('/Add/Brand/Name', 'ConfigurationController@viewBrandNameForm')->name('admin.add_brand_name_form');

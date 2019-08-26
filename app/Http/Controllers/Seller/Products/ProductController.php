@@ -30,29 +30,22 @@ class ProductController extends Controller
             'first_category' => 'required',
             'second_category' => 'required',
             'brand' => 'required',
+            'mrp' => 'required',
+            'price' => 'required',
+            'min_quantity' => 'required',
             'image.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $seller_id = Auth::guard('seller')->id();
         $name = $request->input('name');
         $tag_name = $request->input('tag_name');
-        $size_wearing = $request->input('size_wearing');
-        $fit_wearing = $request->input('fit_wearing');
         $category = $request->input('category');
         $first_category = $request->input('first_category');
         $second_category = $request->input('second_category');
         $brand = $request->input('brand');
         $color = $request->input('color'); ///This Is An Array Of Color
 
-        $size_name_id = $request->input('size_id'); ///This Is An Array Of Size Name Id
-        $size = $request->input('size'); ///This Is An Array Of Size Value
-        $mrp = $request->input('mrp'); ///This Is An Array Of MRP Against Size
-        $price = $request->input('price'); ///This Is An Array Of price Against Size
-        $stock = $request->input('stock'); ///This Is An Array Of stock Against Size
 
-
-        $varient_name_id = $request->input('varient_name_id');///This Is An Array Of varient_name_id
-        $varients_value_id = $request->input('varients');///This Is An Array Of varient_value_id
         $short_description = $request->input('short_description');
         $long_description = $request->input('long_description');
         $image = $request->file('image');
@@ -62,8 +55,6 @@ class ProductController extends Controller
         ->insertGetId([
             'name' => $name,
             'tag_name' => $tag_name,
-            'size_wearing' => $size_wearing,
-            'fit_wearing' => $fit_wearing,
             'brand_id' => $brand,
             'seller_id' => $seller_id,
             'category' => $category,
@@ -71,43 +62,28 @@ class ProductController extends Controller
             'second_category' => $second_category,
             'short_description' => $short_description,
             'long_description' => $long_description,
+            'mrp'=> $request->input('mrp'),
+            'price'=> $request->input('price'),
+            'min_ord_qtty'=> $request->input('min_quantity'),
         ]);
+
 
         if ($product_insert) {
             $product_id = $product_insert; 
 
-            //*******************Insert Color**************
-            foreach ($color as $colors) {
-                $color_insert = DB::table('product_colors')
-                ->insert([
-                    'product_id' => $product_id,
-                    'color_id' => $colors,
-                ]);
-            }
+            $product_id = $product_insert; 
 
             //*******************Insert Color**************
-            for ($i=0; $i <count($varient_name_id) ; $i++) { 
-                $varients_insert = DB::table('product_varients')
-                ->insert([
-                    'product_id' => $product_id,
-                    'varient_name_id' => $varient_name_id[$i],
-                    'varient_value_id' => $varients_value_id[$i],
-                ]);
+            if (isset($color) && !empty($color)) {
+                foreach ($color as $colors) {
+                    $color_insert = DB::table('product_colors')
+                    ->insert([
+                        'product_id' => $product_id,
+                        'color_id' => $colors,
+                    ]);
+                }
             }
-
-            //*******************Insert Product Sizes**************
-            for ($i=0; $i <count($size_name_id) ; $i++) { 
-                $sizes_insert = DB::table('product_sizes')
-                ->insert([
-                    'product_id' => $product_id,
-                    'size_name_id' => $size_name_id[$i],
-                    'size_value_id' => $size[$i],
-                    'mrp' => $mrp[$i],
-                    'price' => $price[$i],
-                    'stock' => $stock[$i],
-                ]);
-            }
-
+            
             //*****************insert Product Images******************
             if($request->hasfile('image'))
             {
@@ -173,8 +149,6 @@ class ProductController extends Controller
                    <a href="'.route('seller.product_view', [encrypt($row->id)]).'" class="btn btn-info btn-sm" target="_blank">View</a>
                    <a href="'.route('seller.product_edit', [encrypt($row->id)]).'" class="btn btn-warning btn-sm">Edit</a>   
                    <a href="'.route('seller.product_images', [encrypt($row->id)]).'" class="btn btn-warning btn-sm">Images</a>
-                   <a href="'.route('seller.product_sizes', [encrypt($row->id)]).'" class="btn btn-warning btn-sm">Sizes</a> 
-                   <a href="'.route('seller.product_varient_edit', [encrypt($row->id)]).'" class="btn btn-warning btn-sm">Varients</a>
                    <a href="'.route('seller.product_Color_edit', [encrypt($row->id)]).'" class="btn btn-warning btn-sm">Colors</a>                  
                    ';
                    if ($row->status == '1') {
@@ -219,27 +193,13 @@ class ProductController extends Controller
         ->where('products.id','=',$product_id)
         ->first();
 
-        $sizes = DB::table('product_sizes')
-        ->select('product_sizes.*','size_name.name as s_name','size_value.value as s_value')
-        ->join('size_name','product_sizes.size_name_id','=','size_name.id')
-        ->join('size_value','product_sizes.size_value_id','=','size_value.id')
-        ->where('product_sizes.product_id',$product_id)
-        ->whereNull('product_sizes.deleted_at')
-        ->get();
+
 
         $colors = DB::table('product_colors')
         ->select('product_colors.*','color.name as c_name','color.value as c_value')
         ->join('color','product_colors.color_id','=','color.id')
         ->where('product_colors.product_id',$product_id)
         ->whereNull('product_colors.deleted_at')
-        ->get();
-
-        $varients = DB::table('product_varients')
-        ->select('product_varients.*','varient_name.name as v_name','varient_value.value as v_value')
-        ->join('varient_name','product_varients.varient_name_id','=','varient_name.id')
-        ->join('varient_value','product_varients.varient_value_id','=','varient_value.id')
-        ->where('product_varients.product_id',$product_id)
-        ->whereNull('product_varients.deleted_at')
         ->get();
 
         return view('seller.products.product_details',compact('product','sizes','colors','varients'));
@@ -296,6 +256,10 @@ class ProductController extends Controller
             'first_category' => 'required',
             'second_category' => 'required',
             'brand' => 'required',
+            'mrp' => 'required',
+            'price' => 'required',
+            'min_quantity' => 'required',
+
         ]);
 
         try {
@@ -310,14 +274,15 @@ class ProductController extends Controller
         ->update([
             'name' => $request->input('name'),
             'tag_name' => $request->input('tag_name'),
-            'size_wearing' => $request->input('size_wearing'),
-            'fit_wearing' => $request->input('fit_wearing'),
             'category' => $request->input('category'),
             'first_category' => $request->input('first_category'),
             'second_category' => $request->input('second_category'),
             'brand_id' => $request->input('brand'),
             'short_description' => $request->input('short_description'),
             'long_description' => $request->input('long_description'),
+            'mrp' => $request->input('mrp'),
+            'price' => $request->input('price'),
+            'min_ord_qtty'=> $request->input('min_quantity'),
         ]);
 
 

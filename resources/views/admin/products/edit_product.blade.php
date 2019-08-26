@@ -9,7 +9,7 @@
     	    <div class="x_panel">
 
     	        <div class="x_title">
-    	            <h2>Add New Product</h2>
+    	            <h2>Edit Product</h2>
     	            <div class="clearfix"></div>
     	        </div>
                 <div>
@@ -42,18 +42,7 @@
                                       <input type="text" class="form-control" name="tag_name"  placeholder="Enter Tag Name" value="{{ $product->tag_name }}">
 
                                     </div>
-                                    <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
-                                      <label for="size_wearing">Size Wearing</label>
-                                      <input type="text" class="form-control" name="size_wearing"  placeholder="Enter Size Wearing" value="{{ $product->size_wearing }}">
-                                    </div> 
                                                                 
-                                </div>
-
-                                <div class="form-row mb-3">
-                                    <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
-                                      <label for="fit_wearing">Fit Wearing</label>
-                                      <input type="text" class="form-control" name="fit_wearing"  placeholder="Enter Fit Wearing" value="{{ $product->fit_wearing }}">
-                                    </div>
                                 </div>
 
                                 <div class="form-row mb-3">

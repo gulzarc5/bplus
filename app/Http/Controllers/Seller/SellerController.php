@@ -26,6 +26,7 @@ class SellerController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'mobile' => $request->input('mobile'),
+            'user_role' => 2,
         ]);
 
 
@@ -100,6 +101,7 @@ class SellerController extends Controller
         ->update([
             'name' => $request->input('name'),
             'mobile' => $request->input('mobile'),
+            'verification_status'=>2,
         ]);
 
         $seller_details = DB::table('seller_details')

@@ -21,115 +21,84 @@
     font: italic bold 14px/30px Georgia, serif;
   }
 </style>
-<div class="gap">
-</div>
+
+@if(isset($products) && !empty($products))
+
+@if(count($products) > 0)
+
+@foreach($products as $seller_product)
+
+<div class="gap"></div>
+
 <div class="container">
- <div class="col-md-12" style="display: flex;">
-   <div class="col-md-11" style="margin-left: -26px;">
-    <p> <i class="fa fa-user sall"></i> chinmayee</p>
-    <p class="sall1">Guwahati, Assam</p>
+   <div class="col-md-12" style="display: flex;">
+      <div class="col-md-11" style="margin-left: -26px;">
+         <p> <i class="fa fa-user sall"></i>{{ $seller_product['seller_name'] }}</p>
+         <p class="sall1">{{ $seller_product['seller_city'] }}, {{ $seller_product['seller_state'] }}</p>
+      </div>
+      <div class="col-md-1" style="margin-top: 25px; margin-left: 26px;">
+         <a href="{{route('web.product_view',['seller_id'=>encrypt($seller_product['seller_id']),'second_category'=>encrypt($seller_product['second_category'])])}}" class="view">View all</a>
+      </div>
+   </div><hr>
 </div>
-<div class="col-md-1" style="margin-top: 25px; margin-left: 26px;">
-  <a href="{{url('product_category')}}" class="view">View all</a>
-  </div>
-</div>
-<hr>
-</div>
+
+
+
 <div class="container">
-  <div class="owl-carousel owl-loaded owl-nav-out" data-options='{"items":5,"loop":true,"nav":true}'>
-    <div class="owl-item">
-      <div class="product  owl-item-slide">
-        <ul class="product-labels">
-        </ul>
-        <div class="product-img-wrap">
-          <img class="product-img" src="{{asset('src/img/test_product/man_fashion/4.jpg')}}" alt="Image Alternative text" title="Image Title" />
-        </div>
-        <a class="product-link" href="{{url('product_details')}}">
-        </a>
-        <div class="product-caption">
-          <ul class="product-caption-rating">
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li>
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li>
-              <i class="fa fa-star">
-              </i>
-            </li>
-          </ul>
-          <h5 class="product-caption-title">Drifire Lightweight Tubular Short Sleeve Shirt - Made in USA
-          </h5>
-          <div class="product-caption-price">
-            <span class="product-caption-price-new"><i class="fa fa-rupee" style="font-size:16px"></i>115
-            </span>
+   <div class="owl-carousel owl-loaded owl-nav-out" data-options='{"items":5,"loop":true,"nav":true}'>
+
+
+      @foreach($seller_product['product'] as $product)
+
+          <div class="owl-item">
+            <div class="product  owl-item-slide">
+              <ul class="product-labels">
+                <li>hot</li>
+              </ul>
+              <div class="product-img-wrap">
+                <img class="product-img" src="{{asset('images/product/thumb/'. $product->main_image.'')}}" alt="Image Alternative text" title="Image Title" />
+              </div>
+              <a class="product-link" href="#">
+              </a>
+              <div class="product-caption">
+                <ul class="product-caption-rating">
+                  <li class="rated">
+                    <i class="fa fa-star">
+                    </i>
+                  </li>
+                  <li class="rated">
+                    <i class="fa fa-star">
+                    </i>
+                  </li>
+                  <li class="rated">
+                    <i class="fa fa-star">
+                    </i>
+                  </li>
+                  <li class="rated">
+                    <i class="fa fa-star">
+                    </i>
+                  </li>
+                  <li>
+                    <i class="fa fa-star">
+                    </i>
+                  </li>
+                </ul>
+                <h5 class="product-caption-title">{{$product->name}}
+                </h5>
+                <div class="product-caption-price">
+                  <span class="product-caption-price-new"><i class="fa fa-rupee" style="font-size:16px"></i>{{$product->price}}
+                  </span>
+                </div>
+                <ul class="product-caption-feature-list">
+                  <li>Free Shipping
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <ul class="product-caption-feature-list">
-            <li>Free Shipping
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="owl-item">
-      <div class="product  owl-item-slide">
-        <ul class="product-labels">
-          <li>hot
-          </li>
-        </ul>
-        <div class="product-img-wrap">
-          <img class="product-img" src="{{asset('src/img/test_product/man_fashion/4.jpg')}}" alt="Image Alternative text" title="Image Title" />
-        </div>
-        <a class="product-link" href="product-Details">
-        </a>
-        <div class="product-caption">
-          <ul class="product-caption-rating">
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li>
-              <i class="fa fa-star">
-              </i>
-            </li>
-          </ul>
-          <h5 class="product-caption-title">Diesel Not So Basic Brown Leather Analog Mens Watch DZ1206
-          </h5>
-          <div class="product-caption-price">
-            <span class="product-caption-price-new"><i class="fa fa-rupee" style="font-size:16px"></i>102
-            </span>
-          </div>
-          <ul class="product-caption-feature-list">
-            <li>Free Shipping
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="owl-item">
+
+      @endforeach
+  {{--   <div class="owl-item">
       <div class="product  owl-item-slide">
         <ul class="product-labels">
           <li>hot
@@ -367,13 +336,27 @@
           </ul>
         </div>
       </div>
-    </div>
+    </div> --}}
   </div>
 </div>
+
+@endforeach
+
+@else
+   No Products Available
+@endif
+
+@endif
+
+
 <div class="gap">
 </div>
 <hr>
-<div class="container">
+
+
+
+
+{{-- <div class="container">
  <div class="col-md-12" style="display: flex;">
    <div class="col-md-11" style="margin-left: -26px;">
     <p> <i class="fa fa-user sall"></i> Vishal</p>
@@ -719,5 +702,5 @@
       </div>
     </div>
   </div>
-</div>
+</div> --}}
 @endsection

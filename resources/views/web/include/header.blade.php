@@ -199,388 +199,69 @@
                   </i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-category">
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-home dropdown-menu-category-icon">
-                      </i>Home & Furniture
-                    </a>
-                    <div class="dropdown-menu-category-section">
-                      <div class="dropdown-menu-category-section-inner">
-                        <div class="dropdown-menu-category-section-content">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <h5 class="dropdown-menu-category-title">Home & Furniture
-                              </h5>
-                                 <hr>
-                              <ul class="dropdown-menu-category-list">
-                                
-                                <li >
-                                  <a href="{{url('product_subcategory')}}">Kitchen
-                                  </a>
-                                </li>
-                             
-                                <li class="list">
-                                  <a href="{{url('product_subcategory')}}">Furniture 
-                                  </a>
-                                </li>
-                                
-                                <li class="list">
-                                  <a href="{{url('product_subcategory')}}">Furnising
-                                  </a>
-                                </li>
-                                
-                                <li class="list">
-                                  <a href="{{url('product_subcategory')}}">Smart Home Automation
-                                  </a>
-                                   </li>
-                               </ul>
+
+                  @if(isset($category_list) && !empty($category_list))
+
+                    @foreach($category_list as $category)
+
+                      <li>
+                        <a href="#">
+                          <i class="fa fa-home dropdown-menu-category-icon">
+                          </i>{{ $category['name'] }}
+                        </a>
+
+                       
+
+                        <div class="dropdown-menu-category-section">
+                          <div class="dropdown-menu-category-section-inner">
+                            <div class="dropdown-menu-category-section-content">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <h5 class="dropdown-menu-category-title">{{ $category['name'] }}</h5>
+                                     <hr>
+                                  <ul class="dropdown-menu-category-list">
+                                    @if(!empty($category['first_category']))
+                                    @php
+                                      $first_div = 1;
+                                    @endphp
+
+                                    @foreach($category['first_category'] as $first_category)
+
+                                    @if( ($first_div % 2) == 0 )
+                                      <div class="col-md-6">
+                                        <li>
+                                          <a href="{{route('web.sub_category',['first_id'=>encrypt($first_category->id)])}}">{{ $first_category->name }}
+                                          </a>
+                                        </li>
+                                      </div>
+                                    @else
+                                      <div class="col-md-6">
+                                        <li>
+                                          <a href="{{route('web.sub_category',['first_id'=>encrypt($first_category->id)])}}">{{ $first_category->name }}
+                                          </a>
+                                        </li>
+                                      </div>
+                                    @endif
+
+                                    @php
+                                       $first_div++;
+                                    @endphp
+                                    @endforeach
+                                    @endif
+                                   </ul>
+                                </div>
+                              </div>
                             </div>
-                            <div class="col-md-6" style="margin-top: 64px;">
-                              
-                              <ul class="dropdown-menu-category-list">
-                                <li>
-                                  <a href="product-subcategory">Home Decor
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="product-subcategory">Home Lighting 
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="product-subcategory">Tools & Hardware
-                                  </a>
-                                 </li>
-                               </ul>
-                            </div>
+
+                           <img class="dropdown-menu-category-section-theme-img" src="{{asset('images/category/main_category/thumb/'.$category['image'].'')}}" alt="Image Alternative text" title="Image Title" style="right: -10px; height:293px; width: 500 " />
                           </div>
-                        </div>
-                        <img class="dropdown-menu-category-section-theme-img" src="{{asset('src/img/test_cat/2.png')}}" alt="Image Alternative text" title="Image Title" style="right: -10px;" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-plug dropdown-menu-category-icon">
-                      </i>Electronics & Appliances
-                    </a>
-                    <div class="dropdown-menu-category-section">
-                      <div class="dropdown-menu-category-section-inner">
-                        <div class="dropdown-menu-category-section-content">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <h5 class="dropdown-menu-category-title">Electronics 
-                              </h5>
-                              <hr>
-                              <ul class="dropdown-menu-category-list">
-                                <li>
-                                  <a href="#">TV & Video
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Home Audio & Theater
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Camera, Photo & Video
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Cell Phones & Accessories
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Headphones
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="col-md-6">
-                              <h5 class="dropdown-menu-category-title">Computers
-                              </h5>
-                              <hr>
-                              
-                              <ul class="dropdown-menu-category-list">
-                                <li>
-                                  <a href="#">Laptops & Tablets
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Desktops & Monitors
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Computer Accessories
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Software
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Printers & Ink
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Networking
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                        <img class="dropdown-menu-category-section-theme-img" src="{{asset('src/img/test_cat/5.png')}}" alt="Image Alternative text" title="Image Title" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-tags dropdown-menu-category-icon">
-                      </i>Clothes & Accessories
-                    </a>
-                    <div class="dropdown-menu-category-section">
-                      <div class="dropdown-menu-category-section-inner">
-                        <div class="dropdown-menu-category-section-content">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <h5 class="dropdown-menu-category-title">Clothes
-                              </h5>
-                              <hr>
-                              <ul class="dropdown-menu-category-list">
-                                <li class="list">
-                                  <a href="#">Woman
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Men
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Girls
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Boys
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Baby
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="col-md-6">
-                              <h5 class="dropdown-menu-category-title">Accessories
-                              </h5>
-                              <hr>
-                              <ul class="dropdown-menu-category-list">
-                                <li>
-                                  <a href="#">Luggage
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="products">Bag
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                        <img class="dropdown-menu-category-section-theme-img" src="{{asset('src/img/test_cat/22.png')}}" alt="Image Alternative text" title="Image Title" style="right: -10px;" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-picture-o dropdown-menu-category-icon">
-                      </i>Stationery & office Supplies
-                    </a>
-                    <div class="dropdown-menu-category-section">
-                      <div class="dropdown-menu-category-section-inner">
-                        <div class="dropdown-menu-category-section-content">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <h5 class="dropdown-menu-category-title">Stationery
-                              </h5>
-                              <hr>
-                              <ul class="dropdown-menu-category-list">
-                                <li>
-                                  <a href="#">Paintings from Dealers & Resellers
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Paintings Direct from Artist
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Art Prints
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Art Photographs from Resellers
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Art Photographs from the Artist
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Art Posters
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="col-md-6">
-                              <h5 class="dropdown-menu-category-title">office Supplies
-                              </h5>
-                              <hr>
-                              <ul class="dropdown-menu-category-list">
-                                <li class="list">
-                                  <a href="#">Home Decor Decals
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Furniture
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Wallpapers
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Bar Flasks
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Posters & Prints
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                        <img class="dropdown-menu-category-section-theme-img" src="{{asset('src/img/test_cat/12.png')}}" alt="Image Alternative text" title="Image Title" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <a href="#">
-                        <i class="fa fa-paw dropdown-menu-category-icon">
-                      </i>Footwear
-                    </a>
-                    <div class="dropdown-menu-category-section">
-                      <div class="dropdown-menu-category-section-inner">
-                        <div class="dropdown-menu-category-section-content">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <h5 class="dropdown-menu-category-title">Footwear
-                              </h5>
-                              <hr>
-                              <ul class="dropdown-menu-category-list">
-                                <li>
-                                  <a href="#">Woman
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Men
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Girls
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Boys
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Baby
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                        <img class="dropdown-menu-category-section-theme-img" src="{{asset('src/img/test_cat/66.png')}}" alt="Image Alternative text" title="Image Title" style="right: -20px;" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-child dropdown-menu-category-icon">
-                      </i>Toy & Baby Care
-                    </a>
-                    <div class="dropdown-menu-category-section">
-                      <div class="dropdown-menu-category-section-inner">
-                        <div class="dropdown-menu-category-section-content">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <h5 class="dropdown-menu-category-title">Kids Clothing
-                              </h5>
-                              <hr>
-                              <ul class="dropdown-menu-category-list">
-                                <li>
-                                  <a href="#">Accessories
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Active Wear
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Coats & Jackets
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Jeans
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Sets
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Indoors
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Swimwear
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Special Occasion
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Shoes
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="col-md-6">
-                              <h5 class="dropdown-menu-category-title">More For Kids
-                              </h5>
-                              <hr>
-                              <ul class="dropdown-menu-category-list">
-                                <li>
-                                  <a href="#">Kids Furniture
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Kids Jewelry & Watches
-                                  </a>
-                                </li>
-                                <li class="list">
-                                  <a href="#">Toys & Games
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                        <img class="dropdown-menu-category-section-theme-img" src="{{asset('src/img/test_cat/4.png')}}" alt="Image Alternative text" title="Image Title" />
-                      </div>
-                    </div>
-                  </li>
+                        </div>                      
+
+                      </li>
+
+                    @endforeach
+                  @endif
+               
                 </ul>
               </li>
             </ul>

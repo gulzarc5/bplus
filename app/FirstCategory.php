@@ -10,7 +10,7 @@ class FirstCategory extends Model
     protected $table = 'first_category';
 
     protected $fillable = [
-    	'name','category_id'
+    	'name','image','category_id'
     ];
     protected $primaryKey = 'id';
 

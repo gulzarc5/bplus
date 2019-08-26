@@ -85,24 +85,9 @@
                   <li><a href="{{ route('admin.deshboard')}}"><i class="fa fa-home"></i> Home </span></a>
                   </li>
                   <li><a><i class="fa fa-edit"></i> Users <span class="fa fa-chevron-down"></span></a>
-                     <ul class="nav child_menu">
-                        <li><a>Sellers<span class="fa fa-chevron-down"></span></a>
-                          <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Active Sellers</a>
-                            </li>
-                            <li><a href="#level2_1">InActive Sellers</a>
-                            </li>
-                          </ul>
-                        </li>
-
-                        <li><a>Buyers<span class="fa fa-chevron-down"></span></a>
-                          <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Active Buyers</a>
-                            </li>
-                            <li><a href="#level2_1">InActive Buyers</a>
-                            </li>
-                          </ul>
-                        </li>
+                    <ul class="nav child_menu">
+                       <li class="sub_menu"><a href="{{route('admin.allSellers')}}">Sellers</a></li>
+                        <li><a href="{{route('admin.allBuyers')}}">Buyers</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-desktop"></i>Products<span class="fa fa-chevron-down"></span></a>
@@ -129,13 +114,13 @@
                         </ul>
                       </li>
 
-                      <li><a><i class="fa fa-bar-chart-o"></i>Sizes <span class="fa fa-chevron-down"></span></a>
+                      {{-- <li><a><i class="fa fa-bar-chart-o"></i>Sizes <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                           <li><a href="{{route('admin.add_size_name_form')}}">Add Size Name</a></li>
                           <li><a href="{{route('admin.add_size_form')}}">Add Size</a></li>
                           <li><a href="{{route('admin.size_list')}}">Size List</a></li>
                         </ul>
-                      </li>
+                      </li> --}}
 
                       <li><a><i class="fa fa-bar-chart-o"></i>Colors <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
@@ -145,14 +130,14 @@
                         </ul>
                       </li>
 
-                      <li><a><i class="fa fa-bar-chart-o"></i>Varients <span class="fa fa-chevron-down"></span></a>
+                     {{--  <li><a><i class="fa fa-bar-chart-o"></i>Varients <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                           <li><a href="{{route('admin.add_varient_name_form')}}">Add Varient Name</a></li>
                            <li><a href="{{route('admin.varient_name_list')}}">Varient Name List</a></li>
                            <li><a href="{{route('admin.map_varient_form')}}">Map Varient</a></li>
                           <li><a href="{{route('admin.view_mapped_varient_list')}}">Mapped Varient List</a></li>
                         </ul>
-                      </li>
+                      </li> --}}
 
                       <li><a><i class="fa fa-bar-chart-o"></i>Brand <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
