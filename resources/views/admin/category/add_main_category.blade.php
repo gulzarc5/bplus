@@ -25,10 +25,10 @@
                 <div>
                     <div class="x_content">
                         @if(isset($category) && !empty($category))
-                            {{Form::model($category, ['method' => 'post','route'=>'admin.updateCategory'])}}
+                            {{Form::model($category, ['method' => 'post','route'=>'admin.updateCategory','enctype'=>'multipart/form-data'])}}
                             {{ Form::hidden('id',null,array('class' => 'form-control','placeholder'=>'Enter Category name')) }}
                         @else
-                            {{ Form::open(['method' => 'post','route'=>'admin.add_main_category']) }}
+                            {{ Form::open(['method' => 'post','route'=>'admin.add_main_category','enctype'=>'multipart/form-data']) }}
                         @endif
 
                         <div class="form-group">
@@ -38,6 +38,17 @@
                                 <span class="invalid-feedback" role="alert" style="color:red">
 			                        <strong>{{ $errors->first('name') }}</strong>
 			                    </span> 
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            {{ Form::label('name', 'Select Image')}} 
+                            
+                            <input type="file" name="image" class="form-control">
+                            @if($errors->has('image'))
+                                <span class="invalid-feedback" role="alert" style="color:red">
+                                    <strong>{{ $errors->first('image') }}</strong>
+                                </span> 
                             @enderror
                         </div>
                         <div class="form-group">
@@ -74,6 +85,7 @@
                                 <tr class="headings">                
                                     <th class="column-title">Sl No. </th>
                                     <th class="column-title">Main category name</th>
+                                    <th class="column-title">Image</th>
                                     <th class="column-title">Status</th>
                                     <th class="column-title">Action</th>
                             </thead>
@@ -89,6 +101,7 @@
                                 <tr class="even pointer">
                                     <td class=" ">{{ $count++ }}</td>
                                     <td class=" ">{{ $category['name'] }}</td>
+                                     <td class=" "><img src="{{asset('images/category/main_category/thumb/'.$category['image'].'')}}" height="80px"></td>
                                     <td class=" ">
                                         @if($category['status'] == '1')
                                             <button class='btn btn-primary'>Enabled</button>

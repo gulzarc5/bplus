@@ -22,6 +22,9 @@ class RedirectIfAuthenticated
                 case 'admin':
                     $route = 'admin/deshboard';
                     break;
+                case 'seller':
+                    $route = 'Seller/Deshboard';
+                    break;
                default:
                     $route = '/home';
             }

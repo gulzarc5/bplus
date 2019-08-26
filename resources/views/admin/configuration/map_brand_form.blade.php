@@ -76,21 +76,30 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
-                            {{ Form::label('brand_id', 'Select Brand')}}
-                        
-                            {!! Form::select('brand_id',array('' => 'Please Select Brand'),null, ['class' => 'form-control','id'=>'brand_id']) !!}
-                         
 
-                            @if($errors->has('brand_id'))
-                                <span class="invalid-feedback" role="alert" style="color:red">
-                                    <strong>{{ $errors->first('brand_id') }}</strong>
-                                </span>
-                            @enderror
+                         <div class="form-row" id="brand_div_append">
+                            <div class="col-md-6" style="margin: 0; padding: 0" >
+                                <div class="col-md-8" style="padding: 0" id="brand_div">                                    
+                                    {{ Form::label('brand_id', 'Select Brand')}}
+                        
+                                    {!! Form::select('brand_id[]',array('' => 'Please Select Brand'),null, ['class' => 'form-control brand_id']) !!}
+
+                                </div>
+                                <div class="col-md-3">
+                                    <a  class="btn btn-sm btn-primary" style="margin-top: 25px;" id="brand_div_button"> More </a>
+                                </div>
+                            
+                            </div>
                         </div>
+
+                         @if($errors->has('brand_id'))
+                            <span class="invalid-feedback" role="alert" style="color:red">
+                                <strong>{{ $errors->first('brand_id') }}</strong>
+                            </span>
+                        @enderror
                        
 
-    	            	<div class="form-group">
+    	            	<div class="form-group col-md-12">
     	            	 	@if(isset($first_category) && !empty($first_category))
                                 {{ Form::submit('Save', array('class'=>'btn btn-success')) }}
                             @else
@@ -173,10 +182,10 @@
                     url:"{{ url('/admin/Ajax/brand/')}}"+"/"+category+"",
                     success:function(data){
                         // console.log(data);
-                        $("#brand_id").html("<option value=''>Please Select Varient</option>");
+                        $(".brand_id").html("<option value=''>Please Select Brand</option>");
 
                         $.each( data, function( key, value ) {
-                            $("#brand_id").append("<option value='"+key+"'>"+value+"</option>");
+                            $(".brand_id").append("<option value='"+key+"'>"+value+"</option>");
                         });
 
                     }
@@ -185,5 +194,29 @@
            
 
         })
+    </script>
+
+
+     <script type="text/javascript">
+        var varient_div_count = 1;
+        $("#brand_div_button").click(function(){
+
+            var varhtml = $("#brand_div").html();
+
+            var varient_html = '<div class="col-md-6" style="margin: 0; padding: 0" id="brand_div'+varient_div_count+'">'+
+            '<div class="col-md-8" style="padding: 0">'+ varhtml  +'</div>'+
+                  '<div class="col-md-3">'+
+                    '<a class="btn btn-sm btn-danger" style="margin-top: 25px;" id="brand_div_button'+varient_div_count+'" onclick="removeVarient('+varient_div_count+')"> Remove </a>'+
+                   '</div></div>';
+
+            varient_div_count++;
+            $("#brand_div_append").append(varient_html);
+
+        });
+
+
+        function removeVarient(id) {
+            $("#brand_div"+id).remove();
+        }
     </script>
  @endsection

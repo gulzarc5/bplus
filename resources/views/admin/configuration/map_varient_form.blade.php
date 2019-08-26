@@ -89,28 +89,37 @@
                             @enderror
                         </div>
 
-                        <div class="form-group">
-                            {{ Form::label('varient_value_id', 'Select Varient Value')}}
-                        
-                            {!! Form::select('varient_value_id',array('' => 'Please Select Varient Value'),null, ['class' => 'form-control','id'=>'varient_value_id']) !!}
-                         
+                        <div class="form-row" id="varient_div_append">
+                            <div class="col-md-6" style="margin: 0; padding: 0" >
+                                <div class="col-md-8" style="padding: 0" id="varient_div">                                    
+                                    {{ Form::label('varient_value_id', 'Select Varient Value')}}
+                                
+                                    {!! Form::select('varient_value_id[]',array('' => 'Please Select Varient Value'),null, ['class' => 'form-control varient_value_id']) !!}
+                                </div>
+                                <div class="col-md-3">
+                                    <a  class="btn btn-sm btn-primary" style="margin-top: 25px;" id="varient_div_button"> More </a>
+                                </div>
+                            
+                            </div>
 
-                            @if($errors->has('varient_value_id'))
+
+
+                          {{--   @if($errors->has('varient_value_id'))
                                 <span class="invalid-feedback" role="alert" style="color:red">
                                     <strong>{{ $errors->first('varient_value_id') }}</strong>
                                 </span>
-                            @enderror
+                            @enderror --}}
                         </div>
 
                        
 
-    	            	<div class="form-group">
+    	            	<div class="form-group col-md-12">
+
     	            	 	@if(isset($first_category) && !empty($first_category))
                                 {{ Form::submit('Save', array('class'=>'btn btn-success')) }}
                             @else
                                 {{ Form::submit('Submit', array('class'=>'btn btn-success')) }}
-                            @endif
-    	                	
+                            @endif    	                	
     	            	</div>
     	            	{{ Form::close() }}
 
@@ -209,10 +218,10 @@
                     url:"{{ url('/admin/Ajax/varient/value/')}}"+"/"+varient_id+"",
                     success:function(data){
                         console.log(data);
-                        $("#varient_value_id").html("<option value=''>Please Select Varient Value</option>");
+                        $(".varient_value_id").html("<option value=''>Please Select Varient Value</option>");
 
                         $.each( data, function( key, value ) {
-                            $("#varient_value_id").append("<option value='"+key+"'>"+value+"</option>");
+                            $(".varient_value_id").append("<option value='"+key+"'>"+value+"</option>");
                         });
 
                     }
@@ -221,5 +230,28 @@
            
 
         })
+    </script>
+
+
+    <script type="text/javascript">
+        var varient_div_count = 1;
+        $("#varient_div_button").click(function(){
+
+            var varhtml = $("#varient_div").html();
+            var varient_html = '<div class="col-md-6" style="margin: 0; padding: 0" id="varient_div'+varient_div_count+'">'+
+            '<div class="col-md-8" style="padding: 0">'+ varhtml  +'</div>'+
+                  '<div class="col-md-3">'+
+                    '<a class="btn btn-sm btn-danger" style="margin-top: 25px;" id="varient_div_button'+varient_div_count+'" onclick="removeVarient('+varient_div_count+')"> Remove </a>'+
+                   '</div></div>';
+
+            varient_div_count++;
+            $("#varient_div_append").append(varient_html);
+
+        });
+
+
+        function removeVarient(id) {
+            $("#varient_div"+id).remove();
+        }
     </script>
  @endsection

@@ -39,6 +39,13 @@
     <link href="{{asset('admin/src_files/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('admin/src_files/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('admin/src_files/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css')}}" rel="stylesheet">
+
+    {{-- pnotify --}}
+    
+   {{--  <link href="{{asset('admin/src_files/vendors/pnotify/dist/pnotify.css')}}" rel="stylesheet">
+    <link href="{{asset('admin/src_files/vendors/pnotify/dist/pnotify.buttons.css')}}" rel="stylesheet">
+    <link href="{{asset('admin/src_files/vendors/pnotify/dist/pnotify.nonblock.css')}}" rel="stylesheet"> --}}
+
     <!-- Custom Theme Style -->
     <link href="{{asset('admin/src_files/build/css/custom.min.css')}}" rel="stylesheet">
   </head>
@@ -78,24 +85,9 @@
                   <li><a href="{{ route('admin.deshboard')}}"><i class="fa fa-home"></i> Home </span></a>
                   </li>
                   <li><a><i class="fa fa-edit"></i> Users <span class="fa fa-chevron-down"></span></a>
-                     <ul class="nav child_menu">
-                        <li><a>Sellers<span class="fa fa-chevron-down"></span></a>
-                          <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Active Sellers</a>
-                            </li>
-                            <li><a href="#level2_1">InActive Sellers</a>
-                            </li>
-                          </ul>
-                        </li>
-
-                        <li><a>Buyers<span class="fa fa-chevron-down"></span></a>
-                          <ul class="nav child_menu">
-                            <li class="sub_menu"><a href="level2.html">Active Buyers</a>
-                            </li>
-                            <li><a href="#level2_1">InActive Buyers</a>
-                            </li>
-                          </ul>
-                        </li>
+                    <ul class="nav child_menu">
+                       <li class="sub_menu"><a href="{{route('admin.allSellers')}}">Sellers</a></li>
+                        <li><a href="{{route('admin.allBuyers')}}">Buyers</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-desktop"></i>Products<span class="fa fa-chevron-down"></span></a>
@@ -122,13 +114,13 @@
                         </ul>
                       </li>
 
-                      <li><a><i class="fa fa-bar-chart-o"></i>Sizes <span class="fa fa-chevron-down"></span></a>
+                      {{-- <li><a><i class="fa fa-bar-chart-o"></i>Sizes <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                           <li><a href="{{route('admin.add_size_name_form')}}">Add Size Name</a></li>
                           <li><a href="{{route('admin.add_size_form')}}">Add Size</a></li>
                           <li><a href="{{route('admin.size_list')}}">Size List</a></li>
                         </ul>
-                      </li>
+                      </li> --}}
 
                       <li><a><i class="fa fa-bar-chart-o"></i>Colors <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
@@ -138,14 +130,14 @@
                         </ul>
                       </li>
 
-                      <li><a><i class="fa fa-bar-chart-o"></i>Varients <span class="fa fa-chevron-down"></span></a>
+                     {{--  <li><a><i class="fa fa-bar-chart-o"></i>Varients <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                           <li><a href="{{route('admin.add_varient_name_form')}}">Add Varient Name</a></li>
                            <li><a href="{{route('admin.varient_name_list')}}">Varient Name List</a></li>
                            <li><a href="{{route('admin.map_varient_form')}}">Map Varient</a></li>
                           <li><a href="{{route('admin.view_mapped_varient_list')}}">Mapped Varient List</a></li>
                         </ul>
-                      </li>
+                      </li> --}}
 
                       <li><a><i class="fa fa-bar-chart-o"></i>Brand <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
@@ -153,6 +145,19 @@
                            <li><a href="{{route('admin.brand_name_list')}}">Brand Name List</a></li>
                            <li><a href="{{route('admin.map_brand_form')}}">Map Brand</a></li>
                           <li><a href="{{route('admin.view_mapped_brand_list')}}">Mapped Brand List</a></li>
+                        </ul>
+                      </li>
+
+                      <li><a><i class="fa fa-bar-chart-o"></i>State <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                          <li><a href="{{route('admin.view_state_form')}}">Add New State</a></li>
+                        </ul>
+                      </li>
+
+                      <li><a><i class="fa fa-bar-chart-o"></i>City <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                          <li><a href="{{route('admin.view_city_form')}}">Add New City</a></li>
+                          <li><a href="{{route('admin.city_list')}}">City List</a></li>
                         </ul>
                       </li>
 
@@ -194,9 +199,7 @@
               </div>
 
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                <li><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
              <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
                   @csrf
               </form>

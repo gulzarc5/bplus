@@ -4,7 +4,10 @@
 @section('content')
 <div class="container">
   <header class="page-header">
-    <h2 class="page-title">Kitchen
+    <h2 class="page-title">
+      @if(isset($first_category) && !empty($first_category))
+        {{ $first_category->name }}
+      @endif
     </h2>
     <ol class="breadcrumb page-breadcrumb">
       <li>
@@ -12,9 +15,12 @@
         </a>
       </li>
       <li>
-        <a class="active">Kitchen
+        <a class="active">
+          @if(isset($first_category) && !empty($first_category))
+            {{ $first_category->name }}
+          @endif
         </a>
-      </li>
+      </li> 
     </ol>
   </header>
 </div>
@@ -22,16 +28,22 @@
 </div>
 <div class="container">
   <div class="row row-sm-gap" data-gutter="15">
-    <div class="col-md-3">
-      <a class="banner-category" href="{{url('product_saller')}}">
-        <img class="banner-category-img" src="{{('src/img/kitchen_icon/2.png')}}" alt="Image Alternative text" title="Image Title" />
-        <h5 class="banner-category-title">Pans
-        </h5>
-        <p class="banner-category-desc">173 products
-        </p>
-      </a>
-    </div>
-    <div class="col-md-3">
+    @if(isset($second_category) && !empty($second_category))
+
+    @foreach($second_category as $category)
+      <div class="col-md-3">
+        <a class="banner-category" href="{{route('web.product_sellers',['second_category'=>encrypt($category->id)])}}">
+          <img class="banner-category-img" src="{{asset('images/category/second_category/thumb/'.$category->image.'')}}" alt="Image Alternative text" title="Image Title" height="80px" width="80px" />
+          <h5 class="banner-category-title">{{ $category->name }}
+          </h5>
+          <p class="banner-category-desc">173 products
+          </p>
+        </a>
+      </div>
+    @endforeach
+
+    @endif
+    {{-- <div class="col-md-3">
       <a class="banner-category" href="{{url('product_saller')}}">
         <img class="banner-category-img" src="{{('src/img/kitchen_icon/1.png')}}" alt="Image Alternative text" title="Image Title" />
         <h5 class="banner-category-title">Tawas
@@ -75,7 +87,7 @@
         <p class="banner-category-desc">437 products
         </p>
       </a>
-    </div>
+    </div> --}}
   </div>
 </div>
 @endsection

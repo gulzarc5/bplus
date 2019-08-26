@@ -8,6 +8,8 @@ use App\Category;
 use App\FirstCategory;
 use App\SecondCategory;
 use Validator;
+use Intervention\Image\Facades\Image;
+use File;
 
 class CategoryController extends Controller
 {
@@ -20,10 +22,26 @@ class CategoryController extends Controller
     public function insertMainCategory(Request $request){
         $validatedData = $request->validate([
         'name' => 'required',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        $image = $request->file('image');
+        $image_name = null;
+        if($request->hasfile('image')){
+            $destination = public_path('images/category/main_category/');
+            $image_extension = $image->getClientOriginalExtension();
+            $image_name = md5(date('now').time())."-".$request->input('name')."."."$image_extension";
+            $original_path = $destination.$image_name;
+            Image::make($image)->save($original_path);
+            $thumb_path = public_path('images/category/main_category/thumb/').$image_name;
+            Image::make($image)
+            ->resize(300, 400)
+            ->save($thumb_path);
+        }
 
         $maincategory = Category::create([
             'name' => $request->input('name'),
+            'image' => $image_name,
         ]);
         if ($maincategory) {
             return redirect()->back()->with('message','Main Category Added Successfully');
@@ -39,13 +57,47 @@ class CategoryController extends Controller
     public function updateCategory(Request $request){
         $validatedData = $request->validate([
         'name' => 'required',
-        'id' => 'required'
+        'id' => 'required',
+        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $category = Category::where('id',$request->input('id'))
-        ->update([
-            'name' => $request->input('name'),
-        ]);
+       
+        if($request->hasfile('image')){
+
+            $image = $request->file('image');
+            $destination = public_path('images/category/main_category/');
+            $image_extension = $image->getClientOriginalExtension();
+            $image_name = md5(date('now').time())."-".$request->input('name')."."."$image_extension";
+            $original_path = $destination.$image_name;
+            Image::make($image)->save($original_path);
+            $thumb_path = public_path('images/category/main_category/thumb/').$image_name;
+            Image::make($image)
+            ->resize(300, 400)
+            ->save($thumb_path);
+
+            $cateegory_fetch =  Category::where('id',$request->input('id'))->first();
+
+             $category = Category::where('id',$request->input('id'))
+                ->update([
+                    'image' => $image_name,
+                ]);
+
+            if($category){                
+                if (!empty($cateegory_fetch->image)) {
+                     $destination_thumb = public_path('images/category/main_category/').$cateegory_fetch->image;
+                    File::delete($destination_thumb);
+
+                    $destination = public_path('images/category/main_category/thumb/').$cateegory_fetch->image;
+                    File::delete($destination);
+                }               
+            }
+        }else{
+            $category = Category::where('id',$request->input('id'))
+            ->update([
+                'name' => $request->input('name'),
+            ]);
+        }
+        
         if ($category) {
             return redirect()->back()->with('message','Category Updated Successfully');
         }else{
@@ -105,11 +157,27 @@ class CategoryController extends Controller
         $validatedData = $request->validate([
         'category_id' => 'required',
         'name' => 'required',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        $image = $request->file('image');
+        $image_name = null;
+        if($request->hasfile('image')){
+            $destination = public_path('images/category/first_category/');
+            $image_extension = $image->getClientOriginalExtension();
+            $image_name = md5(date('now').time())."-".$request->input('name')."."."$image_extension";
+            $original_path = $destination.$image_name;
+            Image::make($image)->save($original_path);
+            $thumb_path = public_path('images/category/first_category/thumb/').$image_name;
+            Image::make($image)
+            ->resize(300, 400)
+            ->save($thumb_path);
+        }
 
         $firstSubCategory = FirstCategory::create([
             'category_id' => $request->input('category_id'),
             'name' => $request->input('name'),
+            'image' => $image_name,
         ]);
         if ($firstSubCategory) {
             return redirect()->back()->with('message','First Category Added Successfully');
@@ -130,13 +198,47 @@ class CategoryController extends Controller
         'name' => 'required',
         'id' => 'required',
         'category_id' => 'required',
+        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $category = FirstCategory::where('id',$request->input('id'))
-        ->update([
-            'name' => $request->input('name'),
-            'category_id' => $request->input('category_id'),
-        ]);
+        $image = $request->file('image');
+        $image_name = null;
+        if($request->hasfile('image')){
+            $destination = public_path('images/category/first_category/');
+            $image_extension = $image->getClientOriginalExtension();
+            $image_name = md5(date('now').time())."-".$request->input('name')."."."$image_extension";
+            $original_path = $destination.$image_name;
+            Image::make($image)->save($original_path);
+            $thumb_path = public_path('images/category/first_category/thumb/').$image_name;
+            Image::make($image)
+            ->resize(300, 400)
+            ->save($thumb_path);
+
+            $fetch_category = FirstCategory::where('id',$request->input('id'))->first();
+            $category = FirstCategory::where('id',$request->input('id'))
+            ->update([
+                'name' => $request->input('name'),
+                'category_id' => $request->input('category_id'),
+                'image' => $image_name
+            ]);
+
+            if($category){                
+                if (!empty($fetch_category->image)) {
+                     $destination_thumb = public_path('images/category/first_category/').$fetch_category->image;
+                    File::delete($destination_thumb);
+
+                    $destination = public_path('images/category/first_category/thumb/').$fetch_category->image;
+                    File::delete($destination);
+                }               
+            }
+        }else{
+            $category = FirstCategory::where('id',$request->input('id'))
+            ->update([
+                'name' => $request->input('name'),
+                'category_id' => $request->input('category_id'),
+            ]);
+        }
+
         if ($category) {
             return redirect()->back()->with('message','Category Updated Successfully');
         }else{
@@ -202,12 +304,28 @@ class CategoryController extends Controller
         'category_id' => 'required',
         'name' => 'required',
         'first_category_id' => 'required',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        $image = $request->file('image');
+        $image_name = null;
+        if($request->hasfile('image')){
+            $destination = public_path('images/category/second_category/');
+            $image_extension = $image->getClientOriginalExtension();
+            $image_name = md5(date('now').time())."-".$request->input('name')."."."$image_extension";
+            $original_path = $destination.$image_name;
+            Image::make($image)->save($original_path);
+            $thumb_path = public_path('images/category/second_category/thumb/').$image_name;
+            Image::make($image)
+            ->resize(300, 400)
+            ->save($thumb_path);
+        }
 
         $second_category = SecondCategory::create([
             'category_id' => $request->input('category_id'),
             'name' => $request->input('name'),
             'first_category_id' => $request->input('first_category_id'),
+            'image' => $image_name,
         ]);
 
         if ($second_category) {
@@ -231,14 +349,49 @@ class CategoryController extends Controller
         'category_id' => 'required',
         'name' => 'required',
         'first_category_id' => 'required',
+        'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $second_category = SecondCategory::where('id',$request->input('id'))
-        ->update([
-            'category_id' => $request->input('category_id'),
-            'name' => $request->input('name'),
-            'first_category_id' => $request->input('first_category_id'),
-        ]);
+        $image_name = null;
+        if($request->hasfile('image')){
+            $image = $request->file('image');
+            $destination = public_path('images/category/second_category/');
+            $image_extension = $image->getClientOriginalExtension();
+            $image_name = md5(date('now').time())."-".$request->input('name')."."."$image_extension";
+            $original_path = $destination.$image_name;
+            Image::make($image)->save($original_path);
+            $thumb_path = public_path('images/category/second_category/thumb/').trim($image_name);
+            Image::make($image)
+            ->resize(300, 400)
+            ->save($thumb_path);
+
+            $fetch_category = SecondCategory::where('id',$request->input('id'))->first();
+            $second_category = SecondCategory::where('id',$request->input('id'))
+            ->update([
+                'category_id' => $request->input('category_id'),
+                'name' => $request->input('name'),
+                'first_category_id' => $request->input('first_category_id'),
+                'image' => $image_name,
+            ]);
+
+            if($second_category){                
+                if (!empty($fetch_category->image)) {
+                     $destination_thumb = public_path('images/category/second_category/').$fetch_category->image;
+                    File::delete($destination_thumb);
+
+                    $destination = public_path('images/category/second_category/thumb/').$fetch_category->image;
+                    File::delete($destination);
+                }               
+            }
+        }else{
+            $second_category = SecondCategory::where('id',$request->input('id'))
+            ->update([
+                'category_id' => $request->input('category_id'),
+                'name' => $request->input('name'),
+                'first_category_id' => $request->input('first_category_id'),
+            ]);
+
+        }
 
         if ($second_category) {
             return redirect()->back()->with('message','Second Category Updated Successfully');
