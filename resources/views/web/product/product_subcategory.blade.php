@@ -32,11 +32,15 @@
 
     @foreach($second_category as $category)
       <div class="col-md-3">
-        <a class="banner-category" href="{{route('web.product_sellers',['second_category'=>encrypt($category->id)])}}">
-          <img class="banner-category-img" src="{{asset('images/category/second_category/thumb/'.$category->image.'')}}" alt="Image Alternative text" title="Image Title" height="80px" width="80px" />
-          <h5 class="banner-category-title">{{ $category->name }}
+        <a class="banner-category" href="{{route('web.product_sellers',['second_category'=>encrypt($category['id'])])}}">
+          <img class="banner-category-img" src="{{asset('images/category/second_category/thumb/'.$category['image'].'')}}" alt="Image Alternative text" title="Image Title" height="80px" width="80px" />
+          <h5 class="banner-category-title">{{ $category['name'] }}
           </h5>
-          <p class="banner-category-desc">173 products
+          <p class="banner-category-desc">
+            
+              {{ $category['total_product'] }} products
+         
+           
           </p>
         </a>
       </div>
