@@ -272,3 +272,16 @@
   </div>
 </div>
 @endsection
+
+@section('script')
+<script type="text/javascript">
+  $("#price-slider").ionRangeSlider({
+    min: 200,
+    max: 575,
+    type: 'double',
+    prefix: "Rs ",
+    prettify: false,
+    hasGrid: false
+});
+</script>
+@endsection

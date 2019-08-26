@@ -7,14 +7,7 @@ $('.i-check, .i-radio').iCheck({
 });
 
 // price slider
-$("#price-slider").ionRangeSlider({
-    min: 130,
-    max: 575,
-    type: 'double',
-    prefix: "Rs ",
-    prettify: false,
-    hasGrid: false
-});
+
 
 $('#jqzoom').jqzoom({
     zoomType: 'standard',

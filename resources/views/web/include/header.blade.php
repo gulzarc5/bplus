@@ -77,102 +77,8 @@
           </div>
         </div>
       </div>
-      <div class="mfp-with-anim mfp-hide mfp-dialog clearfix" id="nav-login-dialog">
-        <h3 class="widget-title">Member Login
-        </h3>
-        <p>Welcome back, friend. Login to get started
-        </p>
-        <hr />
-        <form>
-          <div class="form-group">
-            <label>Email or Username
-            </label>
-            <input class="form-control" type="text" />
-          </div>
-          <div class="form-group">
-            <label>Password
-            </label>
-            <input class="form-control" type="text" />
-          </div>
-          <div class="checkbox">
-            <label>
-              <input class="i-check" type="checkbox" />Remeber Me
-            </label>
-          </div>
-          <input class="btn btn-primary" type="submit" value="Sign In" />
-        </form>
-        <div class="gap gap-small">
-        </div>
-        <ul class="list-inline">
-          <li>
-            <a href="#nav-account-dialog" class="popup-text">Not Member Yet
-            </a>
-          </li>
-          <li>
-            <a href="#nav-pwd-dialog" class="popup-text">Forgot Password?
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="mfp-with-anim mfp-hide mfp-dialog clearfix" id="nav-account-dialog">
-        <h3 class="widget-title">Create TheBox Account
-        </h3>
-        <p>Ready to get best offers? Let's get started!
-        </p>
-        <hr />
-        <form>
-          <div class="form-group">
-            <label>Email
-            </label>
-            <input class="form-control" type="text" />
-          </div>
-          <div class="form-group">
-            <label>Password
-            </label>
-            <input class="form-control" type="text" />
-          </div>
-          <div class="form-group">
-            <label>Repeat Password
-            </label>
-            <input class="form-control" type="text" />
-          </div>
-          <div class="form-group">
-            <label>Phone Number
-            </label>
-            <input class="form-control" type="text" />
-          </div>
-          <div class="checkbox">
-            <label>
-              <input class="i-check" type="checkbox" />Subscribe to the Newsletter
-            </label>
-          </div>
-          <input class="btn btn-primary" type="submit" value="Create Account" />
-        </form>
-        <div class="gap gap-small">
-        </div>
-        <ul class="list-inline">
-          <li>
-            <a href="#nav-login-dialog" class="popup-text">Already Memeber
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="mfp-with-anim mfp-hide mfp-dialog clearfix" id="nav-pwd-dialog">
-        <h3 class="widget-title">Password Recovery
-        </h3>
-        <p>Enter Your Email and We Will Send the Instructions
-        </p>
-        <hr />
-        <form>
-          <div class="form-group">
-            <label>Your Email
-            </label>
-            <input class="form-control" type="text" />
-          </div>
-          <input class="btn btn-primary" type="submit" value="Recover Password" />
-        </form>
-      </div>
-      <nav class="navbar navbar-inverse navbar-main yamm">
+
+       <nav class="navbar navbar-inverse navbar-main yamm">
         <div class="container">
           <div class="navbar-header" >
             <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-nav-collapse" area_expanded="false">
@@ -214,12 +120,13 @@
 
                         <div class="dropdown-menu-category-section">
                           <div class="dropdown-menu-category-section-inner">
+                            <div class="col-md-9">
                             <div class="dropdown-menu-category-section-content">
                               <div class="row">
                                 <div class="col-md-12">
                                   <h5 class="dropdown-menu-category-title">{{ $category['name'] }}</h5>
                                      <hr>
-                                  <ul class="dropdown-menu-category-list">
+                                  <ul >
                                     @if(!empty($category['first_category']))
                                     @php
                                       $first_div = 1;
@@ -228,14 +135,15 @@
                                     @foreach($category['first_category'] as $first_category)
 
                                     @if( ($first_div % 2) == 0 )
-                                      <div class="col-md-6">
-                                        <li>
+                                      
+                                      <div class="col-md-6 dropdown-menu-category-list">
+                                        <li >
                                           <a href="{{route('web.sub_category',['first_id'=>encrypt($first_category->id)])}}">{{ $first_category->name }}
                                           </a>
                                         </li>
                                       </div>
                                     @else
-                                      <div class="col-md-6">
+                                      <div class="col-md-6 dropdown-menu-category-list">
                                         <li>
                                           <a href="{{route('web.sub_category',['first_id'=>encrypt($first_category->id)])}}">{{ $first_category->name }}
                                           </a>
@@ -252,8 +160,10 @@
                                 </div>
                               </div>
                             </div>
-
-                           <img class="dropdown-menu-category-section-theme-img" src="{{asset('images/category/main_category/thumb/'.$category['image'].'')}}" alt="Image Alternative text" title="Image Title" style="right: -10px; height:293px; width: 500 " />
+                          </div>
+                          <div class="col-md-3" style="margin-top: 40%;">
+                           <img class="dropdown-menu-category-section-theme-img" src="{{asset('images/category/main_category/thumb/'.$category['image'].'')}}" alt="Image Alternative text" title="Image Title" style=" " />
+                           </div>
                           </div>
                         </div>                      
 
@@ -360,12 +270,17 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li>
-                    <a href="#nav-login-dialog" data-effect="mfp-move-from-top" class="popup-text">Sign In
+                    <a href="{{url('user_login')}}" data-effect="mfp-move-from-top" >Sign In
                     </a>
                   </li>
                   <br>
                   <li>
-                    <a href="#nav-account-dialog" data-effect="mfp-move-from-top" class="popup-text">Create Account
+                    <a href="{{url('user_register')}}" data-effect="mfp-move-from-top" >Create Account
+                    </a>
+                  </li>
+                  <br>
+                  <li>
+                    <a href="{{url('my_profile')}}" data-effect="mfp-move-from-top" >My Profile
                     </a>
                   </li>
                   <br>
@@ -379,10 +294,6 @@
                     </a>
                   </li>
                   <br>
-                  <li>
-                    <a href="" data-effect="mfp-move-from-top" class="">Your Returns
-                    </a>
-                  </li>
                 </ul>
               </li>
             </ul>

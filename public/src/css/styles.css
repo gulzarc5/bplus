@@ -472,8 +472,8 @@ hr {
   filter: alpha(opacity=30);
 }
 .dropdown-menu-category-section {
-  width: 600px;
-  height: 491px;
+  width: 800px;
+  height: 500px;
   position: absolute;
   top: 0;
   left: 230px;
@@ -493,8 +493,10 @@ hr {
 .dropdown-menu-category-section-theme-img {
   position: absolute;
   bottom: 0;
-  right: 0;
+  right: 2px;
   z-index: 1;
+  height:245px; 
+  width: 320px;
 }
 .dropdown-menu-category-title {
   font-weight: 500;
@@ -512,10 +514,12 @@ hr {
 }
 .dropdown-menu-category-list > li > a {
   color: #595959;
+  margin-left: -38px;
 }
 .dropdown-menu-category-list > li > a:hover {
   text-decoration: none;
   color: #486d97;
+  margin-left: -38px;
 }
 .dropdown-menu-category-list > li > p {
   font-size: 11px;

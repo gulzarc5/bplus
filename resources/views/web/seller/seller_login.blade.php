@@ -13,7 +13,7 @@
                     <div id="login-box" class="col-md-4">
 
                         {{ Form::open(array('url' => 'Seller/Login', 'method' => 'post')) }}
-                            <h3 class="text-center text-info" style="text-decoration: underline;">Seller Login From</h3>
+                            <h3 class="text-center text-info" style="text-decoration: underline; margin-top: 20px;">Seller Login From</h3>
 
                             @if (Session::has('message'))
                                 <div class="alert alert-success" >{{ Session::get('message') }}</div>

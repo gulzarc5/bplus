@@ -184,3 +184,15 @@ Route::group(['middleware'=>'auth:admin,seller','prefix'=>'admin','namespace'=>'
 	});
 
 });
+
+Route::get('/user_login', function () {
+    return view('web.user.user_login');
+});
+
+Route::get('/user_register', function () {
+    return view('web.user.user_register');
+});
+
+Route::get('/my_profile', function () {
+    return view('web.profile.my_profile');
+});
