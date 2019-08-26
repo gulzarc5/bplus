@@ -84,6 +84,15 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 
 	Route::group(['namespace'=> 'Configuration'], function(){
 
+		//*****************************Sliders********************
+
+		Route::get('Slider/Form/','ConfigurationController@SliderFormView')->name('admin.SliderFormView');
+		Route::post('Slider/','ConfigurationController@sliderInsert')->name('admin.sliderInsert');
+		Route::get('Slider/Edit/{slider_id}','ConfigurationController@sliderEdit')->name('admin.sliderEdit');
+		Route::post('Slider/Update','ConfigurationController@sliderUpdate')->name('admin.sliderUpdate');
+		Route::get('Slider/Status/Update/{slider_id}/{status}','ConfigurationController@sliderStatusUpdate')->name('admin.sliderStatusUpdate');
+		Route::get('Slider/Delete/{slider_id}','ConfigurationController@sliderDelete')->name('admin.sliderDelete');
+
 		//********************************Size Configuration Route***************************************
 		// Route::get('/Add/Size/Name', 'ConfigurationController@viewSizeNameForm')->name('admin.add_size_name_form');
 		// Route::post('/Add/Size/Name', 'ConfigurationController@AddSizeName')->name('admin.add_size_name');
