@@ -1,5 +1,5 @@
 @extends('web.templet.master')
-@section('title', 'login')
+@section('title', 'myProfile')
 @section('content')
 <div class="container">
    <div class="row">
@@ -18,7 +18,7 @@
                </div>
                <hr>
             </div>
-            <div class="mfp-with-anim   " id="myprofile-form" style="margin-top: -20px; display: block;">
+            <div class="mfp-with-anim" id="myprofile-form" style=" display: block;">
                <form>
                   <div class="row">
                      <div class="col-lg-12">
@@ -121,7 +121,7 @@
                <div class="gap gap-small">
                </div>
             </div>
-            <div class="mfp-with-anim mfp-dialog clearfix" id="changepass-form" style="margin-top: -20px;display: none;">
+            <div class="mfp-with-anim mfp-dialog clearfix" id="changepass-form" style="margin-top: -20px; display: none;">
                <form>
                   <div class="form-group">
                      <label>Recent Password
@@ -153,7 +153,7 @@
                      </a>
                   </li>
                   <li>
-                     <a href="#nav-pwd-dialog" >Forgot Password?
+                     <a href="{{url('forgot_password')}}" >Forgot Password?
                      </a>
                   </li>
                </ul>
@@ -161,8 +161,6 @@
          </div>
       </div>
    </div>
-</div>
-</div>
 </div>
 @endsection
 @section('script')

@@ -574,6 +574,18 @@ hr {
 }
 .dropdown-menu-shipping-cart-checkout {
   float: right;
+  margin-top: -25px;
+  background-color: #022a56;
+  color: #fff!important;
+  border: 1px solid #022a56;
+  border-radius: 5px;
+}
+.dropdown-menu-shipping-cart-checkout:hover {
+  float: right;
+  margin-top: -25px;
+  background-color: #fff;
+  color: #000!important;
+  border: 1px solid #022a56;
 }
 .dropdown-menu-items-list {
   list-style: none;

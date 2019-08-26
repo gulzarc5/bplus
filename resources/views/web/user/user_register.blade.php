@@ -1,6 +1,6 @@
 @extends('web.templet.master')
 
-@section('title', 'login')
+@section('title', 'register')
 
 @section('content')
 	<div class="mfp-with-anim  mfp-dialog clearfix" >

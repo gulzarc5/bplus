@@ -196,3 +196,10 @@ Route::get('/user_register', function () {
 Route::get('/my_profile', function () {
     return view('web.profile.my_profile');
 });
+
+Route::get('/forgot_password', function () {
+    return view('web.profile.forgot_password');
+});
+Route::get('/shopping_cart', function () {
+    return view('web.shopping_cart');
+});

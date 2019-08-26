@@ -198,7 +198,7 @@
 </a>
 </li> -->
               <li class="dropdown">
-                <a href="shopping-cart.html">
+                <a href="{{('shopping_cart')}}">
                   <i class="fa fa-shopping-cart" style="font-size: 20px;">
                   </i> 3 Items
                 </a>
@@ -258,8 +258,8 @@
                   <li>
                     <p class="dropdown-menu-shipping-cart-total">Total: $150
                     </p>
-                    <button class="dropdown-menu-shipping-cart-checkout btn btn-primary">Checkout
-                    </button>
+                   <a href="{{('shopping_cart')}}" class="dropdown-menu-shipping-cart-checkout ">Checkout
+                    </a>
                   </li>
                 </ul>
               </li>
