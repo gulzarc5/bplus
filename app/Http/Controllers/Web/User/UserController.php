@@ -24,7 +24,7 @@ class UserController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'mobile' => $request->input('mobile'),
-            'user_role' => 2,
+            'user_role' => 1,
         ]);
 
 
@@ -37,13 +37,7 @@ class UserController extends Controller
                 'seller_id' => $seller_id,
             ]);
 
-            $bank_details = DB::table('seller_bank')
-            ->insert([
-                'seller_id' => $seller_id,
-            ]);
-
-
-        	return redirect()->route('seller_login')->with('message','Thank You For Registering With Us Please Login To See The Action');
+        	return redirect()->route('web.user_registration')->with('message','Thank You For Registering With Us Please Login To See The Action');
         }else{
         	return redirect()->back()->with('error','Something Went Wrong Please try Again');
         }
