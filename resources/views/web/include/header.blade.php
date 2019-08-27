@@ -198,7 +198,7 @@
 </a>
 </li> -->
               <li class="dropdown">
-                <a href="{{('shopping_cart')}}">
+                <a href="{{url('shopping_cart')}}">
                   <i class="fa fa-shopping-cart" style="font-size: 20px;">
                   </i> 3 Items
                 </a>

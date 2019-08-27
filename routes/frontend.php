@@ -15,6 +15,14 @@ Route::group(['namespace'=> 'Web'], function(){
         Route::get('/Details/{product_id}','ProductController@productDetails')->name('web.product_details');
      });
 
+     Route::group(['namespace'=> 'Cart','prefix'=>'Cart'], function(){
+        Route::post('Add', 'CartController@AddCart')->name('web.add_cart');
+     });
+
+     Route::group(['namespace'=> 'User','prefix'=>'User'], function(){
+        Route::post('Add', 'UserController@userRegistration')->name('web.user_registration');
+     });
+
 });
 
 
@@ -46,4 +54,27 @@ Route::get('product_details', function () {
 
 Route::get('seller_register', function () {
     return view('web.seller.seller_register');
+});
+
+Route::get('/user_login', function () {
+    return view('web.user.user_login');
+});
+
+Route::get('/user_register', function () {
+    return view('web.user.user_register');
+});
+
+Route::get('/my_profile', function () {
+    return view('web.profile.my_profile');
+});
+
+Route::get('/forgot_password', function () {
+    return view('web.profile.forgot_password');
+});
+Route::get('/shopping_cart', function () {
+    return view('web.shopping_cart');
+});
+
+Route::get('/order_history', function () {
+    return view('web.order_history');
 });

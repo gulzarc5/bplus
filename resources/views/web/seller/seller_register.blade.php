@@ -12,7 +12,7 @@
                 	<div  class="col-md-4"></div>
                     <div id="login-box" class="col-md-4">
                         {{ Form::open(['method' => 'post','route'=>'seller.registration']) }}
-                            <h3 class="text-center text-info" style="text-decoration: underline;margin-top: 20px;"">Seller Registration From</h3>
+                            <h3 class="text-center text-info" style="text-decoration: underline;margin-top: 20px;">Seller Registration From</h3>
                             @if (Session::has('message'))
                                 <div class="alert alert-success" >{{ Session::get('message') }}</div>
                             @endif
