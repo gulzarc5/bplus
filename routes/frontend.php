@@ -19,6 +19,10 @@ Route::group(['namespace'=> 'Web'], function(){
         Route::post('Add', 'CartController@AddCart')->name('web.add_cart');
      });
 
+     Route::group(['namespace'=> 'User','prefix'=>'User'], function(){
+        Route::post('Add', 'UserController@userRegistration')->name('web.user_registration');
+     });
+
 });
 
 
