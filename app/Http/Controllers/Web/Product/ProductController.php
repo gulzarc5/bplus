@@ -79,32 +79,32 @@ class ProductController extends Controller
             ->get();
 
         $products_sellers=DB::table('products')
-        ->select('products.seller_id as seller_id', 'seller.name as seller_name')
-        ->join('seller','products.seller_id','=','seller.id')
-        ->whereNull('products.deleted_at')
-        ->where('products.status',1)
-        ->where('products.second_category',$second_category)
-        ->distinct()
-        ->get();
+            ->select('products.seller_id as seller_id', 'seller.name as seller_name')
+            ->join('seller','products.seller_id','=','seller.id')
+            ->whereNull('products.deleted_at')
+            ->where('products.status',1)
+            ->where('products.second_category',$second_category)
+            ->distinct()
+            ->get();
 
-         $products_brands=DB::table('products')
-        ->select('brand_name.id as brand_id', 'brand_name.name as brand_name',DB::raw('count(*) as total'))
-        ->join('brand_name','products.brand_id','=','brand_name.id')
-        ->whereNull('products.deleted_at')
-        ->where('products.status',1)
-        ->where('products.second_category',$second_category)
-        ->distinct()
-        ->groupBy('brand_name.id','brand_name.name')
-        ->get();
+        $products_brands=DB::table('products')
+            ->select('brand_name.id as brand_id', 'brand_name.name as brand_name',DB::raw('count(*) as total'))
+            ->join('brand_name','products.brand_id','=','brand_name.id')
+            ->whereNull('products.deleted_at')
+            ->where('products.status',1)
+            ->where('products.second_category',$second_category)
+            ->distinct()
+            ->groupBy('brand_name.id','brand_name.name')
+            ->get();
 
         $product_colors = DB::table('products')
-        ->select('color.id as color_id','color.name as color_name','color.value as color_value',DB::raw('count(*) as total'))
-        ->join('product_colors','products.id','=','product_colors.product_id')
-        ->join('color','product_colors.color_id','=','color.id')
-        ->where('products.second_category',$second_category)
-        ->distinct('color.id')
-        ->groupBy('color.id','color.name','color.value')
-        ->get();
+            ->select('color.id as color_id','color.name as color_name','color.value as color_value',DB::raw('count(*) as total'))
+            ->join('product_colors','products.id','=','product_colors.product_id')
+            ->join('color','product_colors.color_id','=','color.id')
+            ->where('products.second_category',$second_category)
+            ->distinct('color.id')
+            ->groupBy('color.id','color.name','color.value')
+            ->get();
 
         /// Pagination
             $current_page = 1;
