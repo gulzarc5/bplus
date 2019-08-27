@@ -12,9 +12,8 @@
                <tr>
                   <th>Product</th>
                   <th>Title</th>
-                  <th>Color/Size</th>
                   <th>Price</th>
-                  <th>Quality</th>
+                  <th>Quantity</th>
                   <th>Total</th>
                   <th>Remove</th>
                </tr>
@@ -28,10 +27,10 @@
                   </td>
                   <td class="table-shopping-cart-title"><a href="#">Gucci Patent Leather Open Toe Platform</a>
                   </td>
-                  <td>Green</td>
+                  
                   <td>₹499</td>
                   <td>
-                     <input class="form-control table-shopping-qty" type="text" value="1" />
+                     <input class="form-control table-shopping-qty" type="number" value="1" />
                   </td>
                   <td>₹499</td>
                   <td>
@@ -46,7 +45,7 @@
                   </td>
                   <td class="table-shopping-cart-title"><a href="#">Nikon D5200 24.1 MP Digital SLR Camera</a>
                   </td>
-                  <td>Black</td>
+                  
                   <td>₹350</td>
                   <td>
                      <input class="form-control table-shopping-qty" type="text" value="1" />
@@ -64,7 +63,7 @@
                   </td>
                   <td class="table-shopping-cart-title"><a href="#">Apple 11.6" MacBook Air Notebook</a>
                   </td>
-                  <td>Silver</td>
+                  
                   <td>₹1100</td>
                   <td>
                      <input class="form-control table-shopping-qty" type="text" value="1" />
@@ -82,7 +81,7 @@
                   </td>
                   <td class="table-shopping-cart-title"><a href="#">Fossil Women's Original Boyfriend</a>
                   </td>
-                  <td>Gold</td>
+                  
                   <td>₹250</td>
                   <td>
                      <input class="form-control table-shopping-qty" type="text" value="1" />

@@ -161,6 +161,12 @@
                         </ul>
                       </li>
 
+                      <li><a><i class="fa fa-bar-chart-o"></i>Sliders<span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                          <li><a href="{{route('admin.SliderFormView')}}">Sliders</a></li>
+                        </ul>
+                      </li>
+
                     </ul>
                   </li>
 

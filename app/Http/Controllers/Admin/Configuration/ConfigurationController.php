@@ -11,6 +11,9 @@ use App\Model\Configuration\SizeName;
 use Validator;
 use DataTables;
 use Illuminate\Support\Facades\DB;
+use Intervention\Image\Facades\Image;
+use File;
+use Carbon\Carbon;
 
 class ConfigurationController extends Controller
 {
@@ -1082,5 +1085,165 @@ class ConfigurationController extends Controller
     {
        $city = DB::table('city')->where('state_id',$id)->get()->pluck('name','id');
        return $city;
+    }
+
+    public function SliderFormView()
+    {
+      $slider = DB::table('slider')
+      ->whereNull('deleted_at')
+      ->get();
+      return view('admin.slider.app_slider',compact('slider'));
+    }
+
+    public function sliderInsert(Request $request)
+    {
+        $validatedData = $request->validate([
+        'type' => 'required',
+        'slider' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $image = $request->file('slider');
+        $image_name = null;
+        if($request->hasfile('slider')){
+            $destination = public_path('images/slider/');
+            $image_extension = $image->getClientOriginalExtension();
+            $image_name = md5(date('now').time())."."."$image_extension";
+            $original_path = $destination.$image_name;
+            Image::make($image)->save($original_path);
+            $thumb_path = public_path('images/slider/thumb/').$image_name;
+            Image::make($image)
+            ->resize(1000, 800)
+            ->save($thumb_path);
+        }
+        $date = Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString();
+        $slider = DB::table('slider')
+        ->insert([
+            'type' => $request->input('type'),
+            'slider' => $image_name,
+            'created_at' => $date,
+        ]);
+        if ($slider) {
+            return redirect()->back()->with('message','Slider Added Successfully');
+        }else{
+            return redirect()->back()->with('error','Something Went Wrong Please try Again');
+        }
+    }
+
+
+    public function sliderEdit($slider_id)
+    {
+      try {
+            $slider_id = decrypt($slider_id);
+      }catch(DecryptException $e) {
+          return redirect()->back();
+      }
+       $slider_edit = DB::table('slider')
+       ->where('id',$slider_id)
+       ->first();
+       return view('admin.slider.app_slider', compact('slider_edit'));
+    }
+
+    public function sliderUpdate(Request $request)
+    {
+      $validatedData = $request->validate([
+        'id' => 'required',
+        'type' => 'required',
+        'slider' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $image = $request->file('slider');
+        $image_name = null;
+        if($request->hasfile('slider')){
+            $destination = public_path('images/slider/');
+            $image_extension = $image->getClientOriginalExtension();
+            $image_name = md5(date('now').time())."."."$image_extension";
+            $original_path = $destination.$image_name;
+            Image::make($image)->save($original_path);
+            $thumb_path = public_path('images/slider/thumb/').$image_name;
+            Image::make($image)
+            ->resize(1000, 800)
+            ->save($thumb_path);
+
+            $slider_image = DB::table('slider')
+              ->where('id',$request->input('id'))
+              ->first();
+
+            $slider_image_update = DB::table('slider')
+            ->where('id',$request->input('id'))
+            ->update([
+                'slider' => $image_name,
+            ]);
+
+            if ($slider_image) {
+               $image_path = public_path('images/slider/').$slider_image->slider;
+                $image_path_thumb = public_path('images/slider/thumb/').$slider_image->slider;
+                if (file_exists($image_path)) {
+                     File::delete($image_path);
+                }
+                if (file_exists($image_path_thumb)) {
+                     File::delete($image_path_thumb);
+                }
+            }
+
+        }
+
+        $date = Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString();
+        $slider = DB::table('slider')
+        ->where('id',$request->input('id'))
+        ->update([
+            'type' => $request->input('type'),
+            'updated_at' => $date,
+        ]);
+        if ($slider) {
+            return redirect()->back()->with('message','Slider Updated Successfully');
+        }else{
+            return redirect()->back()->with('error','Something Went Wrong Please try Again');
+        }
+    }
+
+    public function sliderStatusUpdate($slider_id,$status)
+    {
+      $date = Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString();
+        try {
+            $slider_id = decrypt($slider_id);
+            $status = decrypt($status);
+        }catch(DecryptException $e) {
+            return redirect()->back();
+        }
+
+        $slider_status = DB::table('slider')
+        ->where('id',$slider_id)
+        ->update([
+            'status' => $status,
+            'updated_at' => $date,
+        ]);
+        if ($slider_status) {
+            return redirect()->back()->with('message','Slider Status Updated Successfully');
+        }else{
+            return redirect()->back()->with('error','Something Went Wrong Please try Again');
+        }
+    }
+
+    public function sliderDelete($slider_id)
+    {
+        try {
+            $slider_id = decrypt($slider_id);
+        }catch(DecryptException $e) {
+            return redirect()->back();
+        }
+
+        $date = Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString();
+        
+        $slider_status = DB::table('slider')
+        ->where('id',$slider_id)
+        ->update([
+            'deleted_at' => $date,
+        ]);
+        if ($slider_status) {
+            return redirect()->back()->with('message','Slider Deleted Successfully');
+        }else{
+            return redirect()->back()->with('error','Something Went Wrong Please try Again');
+        }
+
     }
 }
