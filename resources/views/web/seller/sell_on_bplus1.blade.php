@@ -1,5 +1,5 @@
 @extends('web.templet.master')
-@section('title', 'myProfile')
+@section('title', 'sell_on_bplus1')
 @section('content')
 <div class="container">
    <div class="row">
@@ -8,11 +8,8 @@
             <div class="panel-heading" style="margin-top: 10px;">
                <div class="row">
                   <center>
-                     <div class="col-md-6">
-                        <a href="#" class="active" id="myprofile-form-link">My Profile</a>
-                     </div>
-                     <div class="col-md-6">
-                        <a href="#" id="changepass-form-link">Change Password</a>
+                     <div class="col-md-12">
+                        <h2>Sell On Bplus</h2>
                      </div>
                   </center>
                </div>
@@ -106,12 +103,55 @@
                               </div>
                            </div>
                         </div>
+                        <div class="col-md-12">
+                        <div class="form-group">
+                           <textarea rows="3" cols="45" class="form-control" placeholder="address">
+                           </textarea>
+                        </div>
+                  </div>
                      </div>
                   </div>
-                  <div class="col-md-12">
-                     <div class="form-group">
-                        <textarea rows="3" cols="45" class="form-control" placeholder="address">
-                        </textarea>
+                  <hr>
+                  <div class="row">
+                     <div class="col-lg-12">
+                        <h3 style="margin-left: 15px;">Bank</h3>
+                        <div style="margin-top: 30px;">
+                           <div class="col-md-4">
+                              <div class="form-group">
+                                 <label>Bank Name
+                                 </label>
+                                 <input class="form-control" type="text" />
+                              </div>
+                           </div>
+                           <div class="col-md-4">
+                              <div class="form-group">
+                                 <label>Branch Name
+                                 </label>
+                                 <input class="form-control" type="text" />
+                              </div>
+                           </div>
+                           <div class="col-md-4">
+                              <div class="form-group">
+                                 <label>Account Number
+                                 </label>
+                                 <input class="form-control" type="text" />
+                              </div>
+                           </div>
+                           <div class="col-md-4">
+                              <div class="form-group">
+                                 <label>IFSC Code
+                                 </label>
+                                 <input class="form-control" type="text" />
+                              </div>
+                           </div>
+                           <div class="col-md-4">
+                              <div class="form-group">
+                                 <label>MICR Code
+                                 </label>
+                                 <input class="form-control" type="text" />
+                              </div>
+                           </div>
+                        </div>
                      </div>
                   </div>
                   <div class="col-md-12">

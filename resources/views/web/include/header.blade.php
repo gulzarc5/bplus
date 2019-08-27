@@ -290,6 +290,11 @@
                   </li>
                   <br>
                   <li>
+                    <a href="{{url('sell_on_bplus1')}}" data-effect="mfp-move-from-top" class="">Sell On Bplus1
+                    </a>
+                  </li>
+                  <br>
+                  <li>
                     <a href="{{url('order_history')}}" data-effect="mfp-move-from-top" class="">Your Orders
                     </a>
                   </li>

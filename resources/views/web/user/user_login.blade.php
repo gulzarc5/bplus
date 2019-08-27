@@ -33,7 +33,7 @@
             </a>
           </li>
           <li>
-            <a href="#nav-pwd-dialog" >Forgot Password?
+            <a href="{{url('forgot_password')}}" >Forgot Password?
             </a>
           </li>
         </ul>

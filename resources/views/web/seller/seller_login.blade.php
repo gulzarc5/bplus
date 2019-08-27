@@ -49,7 +49,8 @@
                             </div>
                             <div class="form-group">
                             	<input type="submit" name="submit" class="btn btn-info btn-md" value="Login">
-                                <br><a href="{{url('seller_register')}}" class="text-info"> Create your Account here</a>
+                                <br><br><a href="{{url('seller_register')}}" class="text-info"> Create your Account here</a>
+                                <a href="{{url('forgot_password')}}" class="text-info" style="margin-left: 10px;">Forgot Password?</a>
                             </div>
                         </div>
                        {{ Form::close() }}

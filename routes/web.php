@@ -216,3 +216,7 @@ Route::get('/shopping_cart', function () {
 Route::get('/order_history', function () {
     return view('web.order_history');
 });
+
+Route::get('/sell_on_bplus1', function () {
+    return view('web.seller.sell_on_bplus1');
+});
