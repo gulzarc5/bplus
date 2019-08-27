@@ -13,6 +13,26 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::group(['namespace'=>'Api'],function(){
+
+	Route::get('app/load','CategoryController@appLoaddata');
+	Route::get('slider/image/{image}', 'CategoryController@sliderImage');
+	Route::get('slider/image/thumb/{image}', 'CategoryController@sliderImageThumb');
+
+	Route::get('first_category/{main_category}','CategoryController@firstCategory');
+	Route::get('first/category/image/{image}', 'CategoryController@firstCategoryImage');
+	Route::get('first/category/image/thumb/{image}', 'CategoryController@firstCategoryImageThumb');
+
+
+	Route::get('seller/list/{second_category}/{page_no}','ProductController@sellerListSecondCategory');
+	Route::get('product/list/{second_category}/{seller_id}/{page_no}','ProductController@productListSecondCategory');
+
+});
+
+
+
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
