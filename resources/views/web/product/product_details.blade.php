@@ -87,6 +87,8 @@
           </li> --}}
         </ul>
       </div>
+      {{ Form::open(['method' => 'post','route'=>'web.add_cart']) }}
+                
       <div class="col-md-6">
         <div class="_box-highlight">
           <ul class="product-page-product-rating">
@@ -106,7 +108,7 @@
           <ul class="product-page-option-list">
             <li class="clearfix">
               <h5 class="product-page-option-title">Color</h5>
-              <select class="product-page-option-select">
+              <select class="product-page-option-select" name="color">
                 @foreach($product_color as $color)
                   <option value="{{$color->color_id}}">{{$color->color_name}}</option>    
                 @endforeach
@@ -126,18 +128,18 @@
               <div id="qtty_section">
                 
               </div>
-              <button class="product-page-qty product-page-qty-minus" >-
+              <button type="button" class="product-page-qty product-page-qty-minus" >-
               </button>
-              <input class="product-page-qty product-page-qty-input" type="number" id="quantity" value="{{$product->min_ord_qtty}}" />
+              <input class="product-page-qty product-page-qty-input" name="quantity" type="number" id="quantity" value="{{$product->min_ord_qtty}}" />
 
-              <button class="product-page-qty product-page-qty-plus"  >+
+              <button type="button" class="product-page-qty product-page-qty-plus"  >+
               </button>
             </li>
-            <li>
-              <a class="btn btn-lg btn-primary" href="#">
-                <i class="fa fa-shopping-cart">
-                </i>Add to Cart
-              </a>
+            <li>    
+                <input type="hidden" name="product_id" value="{{ encrypt($product->id) }}">
+                <button type="submit" class="btn btn-lg btn-primary"> <i class="fa fa-shopping-cart">
+                </i>Add to Cart</button>  
+              
             </li>
             <li>
               <a class="btn btn-lg btn-default" href="chat">
@@ -146,10 +148,15 @@
               </a>
             </li>
           </ul>
+
           <div class="gap gap-small">
           </div>
         </div>
       </div>
+
+{{ Form::close() }}
+
+
     </div>
     <div class="gap">
     </div>

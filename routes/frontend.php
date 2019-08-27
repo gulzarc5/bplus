@@ -15,6 +15,10 @@ Route::group(['namespace'=> 'Web'], function(){
         Route::get('/Details/{product_id}','ProductController@productDetails')->name('web.product_details');
      });
 
+     Route::group(['namespace'=> 'Cart','prefix'=>'Cart'], function(){
+        Route::post('Add', 'CartController@AddCart')->name('web.add_cart');
+     });
+
 });
 
 
