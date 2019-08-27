@@ -1584,7 +1584,7 @@ hr {
   text-decoration: none;
 }
 .table-shopping-qty {
-  width: 35px;
+  width: 58px;
 }
 .table-shopping-remove {
   display: block;
@@ -1596,10 +1596,46 @@ hr {
   border-radius: 50%;
   background: #e6e6e6;
   color: #595959;
+  margin-top: 18px;
 }
 .table-shopping-remove:hover {
   text-decoration: none;
   color: #f00;
+}
+.table-shopping-check {
+  display: block;
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: #e6e6e6;
+  color: #595959;
+  margin-top: 18px;
+  margin-left: 10px;
+}
+.table-shopping-check:hover {
+  text-decoration: none;
+  color: #04bd04;
+  margin-left: 10px;
+}
+.table-shopping-check-remove{
+  display: flex;
+}
+.order-status-pending{
+  background-color: #d23003;
+    padding: 7px 10px 7px 10px;
+    color: #fff!important;
+    border-color: #d23003;
+    border-radius: 5px;
+}
+.order-status-pay{
+  background-color: #39b104;
+    padding: 7px 10px 7px 10px;
+    color: #fff!important;
+    border-color: #39b104;
+    border-radius: 5px;
 }
 .shopping-cart-total {
   font-size: 17px;

@@ -208,7 +208,7 @@
                       <img src="img/cart/1.jpg" alt="Image Alternative text" title="Image Title" />
                     </a>
                     <div class="dropdown-menu-shipping-cart-inner">
-                      <p class="dropdown-menu-shipping-cart-price">$52
+                      <p class="dropdown-menu-shipping-cart-price">₹52
                       </p>
                       <p class="dropdown-menu-shipping-cart-item">
                         <a href="#">Gucci Patent Leather Open Toe Platform
@@ -221,7 +221,7 @@
                       <img src="{{asset('src/img/cart/2.jpg')}}" alt="Image Alternative text" title="Image Title" />
                     </a>
                     <div class="dropdown-menu-shipping-cart-inner">
-                      <p class="dropdown-menu-shipping-cart-price">$43
+                      <p class="dropdown-menu-shipping-cart-price">₹43
                       </p>
                       <p class="dropdown-menu-shipping-cart-item">
                         <a href="#">Nikon D5200 24.1 MP Digital SLR Camera
@@ -234,7 +234,7 @@
                       <img src="{{asset('src/img/cart/3.jpg')}}" alt="Image Alternative text" title="Image Title" />
                     </a>
                     <div class="dropdown-menu-shipping-cart-inner">
-                      <p class="dropdown-menu-shipping-cart-price">$41
+                      <p class="dropdown-menu-shipping-cart-price">₹41
                       </p>
                       <p class="dropdown-menu-shipping-cart-item">
                         <a href="#">Apple 11.6" MacBook Air Notebook 
@@ -247,7 +247,7 @@
                       <img src="{{asset('src/img/cart/4.jpg')}}" alt="Image Alternative text" title="Image Title" />
                     </a>
                     <div class="dropdown-menu-shipping-cart-inner">
-                      <p class="dropdown-menu-shipping-cart-price">$77
+                      <p class="dropdown-menu-shipping-cart-price">₹77
                       </p>
                       <p class="dropdown-menu-shipping-cart-item">
                         <a href="#">Fossil Women's Original Boyfriend
@@ -256,9 +256,9 @@
                     </div>
                   </li>
                   <li>
-                    <p class="dropdown-menu-shipping-cart-total">Total: $150
+                    <p class="dropdown-menu-shipping-cart-total">Total: ₹150
                     </p>
-                   <a href="{{('shopping_cart')}}" class="dropdown-menu-shipping-cart-checkout ">Checkout
+                   <a href="{{url('shopping_cart')}}" class="dropdown-menu-shipping-cart-checkout ">Checkout
                     </a>
                   </li>
                 </ul>
@@ -290,7 +290,7 @@
                   </li>
                   <br>
                   <li>
-                    <a href="" data-effect="mfp-move-from-top" class="">Your Orders
+                    <a href="{{url('order_history')}}" data-effect="mfp-move-from-top" class="">Your Orders
                     </a>
                   </li>
                   <br>

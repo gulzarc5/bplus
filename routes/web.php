@@ -212,3 +212,7 @@ Route::get('/forgot_password', function () {
 Route::get('/shopping_cart', function () {
     return view('web.shopping_cart');
 });
+
+Route::get('/order_history', function () {
+    return view('web.order_history');
+});

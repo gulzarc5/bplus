@@ -34,7 +34,7 @@
   @if(isset($product) && !empty($product))
     <div class="row">
       <div class="col-md-6">
-        <div class="product-page-product-wrap jqzoom-stage jqzoom-stage-lg">
+        <div class="product-page-product-wrap jqzoom-stage">
           <div class="clearfix">
             <a href="{{ asset('images/product/'. $product->main_image.'')}}" id="jqzoom" data-rel="gal-1">
               <img src="{{ asset('images/product/'. $product->main_image.'')}}" alt="Image Alternative text" title="Image Title" />
@@ -49,7 +49,7 @@
             @foreach($product_images as $image)
               @if($flag)
                 <li>
-                  <a class="zoomThumbActive" href="javascript:void(0)" data-rel="{gallery:'gal-1', smallimage: {{ asset('images/product/thumb/'. $image->image.'')}}, largeimage: {{ asset('images/product/'. $image->image.'')}}}">
+                  <a class="zoomThumbActive" href="javascript:void(0)" data-rel="{gallery:'gal-1', smallimage: '{{ asset('images/product/'. $image->image.'')}}', largeimage: '{{ asset('images/product/'. $image->image.'')}}'}">
                     <img src="{{ asset('images/product/thumb/'. $image->image.'')}}" alt="Image Alternative text" title="Image Title" />
                   </a>
                 </li>
@@ -58,12 +58,11 @@
                 @endphp
               @else
                 <li>
-                  <a  href="javascript:void(0)" data-rel="{gallery:'gal-1', smallimage: {{ asset('images/product/thumb/'. $image->image.'')}}, largeimage: {{ asset('images/product/'. $image->image.'')}}}">
+                  <a href="javascript:void(0)" data-rel="{gallery:'gal-1', smallimage: '{{ asset('images/product/thumb/'. $image->image.'')}}', largeimage: '{{ asset('images/product/'. $image->image.'')}}'}">
                     <img src="{{ asset('images/product/thumb/'. $image->image.'')}}" alt="Image Alternative text" title="Image Title" />
                   </a>
                 </li>
               @endif
-            
             @endforeach
           @endif
           {{-- <li>
