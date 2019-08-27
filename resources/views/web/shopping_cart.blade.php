@@ -14,7 +14,7 @@
                   <th>Title</th>
                   <th>Color/Size</th>
                   <th>Price</th>
-                  <th>Quality</th>
+                  <th>Quantity Cart</th>
                   <th>Total</th>
                   <th>Remove</th>
                </tr>
