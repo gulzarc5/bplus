@@ -69,14 +69,6 @@ class ProductController extends Controller
             return redirect()->back();
         }
 
-        $seller_second_category = DB::table('products')
-            ->select('products.seller_id as seller_id','products.second_category as second_category','second_category.name as category_name')
-            ->join('second_category','products.second_category','=','second_category.id')
-            ->whereNull('products.deleted_at')
-            ->where('products.status',1)
-            ->where('products.seller_id',$seller_id)
-            ->distinct()
-            ->get();
 
         $products_sellers=DB::table('products')
             ->select('products.seller_id as seller_id', 'seller.name as seller_name')
@@ -86,6 +78,16 @@ class ProductController extends Controller
             ->where('products.second_category',$second_category)
             ->distinct()
             ->get();
+
+        $seller_second_category = DB::table('products')
+            ->select('products.seller_id as seller_id','products.second_category as second_category','second_category.name as category_name')
+            ->join('second_category','products.second_category','=','second_category.id')
+            ->whereNull('products.deleted_at')
+            ->where('products.status',1)
+            ->where('products.seller_id',$seller_id)
+            ->distinct()
+            ->get();
+
 
         $products_brands=DB::table('products')
             ->select('brand_name.id as brand_id', 'brand_name.name as brand_name',DB::raw('count(*) as total'))
@@ -122,6 +124,15 @@ class ProductController extends Controller
             'total_product' => $product_count,
         ];
 
+        $product_min_max_price = DB::table('products')
+            ->select(DB::raw('min(price) as min_price'),DB::raw('max(price) as max_price'))
+            ->whereNull('deleted_at')
+            ->where('status',1)
+            ->where('second_category',$second_category)
+            ->where('seller_id',$seller_id)
+            ->first();
+        // dd($product_min_max_price);
+
         $product_against_seller=DB::table('products')
             ->whereNull('deleted_at')
             ->where('status',1)
@@ -132,9 +143,13 @@ class ProductController extends Controller
             ->get();
          
         $second_category_name = DB::table('second_category')->where('id',$second_category)->first();
-        return view('web.product.product_category',compact('seller_second_category','products_sellers','products_brands','product_colors','product_against_seller','second_category_name','pagination'));
+        return view('web.product.product_category',compact('seller_second_category','products_sellers','products_brands','product_colors','product_against_seller','second_category_name','pagination','product_min_max_price','seller_id'));
     }
 
+    public function producatFilter(Request $request)
+    {
+        echo "hi";
+    }
 
     public function productDetails($product_id)
     {

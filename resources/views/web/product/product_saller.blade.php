@@ -58,7 +58,7 @@
               <div class="product-img-wrap">
                 <img class="product-img" src="{{asset('images/product/thumb/'. $product->main_image.'')}}" alt="Image Alternative text" title="Image Title" />
               </div>
-              <a class="product-link" href="#">
+              <a class="product-link" href="{{route('web.product_details',['product_id' => encrypt($product->id)])}}">
               </a>
               <div class="product-caption">
                 <ul class="product-caption-rating">

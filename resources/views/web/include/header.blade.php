@@ -106,9 +106,9 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-category">
 
-                  @if(isset($category_list) && !empty($category_list))
+                  @if(isset($header_data) && !empty($header_data) && isset($header_data['category_list']) && !empty($header_data['category_list']))
 
-                    @foreach($category_list as $category)
+                    @foreach($header_data['category_list'] as $category)
 
                       <li>
                         <a href="#">
@@ -198,25 +198,49 @@
 </a>
 </li> -->
               <li class="dropdown">
-                <a href="{{url('shopping_cart')}}">
-                  <i class="fa fa-shopping-cart" style="font-size: 20px;">
-                  </i> 3 Items
+                <a href="{{route('web.viewCart')}}">
+                  <i class="fa fa-shopping-cart" style="font-size: 20px;"></i> 
+                    @if(isset($header_data) && !empty($header_data) && isset($header_data['cart_data']) && !empty($header_data['cart_data']) )
+                     {{ count($header_data['cart_data'])}}
+                     @else
+                       0
+                      @endif
+                   Items
                 </a>
                 <ul class="dropdown-menu dropdown-menu-shipping-cart">
-                  <li>
-                    <a class="dropdown-menu-shipping-cart-img" href="#">
-                      <img src="img/cart/1.jpg" alt="Image Alternative text" title="Image Title" />
-                    </a>
-                    <div class="dropdown-menu-shipping-cart-inner">
-                      <p class="dropdown-menu-shipping-cart-price">₹52
-                      </p>
-                      <p class="dropdown-menu-shipping-cart-item">
-                        <a href="#">Gucci Patent Leather Open Toe Platform
-                        </a>
-                      </p>
-                    </div>
-                  </li>
-                  <li>
+                  @php
+                      $header_cart_total = 0; 
+                    @endphp
+                  @if(isset($header_data) && !empty($header_data) && isset($header_data['cart_data']) && !empty($header_data['cart_data']) )
+                    
+
+                     @foreach($header_data['cart_data'] as $cart)
+                        <li>
+                          <a class="dropdown-menu-shipping-cart-img" href="#">
+                            <img src="{{ asset('images/product/thumb/'.$cart['image'].'')}}" alt="Image Alternative text" title="Image Title" />
+                          </a>
+                          <div class="dropdown-menu-shipping-cart-inner">
+                            <p class="dropdown-menu-shipping-cart-price">₹{{ number_format($cart['price'],2) }}</p>
+                            <p class="dropdown-menu-shipping-cart-item">
+                              <a href="#">{{ $cart['title'] }}</a>
+                            </p>
+                          </div>
+                        </li>
+
+                        @php
+                          $header_cart_total = $header_cart_total + (floatval($cart['quantity']) * floatval($cart['price']));
+                        @endphp
+                     @endforeach
+
+                  @else
+                    <li>
+                      <div class="dropdown-menu-shipping-cart-inner">
+                        <p class="dropdown-menu-shipping-cart-price">Cart is Empty</p>
+                      </div>
+                    </li>
+                  @endif
+                  
+                 {{--  <li>
                     <a class="dropdown-menu-shipping-cart-img" href="#">
                       <img src="{{asset('src/img/cart/2.jpg')}}" alt="Image Alternative text" title="Image Title" />
                     </a>
@@ -254,51 +278,48 @@
                         </a>
                       </p>
                     </div>
-                  </li>
+                  </li> --}}
+
+
                   <li>
-                    <p class="dropdown-menu-shipping-cart-total">Total: ₹150
+                    <p class="dropdown-menu-shipping-cart-total">Total: ₹{{ number_format($header_cart_total,2) }} 
                     </p>
-                   <a href="{{url('shopping_cart')}}" class="dropdown-menu-shipping-cart-checkout ">Checkout
+                   <a href="{{route('web.viewCart')}}" class="dropdown-menu-shipping-cart-checkout ">Checkout
                     </a>
                   </li>
                 </ul>
               </li>
               <li class="dropdown">
-                <a href="">
-                  <i class="fa fa-user" style="font-size: 20px;">
-                  </i> User Account
-                </a>
+                <a href=""><i class="fa fa-user" style="font-size: 20px;"></i> User Account</a>
                 <ul class="dropdown-menu">
-                  <li>
-                    <a href="{{url('user_login')}}" data-effect="mfp-move-from-top" >Sign In
-                    </a>
-                  </li>
+                  <li><a href="{{route('web.userLoginForm')}}" data-effect="mfp-move-from-top" >Sign In</a></li>
                   <br>
-                  <li>
-                    <a href="{{url('user_register')}}" data-effect="mfp-move-from-top" >Create Account
-                    </a>
-                  </li>
+
+                  <li><a href="{{route('web.userRegistrationForm')}}" data-effect="mfp-move-from-top" >Create Account</a></li>
                   <br>
-                  <li>
-                    <a href="{{url('my_profile')}}" data-effect="mfp-move-from-top" >My Profile
-                    </a>
-                  </li>
+
+                  <li><a href="{{url('seller_login')}}" data-effect="mfp-move-from-top" class="">Sell On Bplus</a></li>
                   <br>
-                  <li>
-                    <a href="{{url('seller_login')}}" data-effect="mfp-move-from-top" class="">Sell On Bplus
-                    </a>
-                  </li>
-                  <br>
-                  <li>
-                    <a href="{{url('sell_on_bplus1')}}" data-effect="mfp-move-from-top" class="">Sell On Bplus1
-                    </a>
-                  </li>
-                  <br>
-                  <li>
-                    <a href="{{url('order_history')}}" data-effect="mfp-move-from-top" class="">Your Orders
-                    </a>
-                  </li>
-                  <br>
+                  @if(Auth::guard('buyer')->id())
+
+                    <li><a href="{{route('web.myprofile')}}" data-effect="mfp-move-from-top" >My Profile</a></li>
+                    <br>
+
+                    <li><a href="{{url('sell_on_bplus1')}}" data-effect="mfp-move-from-top" class="">Become A seller</a></li>
+                    <br>
+                      
+
+                    <li><a href="{{url('order_history')}}" data-effect="mfp-move-from-top" class="">Your Orders</a></li>
+                    <br>
+
+
+                    <li><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                     <form id="logout-form" action="{{ route('web.buyerLogout') }}" method="POST" style="display: none;">
+                          @csrf
+                      </form>
+                    <br>
+                  @endif
+
                 </ul>
               </li>
             </ul>

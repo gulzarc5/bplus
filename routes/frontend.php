@@ -13,16 +13,33 @@ Route::group(['namespace'=> 'Web'], function(){
 
         Route::get('/All/{seller_id}/{second_category}','ProductController@productView')->name('web.product_view');
         Route::get('/Details/{product_id}','ProductController@productDetails')->name('web.product_details');
+
+        Route::post('/Filter/','ProductController@productFilter')->name('web.product_filter');
      });
 
      Route::group(['namespace'=> 'Cart','prefix'=>'Cart'], function(){
+        Route::get('/shopping_cart', 'CartController@viewCart')->name('web.viewCart');
         Route::post('Add', 'CartController@AddCart')->name('web.add_cart');
+        Route::post('/cartUpdate', 'CartController@updateCart')->name('web.updateCart');
+        Route::get('/cart/item/remove/{p_id}','CartController@cartItemRemove')->name('cartItemRemove');
+
      });
 
      Route::group(['namespace'=> 'User','prefix'=>'User'], function(){
+        Route::get('/user_register', 'UserController@userRegistrationForm')->name('web.userRegistrationForm');
+        Route::get('/user_login', 'UserController@userLoginForm')->name('web.userLoginForm');
+        Route::post('/user_login', 'LoginController@buyerLogin')->name('web.buyerLogin');
+        Route::post('/Logout', 'LoginController@logout')->name('web.buyerLogout');
+
         Route::post('Add', 'UserController@userRegistration')->name('web.user_registration');
+
+
      });
 
+     Route::group(['middleware'=>'auth:buyer','namespace'=> 'User','prefix'=>'User'], function(){
+
+        Route::get('/my_profile', 'UserController@myProfileForm')->name('web.myprofile');
+     });
 });
 
 
@@ -56,25 +73,19 @@ Route::get('seller_register', function () {
     return view('web.seller.seller_register');
 });
 
-Route::get('/user_login', function () {
-    return view('web.user.user_login');
-});
 
-Route::get('/user_register', function () {
-    return view('web.user.user_register');
-});
 
-Route::get('/my_profile', function () {
-    return view('web.profile.my_profile');
-});
+
+
 
 Route::get('/forgot_password', function () {
     return view('web.profile.forgot_password');
 });
-Route::get('/shopping_cart', function () {
-    return view('web.shopping_cart');
-});
+
 
 Route::get('/order_history', function () {
     return view('web.order_history');
+});
+Route::get('/sell_on_bplus1', function () {
+    return view('web.seller.sell_on_bplus1');
 });

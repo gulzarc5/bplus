@@ -150,4 +150,85 @@ class ProductController extends Controller
 
         return response()->json($response, 200);
     }
+
+    public function productImage($image_name)
+    {
+        $path =  public_path('images/product/').$image_name;
+
+        if (file_exists($path)) {
+            $mime = \File::mimeType($path);
+
+            header('Content-type: '.$mime);
+
+            return readfile($path);
+        }else{
+            return 0;
+        }        
+    }
+
+    public function productImageThumb($image_name)
+    {
+        $path =  public_path('images/product/thumb/').$image_name;
+
+        if (file_exists($path)) {
+            $mime = \File::mimeType($path);
+
+            header('Content-type: '.$mime);
+
+            return readfile($path);
+        }else{
+            return 0;
+        }        
+    }
+
+    public function singleProductView($product_id)
+    {        
+
+        $product=DB::table('products')
+        ->select('products.*','brand_name.name as brand_name')
+        ->join('brand_name','brand_name.id','=','products.brand_id')
+        ->whereNull('products.deleted_at')
+        ->where('products.status',1)
+        ->where('products.id',$product_id)
+        ->first();
+
+        $seller_details = DB::table('seller')
+        ->select('seller.name as seller_name','state.name as state_name','city.name as city_name')
+        ->join('seller_details','seller.id','=','seller_details.seller_id')
+        ->join('state','seller_details.state_id','=','state.id')
+        ->join('city','seller_details.city_id','=','city.id')
+        ->where('seller.id',$product->seller_id)
+        ->first();
+
+        $product_images = DB::table('product_image')
+        ->where('product_id',$product_id)
+        ->whereNull('deleted_at')
+        ->where('status',1)
+        ->get();
+        $product_color = DB::table('product_colors')
+        ->select('product_colors.id as color_id','color.name as color_name','color.value as color_value')
+        ->join('color','product_colors.color_id','color.id')
+        ->where('product_colors.product_id',$product_id)
+        ->where('product_colors.status','1')
+        ->whereNull('product_colors.deleted_at')
+        ->get();
+        
+
+        $data = [
+            'product' => $product,
+            'product_images' => $product_images,
+            'product_color'=> $product_color,
+            'seller_details' => $seller_details,
+        ];
+
+
+        $response = [
+            'status' => true,
+            'message' => 'Product Details',
+            'data' => $data,
+
+        ];
+
+        return response()->json($response, 200);
+    }
 }

@@ -66,6 +66,9 @@ class Handler extends ExceptionHandler
             case 'seller':
                 $login = 'seller_login';
                 break;
+            case 'buyer':
+                $login = 'web.buyerLogin';
+                break;
             default:
                 $login = 'login';
                 break;

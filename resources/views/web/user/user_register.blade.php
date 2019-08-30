@@ -6,6 +6,12 @@
 	<div class="mfp-with-anim  mfp-dialog clearfix" >
         <h3 class="widget-title text-center">Create your Account
         </h3>
+        @if (Session::has('message'))
+            <div class="alert alert-success" >{{ Session::get('message') }}</div>
+        @endif
+        @if (Session::has('error'))
+            <div class="alert alert-danger" >{{ Session::get('error') }}</div>
+        @endif
         <hr />
         {{ Form::open(array('route' => 'web.user_registration', 'method' => 'post')) }}
           <div class="form-group">
@@ -39,7 +45,7 @@
           </div>
           <div class="form-group">
             <label>Repeat Password</label>
-            <input class="form-control" type="password" name="confirm-password_confirmation" />
+            <input class="form-control" type="password" name="password_confirmation" />
 
               @if($errors->has('password_confirmation'))
                   <span class="invalid-feedback" role="alert" style="color:red">

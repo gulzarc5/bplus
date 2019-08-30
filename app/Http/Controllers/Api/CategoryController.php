@@ -83,6 +83,37 @@ class CategoryController extends Controller
         }        
     }
 
+    public function mainCategoryImage($image_name)
+    {
+        $path =  public_path('images/category/main_category/').$image_name;
+
+ 
+        if (file_exists($path)) {
+            $mime = \File::mimeType($path);
+
+            header('Content-type: '.$mime);
+
+            return readfile($path);
+        }else{
+            return 0;
+        }        
+    }
+
+    public function mainCategoryImageThumb($image_name)
+    {
+        $path =  public_path('images/category/main_category/thumb/').$image_name;
+
+        if (file_exists($path)) {
+            $mime = \File::mimeType($path);
+
+            header('Content-type: '.$mime);
+
+            return readfile($path);
+        }else{
+            return 0;
+        }        
+    }
+
     public function firstCategory($main_category)
     {
       
@@ -114,7 +145,7 @@ class CategoryController extends Controller
 
     public function firstCategoryImage($image_name)
     {
-        $path =  public_path('images/category/first_category').$image_name;
+        $path =  public_path('images/category/first_category/').$image_name;
 
         if (file_exists($path)) {
             $mime = \File::mimeType($path);
@@ -130,6 +161,80 @@ class CategoryController extends Controller
     public function firstCategoryImageThumb($image_name)
     {
         $path =  public_path('images/category/first_category/thumb/').$image_name;
+
+        if (file_exists($path)) {
+            $mime = \File::mimeType($path);
+
+            header('Content-type: '.$mime);
+
+            return readfile($path);
+        }else{
+            return 0;
+        }        
+    }
+
+    public function secondCategory($first_category)
+    {
+        $second_category1 = DB::table('second_category')
+        ->where('first_category_id',$first_category)
+        ->whereNull('deleted_at')
+        ->where('status',1)
+        ->get();
+
+        if ($second_category1) {
+
+            $second_category = [];
+            foreach ($second_category1 as $key => $value) {
+                $product_count = 0;
+                $product_count = DB::table('products')
+                ->where('second_category',$value->id)
+                ->whereNull('deleted_at')
+                ->where('status',1)
+                ->count();
+                $second_category[] = [
+                    'id' => $value->id,
+                    'name' => $value->name,
+                    'image' => $value->image,
+                    'total_product' => $product_count,
+                ];
+            }
+            $response = [
+                'status' => true,
+                'message' => 'Second category list',
+                'data' => $second_category,
+            ];
+                
+            return response()->json($response, 200);
+        }else{
+            $second_category=[];
+            $response = [
+                'status' => false,
+                'message' => 'Second category list',
+                'data' => $second_category,
+            ];
+                
+            return response()->json($response, 200);
+        }
+    }
+
+    public function secondCategoryImage($image_name)
+    {
+        $path =  public_path('images/category/second_category/').$image_name;
+
+        if (file_exists($path)) {
+            $mime = \File::mimeType($path);
+
+            header('Content-type: '.$mime);
+
+            return readfile($path);
+        }else{
+            return 0;
+        }        
+    }
+
+    public function secondCategoryImageThumb($image_name)
+    {
+        $path =  public_path('images/category/second_category/thumb/').$image_name;
 
         if (file_exists($path)) {
             $mime = \File::mimeType($path);

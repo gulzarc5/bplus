@@ -74,13 +74,17 @@ class ProductController extends Controller
             $product_id = $product_insert; 
 
             //*******************Insert Color**************
+            // dd($color);
             if (isset($color) && !empty($color)) {
                 foreach ($color as $colors) {
-                    $color_insert = DB::table('product_colors')
-                    ->insert([
-                        'product_id' => $product_id,
-                        'color_id' => $colors,
-                    ]);
+                    if (!empty($colors)) {
+                        $color_insert = DB::table('product_colors')
+                            ->insert([
+                                'product_id' => $product_id,
+                                'color_id' => $colors,
+                            ]);
+                    }
+                    
                 }
             }
             

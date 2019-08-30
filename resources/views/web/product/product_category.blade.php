@@ -8,61 +8,34 @@
       @if(isset($second_category_name) && !empty($second_category_name))
         @if(!empty($second_category_name->name))
           {{ $second_category_name->name }}
+          <input type="hidden" id="category_id_filter" value="{{$second_category_name->id}}">
         @endif
       @endif
     </h1>
     <ol class="breadcrumb page-breadcrumb">
-      <li>
-        <a href="#">Home
-        </a>
-      </li>
-      <li>
-        <a href="#">Fasion
-        </a>
-      </li>
-      <li>
-        <a href="#">Women
-        </a>
-      </li>
-      <li>
-        <a href="#">Accessories
-        </a>
-      </li>
-      <li class="active">Handbags
-      </li>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Fasion</a></li>
+      <li><a href="#">Women</a></li>
+      <li><a href="#">Accessories</a></li>
+      <li class="active">Handbags</li>
     </ol>
     <ul class="category-selections clearfix">
+      <li><a class="fa fa-th-large category-selections-icon active" href="#"></a></li>
+      <li><a class="fa fa-th-list category-selections-icon" href="#"></a></li>
       <li>
-        <a class="fa fa-th-large category-selections-icon active" href="#">
-        </a>
-      </li>
-      <li>
-        <a class="fa fa-th-list category-selections-icon" href="#">
-        </a>
-      </li>
-      <li>
-        <span class="category-selections-sign">Sort by :
-        </span>
+        <span class="category-selections-sign">Sort by :</span>
         <select class="category-selections-select">
-          <option selected>Newest First
-          </option>
-          <option>Best Sellers
-          </option>
-          <option>Trending Now
-          </option>
-          <option>Best Raited
-          </option>
-          <option>Price : Lowest First
-          </option>
-          <option>Price : Highest First
-          </option>
-          <option>Title : A - Z
-          </option>
-          <option>Title : Z - A
-          </option>
+        <option selected>Newest First</option>
+          {{-- <option>Best Sellers</option>
+          <option>Trending Now</option> --}}
+          {{-- <option>Best Raited</option> --}}
+          <option>Price : Lowest First</option>
+          <option>Price : Highest First</option>
+          <option>Title : A - Z </option>
+          <option>Title : Z - A</option>
         </select>
       </li>
-      <li>
+     {{--  <li>
         <span class="category-selections-sign">Items :
         </span>
         <select class="category-selections-select">
@@ -75,35 +48,30 @@
           <option>All
           </option>
         </select>
-      </li>
+      </li> --}}
     </ul>
   </header>
   <div class="row">
     <div class="col-md-3">
       <aside class="category-filters category-filters-color">
 
-         {{-- FIlter Category Section  --}}
-
-         @if(isset($seller_second_category) && !empty($seller_second_category))
-
+        {{-- FIlter Category Section  --}}
+        @if(isset($seller_second_category) && !empty($seller_second_category))
           <div class="category-filters-section">
             <h3 class="widget-title-sm">Category</h3>
             <ul class="cateogry-filters-list">
-
               @foreach($seller_second_category as $second_category)
-                <li><a href="{{route('web.product_view',['seller_id'=>encrypt($second_category->seller_id),'second_category'=>encrypt($second_category->second_category)])}}">{{$second_category->category_name}}</a></li>
+                <li><a href="{{route('web.product_view',['seller_id'=>encrypt($second_category->seller_id),'second_category'=>encrypt($second_category->second_category)])}}">{{$second_category->category_name}}</a>
+                  
+                </li>
               @endforeach
-
             </ul>
           </div>
-
         @endif
 
-
         <div class="category-filters-section">
-          <h3 class="widget-title-sm">Price
-          </h3>
-          <input type="text" id="price-slider" />
+          <h3 class="widget-title-sm">Price</h3>
+          <input type="hidden" id="price-slider" />
         </div>
 
 
@@ -115,7 +83,11 @@
             @foreach($products_sellers as $products_seller)
               <div class="checkbox">
                 <label>
-                  <input class="i-check" type="checkbox" />{{$products_seller->seller_name}}
+                  @if(isset($seller_id) && !empty($seller_id) && ($seller_id == $products_seller->seller_id ))
+                  <input class="i-check" checked type="checkbox"  name="sellers" value="{{ $products_seller->seller_id }}" />{{$products_seller->seller_name}}
+                  @else
+                    <input class="i-check" type="checkbox"  name="sellers" value="{{ $products_seller->seller_id }}" />{{$products_seller->seller_name}}
+                  @endif
                   <!-- <span class="category-filters-amount">(55)
                   </span> -->
                 </label>
@@ -135,7 +107,7 @@
           @foreach($products_brands as $products_brand)
           <div class="checkbox">
             <label>
-              <input class="i-check" type="checkbox" />{{$products_brand->brand_name}}
+              <input class="i-check" type="checkbox"  name="brand" value="{{$products_brand->brand_id}}" />{{$products_brand->brand_name}}
               <span class="category-filters-amount">({{$products_brand->total}})</span>
             </label>
           </div>
@@ -154,7 +126,7 @@
           @foreach($product_colors as $product_color)
           <div class="checkbox">
             <label>
-              <input class="i-check" type="checkbox" />{{ $product_color->color_name }}<span style="height: 15px; width: 30px;   background-color: {{ $product_color->color_value }}; border-radius: 30%; display: inline-block;"></span>
+              <input class="i-check" type="checkbox" name="color"  value="{{ $product_color->color_id }}" />{{ $product_color->color_name }}<span style="height: 15px; width: 30px;   background-color: {{ $product_color->color_value }}; border-radius: 30%; display: inline-block;"></span>
               <span class="category-filters-amount">({{ $product_color->total }})
               </span>
             </label>
@@ -273,15 +245,119 @@
 </div>
 @endsection
 
+
 @section('script')
+@if(isset($product_min_max_price) && !empty($product_min_max_price) && !empty($product_min_max_price->min_price) && !empty($product_min_max_price->max_price))
 <script type="text/javascript">
   $("#price-slider").ionRangeSlider({
-    min: 200,
-    max: 575,
+    min: {{ $product_min_max_price->min_price }},
+    max: {{ $product_min_max_price->max_price }},
     type: 'double',
     prefix: "Rs ",
     prettify: false,
     hasGrid: false
 });
 </script>
+@else
+  <script type="text/javascript">
+  $("#price-slider").ionRangeSlider({
+    min: 0,
+    max: 1000,
+    type: 'double',
+    prefix: "Rs ",
+    prettify: false,
+    hasGrid: false
+});
+@endif
+</script>
+
+<script>
+
+
+
+$("#irs-1").click(function () {
+
+  // var category_id_filter = $("#category_id_filter").val();
+  // var prices = $("#price-slider").val();
+
+  // var filter_color = $("input[name='color']:checked").map(function(){return $(this).val();}).get();
+
+  // var filter_sellers = new Array();
+  // $("input:checkbox[name=sellers]:checked").each(function(){
+  //     filter_sellers.push($(this).val());
+  // });
+
+  // var filter_brands = new Array();
+  // $("input:checkbox[name=brand]:checked").each(function(){
+  //     filter_brands.push($(this).val());
+  // });
+  // console.log(filter_brands);
+  // console.log(filter_sellers);
+  // console.log(filter_color);
+ 
+  filterProduct();
+  
+
+  // alert("category "+category_id_filter+" filter_color "+filter_color+" prices "+prices+" filter_sellers "+filter_sellers+" filter_brands "+filter_brands);
+
+})
+
+
+  function filterProduct() {
+      var category_id_filter = $("#category_id_filter").val();
+      var prices = $("#price-slider").val();
+
+      var filter_color = $("input[name='color']:checked").map(function(){return $(this).val();}).get();
+
+      var filter_sellers = new Array();
+      $("input:checkbox[name=sellers]:checked").each(function(){
+          filter_sellers.push($(this).val());
+      });
+
+      var filter_brands = new Array();
+      $("input:checkbox[name=brand]:checked").each(function(){
+          filter_brands.push($(this).val());
+      });
+      console.log(filter_brands);
+      console.log(filter_sellers);
+      console.log(filter_color);
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        type:"POST",
+        url:"{{ route('web.product_filter')}}",
+        data:{
+          category:category_id_filter,
+          prices:prices,
+          colors:filter_color,
+          sellers:filter_sellers,
+          brands:filter_brands,
+        },
+        beforeSend:function() { 
+             $("<img src='http://miniontours.yzi.me/loading.gif'  style='position:relative;top:200px;left:200px;z-index:2000' id='loading-excel' />").appendTo("body");
+        },
+        complete:function() {
+               $("#loading-excel").remove();
+        },
+        success:function(data){
+          
+            console.log(data);
+            // var cat = JSON.parse(data);
+            // $("#first_category").html("<option value=''>Please Select Sub Category</option>");
+
+            // $.each( cat, function( key, value ) {
+            //     $("#first_category").append("<option value='"+key+"'>"+value+"</option>");
+            // });
+
+        }
+    });
+  }
+</script>
+
+
+
 @endsection

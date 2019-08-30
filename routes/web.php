@@ -194,29 +194,7 @@ Route::group(['middleware'=>'auth:admin,seller','prefix'=>'admin','namespace'=>'
 
 });
 
-Route::get('/user_login', function () {
-    return view('web.user.user_login');
-});
 
-Route::get('/user_register', function () {
-    return view('web.user.user_register');
-});
 
-Route::get('/my_profile', function () {
-    return view('web.profile.my_profile');
-});
 
-Route::get('/forgot_password', function () {
-    return view('web.profile.forgot_password');
-});
-Route::get('/shopping_cart', function () {
-    return view('web.shopping_cart');
-});
 
-Route::get('/order_history', function () {
-    return view('web.order_history');
-});
-
-Route::get('/sell_on_bplus1', function () {
-    return view('web.seller.sell_on_bplus1');
-});
