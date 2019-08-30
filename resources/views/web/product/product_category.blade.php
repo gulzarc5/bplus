@@ -324,31 +324,42 @@ $("#irs-1").click(function () {
       $("input:checkbox[name=brand]:checked").each(function(){
           filter_brands.push($(this).val());
       });
+<<<<<<< HEAD
       // console.log(filter_brands);
       // console.log(filter_sellers);
       // console.log(filter_color);
+=======
+
+>>>>>>> working on filteration
 
     $.ajaxSetup({
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
         }
     });
     $.ajax({
         type:"POST",
         url:"{{ route('web.product_filter')}}",
         data:{
+          "_token": "{{ csrf_token() }}",
           category:category_id_filter,
           prices:prices,
           colors:filter_color,
           sellers:filter_sellers,
           brands:filter_brands,
         },
+<<<<<<< HEAD
         beforeSend:function() { 
              $('#myModal').modal('show');
              $("#myModal").removeClass("mfp-hide");
 
 
         },
+=======
+        // beforeSend:function() { 
+        //      // $("<img src='http://miniontours.yzi.me/loading.gif'  style='position:relative;top:200px;left:200px;z-index:2000' id='loading-excel' />").appendTo("body");
+        // },
+>>>>>>> working on filteration
         // complete:function() {
         //        $("#loading-excel").remove();
         // },

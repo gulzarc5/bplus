@@ -146,9 +146,50 @@ class ProductController extends Controller
         return view('web.product.product_category',compact('seller_second_category','products_sellers','products_brands','product_colors','product_against_seller','second_category_name','pagination','product_min_max_price','seller_id'));
     }
 
-    public function producatFilter(Request $request)
+    public function productFilter(Request $request)
     {
-        echo "hi";
+        $this->validate($request, [
+            'category'   => 'required',
+            'sellers' => 'required',
+        ]);
+
+        $second_category = $request->input('category');
+        $sellers = $request->input('sellers');
+        $brands = $request->input('brands');
+        $prices = $request->input('prices');
+        $colors = $request->input('colors');
+
+        if (isset($brands) && !empty($brands)) {
+            // echo count($brands);
+        }else{
+            // echo "Brand empty<br>";
+        }
+        // if (isset($prices) && !empty($prices)) {
+        //     $prices = explode(";",$prices);
+        // }else{
+        //     // echo "Price empty<br>";
+        // }
+        if (isset($colors) && !empty($colors)) {
+            // echo count($colors);
+        }else{
+            // echo "colors empty<br>";
+        }
+        
+
+        $products_sellers=DB::table('products')
+            ->select('products.seller_id as seller_id', 'seller.name as seller_name')
+            ->join('seller','products.seller_id','=','seller.id')
+            ->whereNull('products.deleted_at')
+            ->where('products.status',1)
+            ->where('products.second_category',$second_category);
+            if (isset($prices) && !empty($prices)) {
+                $prices = explode(";",$prices);
+                $products_sellers
+            }
+            ->distinct()
+            ->get();
+        dd($products_sellers);
+
     }
 
     public function productDetails($product_id)
