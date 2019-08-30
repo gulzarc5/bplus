@@ -67,7 +67,7 @@
               <h5>Address
               </h5>
               <address>Kamrup
-                <br />Guwahati, Assam
+                <br/>Guwahati, Assam
               </address>
             </li>
           </ul>
@@ -129,7 +129,7 @@
               <h5>Address
               </h5>
               <address>Sikkim
-                <br />Sikkim, Sikkim
+                <br/>Sikkim, Sikkim
               </address>
             </li>
           </ul>

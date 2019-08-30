@@ -28,9 +28,7 @@
                   <td class="table-shopping-cart-title"><a href="#">Gucci Patent Leather Open Toe Platform</a>
                   </td>
                   <td>₹499</td>
-                  <td>
-                     <input class="form-control table-shopping-qty" type="number" value="1" min="1" />
-                  </td>
+                  <td>2</td>
                   <td>₹499</td>
                   <td><a class="order-status-pay">Pay</a></td>
                </tr>
@@ -42,11 +40,8 @@
                   </td>
                   <td class="table-shopping-cart-title"><a href="#">Nikon D5200 24.1 MP Digital SLR Camera</a>
                   </td>
-                  
                   <td>₹350</td>
-                  <td>
-                     <input class="form-control table-shopping-qty" type="number" value="1" min="1" />
-                  </td>
+                  <td>1</td>
                   <td>₹350</td>
                    <td><a class="order-status-pending">Panding</a></td>
                </tr>
@@ -58,11 +53,8 @@
                   </td>
                   <td class="table-shopping-cart-title"><a href="#">Apple 11.6" MacBook Air Notebook</a>
                   </td>
-                  
                   <td>₹1100</td>
-                  <td>
-                     <input class="form-control table-shopping-qty" type="number" value="1" min="1" />
-                  </td>
+                  <td>1</td>
                   <td>₹1100</td>
                    <td><a class="order-status-pay">Pay</a></td>
                </tr>
@@ -76,9 +68,7 @@
                   </td>
                   
                   <td>₹250</td>
-                  <td>
-                     <input class="form-control table-shopping-qty" type="number" value="1" min="1" />
-                  </td>
+                  <td>3</td>
                   <td>₹250</td>
                   <td><a class="order-status-pending">Panding</a></td>
                </tr>

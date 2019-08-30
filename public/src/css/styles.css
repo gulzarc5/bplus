@@ -5637,6 +5637,15 @@ img.mfp-img {
   margin: 40px auto;
   position: relative;
 }
+
+.mfp-dialog1 {
+  /*background: #fff;*/
+  text-align: left;
+    max-width: 400px;
+    margin: -164px auto;
+    position: relative;
+}
+
 .mfp-search-dialog {
   width: 100%;
   height: 250px !important;

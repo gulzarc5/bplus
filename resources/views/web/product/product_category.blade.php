@@ -2,7 +2,13 @@
 @section('title','product')
 
 @section('content')
+
 <div class="container">
+  <div class="mfp-content">
+<div class="mfp-with-anim mfp-hide mfp-dialog1 clearfix" id="myModal">
+  <img src="{{asset('src/img/product_loader.gif')}}"style='position:relative;top:250px;left:230px;z-index:2000'> 
+        </div>
+      </div>
   <header class="page-header">
     <h1 class="page-title">
       @if(isset($second_category_name) && !empty($second_category_name))
@@ -69,7 +75,7 @@
           </div>
         @endif
 
-        <div class="category-filters-section">
+        <div class="category-filters-section popup-text" data-effect="mfp-move-from-top" >
           <h3 class="widget-title-sm">Price</h3>
           <input type="hidden" id="price-slider" />
         </div>
@@ -318,9 +324,9 @@ $("#irs-1").click(function () {
       $("input:checkbox[name=brand]:checked").each(function(){
           filter_brands.push($(this).val());
       });
-      console.log(filter_brands);
-      console.log(filter_sellers);
-      console.log(filter_color);
+      // console.log(filter_brands);
+      // console.log(filter_sellers);
+      // console.log(filter_color);
 
     $.ajaxSetup({
         headers: {
@@ -338,13 +344,17 @@ $("#irs-1").click(function () {
           brands:filter_brands,
         },
         beforeSend:function() { 
-             $("<img src='http://miniontours.yzi.me/loading.gif'  style='position:relative;top:200px;left:200px;z-index:2000' id='loading-excel' />").appendTo("body");
+             $('#myModal').modal('show');
+             $("#myModal").removeClass("mfp-hide");
+
+
         },
-        complete:function() {
-               $("#loading-excel").remove();
-        },
+        // complete:function() {
+        //        $("#loading-excel").remove();
+        // },
         success:function(data){
-          
+           $('#myModal').modal('hide');
+          $("#myModal").addClass("mfp-hide");
             console.log(data);
             // var cat = JSON.parse(data);
             // $("#first_category").html("<option value=''>Please Select Sub Category</option>");
