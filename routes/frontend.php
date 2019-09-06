@@ -94,13 +94,7 @@ Route::get('/sell_on_bplus1', function () {
     return view('web.seller.sell_on_bplus1');
 });
 
-<<<<<<< HEAD
-Route::get('/checkout', function () {
-    return view('web.checkout');
-});
 
 Route::get('/product_subcategory_from_home', function () {
     return view('web.product.product_subcategory_from_home');
 });
-=======
->>>>>>> order placing worked
