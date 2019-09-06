@@ -30,15 +30,12 @@
       <li><a class="fa fa-th-list category-selections-icon" href="#"></a></li>
       <li>
         <span class="category-selections-sign">Sort by :</span>
-        <select class="category-selections-select">
-        <option selected>Newest First</option>
-          {{-- <option>Best Sellers</option>
-          <option>Trending Now</option> --}}
-          {{-- <option>Best Raited</option> --}}
-          <option>Price : Lowest First</option>
-          <option>Price : Highest First</option>
-          <option>Title : A - Z </option>
-          <option>Title : Z - A</option>
+        <select class="category-selections-select" id="product_sort">
+        <option selected value="newest">Newest First</option>
+          <option value="low">Price : Lowest First</option>
+          <option value="high">Price : Highest First</option>
+          <option value="title_asc">Title : A - Z </option>
+          <option value="title_dsc">Title : Z - A</option>
         </select>
       </li>
      {{--  <li>
@@ -82,17 +79,17 @@
 
 
         @if(isset($products_sellers) && !empty($products_sellers))
-
+        <div id="sellers_div">
           <div class="category-filters-section">
             <h3 class="widget-title-sm">Sallers</h3>
 
             @foreach($products_sellers as $products_seller)
               <div class="checkbox">
-                <label>
+                <label onclick="sellersCheckbox()">
                   @if(isset($seller_id) && !empty($seller_id) && ($seller_id == $products_seller->seller_id ))
-                  <input class="i-check" checked type="checkbox"  name="sellers" value="{{ $products_seller->seller_id }}" />{{$products_seller->seller_name}}
+                  <input class="i-check"  checked type="checkbox"  name="sellers" value="{{ $products_seller->seller_id }}" />{{$products_seller->seller_name}}
                   @else
-                    <input class="i-check" type="checkbox"  name="sellers" value="{{ $products_seller->seller_id }}" />{{$products_seller->seller_name}}
+                    <input class="i-check"  type="checkbox"  name="sellers" value="{{ $products_seller->seller_id }}" />{{$products_seller->seller_name}}
                   @endif
                   <!-- <span class="category-filters-amount">(55)
                   </span> -->
@@ -101,45 +98,44 @@
             @endforeach
 
           </div>
+        </div>
 
         @endif
 
 
         @if(isset($products_brands) && !empty($products_brands))
+        <div id="brands_div">
+          <div class="category-filters-section">
+            <h3 class="widget-title-sm">Brands</h3>
 
-        <div class="category-filters-section">
-          <h3 class="widget-title-sm">Brands</h3>
+            @foreach($products_brands as $products_brand)
+            <div class="checkbox">
+              <label onclick="brandsCheckbox()">
+                <input class="i-check" type="checkbox"  name="brand" value="{{$products_brand->brand_id}}" />{{$products_brand->brand_name}}
+                <span class="category-filters-amount">({{$products_brand->total}})</span>
+              </label>
+            </div>
+            @endforeach
 
-          @foreach($products_brands as $products_brand)
-          <div class="checkbox">
-            <label>
-              <input class="i-check" type="checkbox"  name="brand" value="{{$products_brand->brand_id}}" />{{$products_brand->brand_name}}
-              <span class="category-filters-amount">({{$products_brand->total}})</span>
-            </label>
           </div>
-          @endforeach
-
         </div>
-
         @endif
 
         @if(isset($product_colors) && !empty($product_colors))
-
-        <div class="category-filters-section">
-          <h3 class="widget-title-sm">Colors
-          </h3>
-
-          @foreach($product_colors as $product_color)
-          <div class="checkbox">
-            <label>
-              <input class="i-check" type="checkbox" name="color"  value="{{ $product_color->color_id }}" />{{ $product_color->color_name }}<span style="height: 15px; width: 30px;   background-color: {{ $product_color->color_value }}; border-radius: 30%; display: inline-block;"></span>
-              <span class="category-filters-amount">({{ $product_color->total }})
-              </span>
-            </label>
-          </div>
-          @endforeach
-
-        </div> 
+        <div id="colors_div">
+          <div class="category-filters-section">
+            <h3 class="widget-title-sm">Colors</h3>
+            @foreach($product_colors as $product_color)
+            <div class="checkbox">
+              <label>
+                <input class="i-check" type="checkbox" name="color"  value="{{ $product_color->color_id }}" />{{ $product_color->color_name }}<span style="height: 15px; width: 30px;   background-color: {{ $product_color->color_value }}; border-radius: 30%; display: inline-block;"></span>
+                <span class="category-filters-amount">({{ $product_color->total }})
+                </span>
+              </label>
+            </div>
+            @endforeach
+          </div> 
+        </div>
 
         @endif
 
@@ -147,7 +143,7 @@
     </aside>
     </div>
     <div class="col-md-9">
-      <div class="row" data-gutter="15">
+      <div class="row" data-gutter="15" id="products_div">
         @if(isset($product_against_seller) && !empty($product_against_seller))
           @foreach($product_against_seller as $products)
             <div class="col-md-4">
@@ -253,6 +249,8 @@
 
 
 @section('script')
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
 @if(isset($product_min_max_price) && !empty($product_min_max_price) && !empty($product_min_max_price->min_price) && !empty($product_min_max_price->max_price))
 <script type="text/javascript">
   $("#price-slider").ionRangeSlider({
@@ -261,57 +259,52 @@
     type: 'double',
     prefix: "Rs ",
     prettify: false,
-    hasGrid: false
+    hasGrid: false,
+     onFinish: function (data) {
+      var prices = data.from+";"+data.to;
+      filterProduct(prices);
+    },
 });
 </script>
 @else
-  <script type="text/javascript">
+<script type="text/javascript">
   $("#price-slider").ionRangeSlider({
     min: 0,
     max: 1000,
     type: 'double',
     prefix: "Rs ",
     prettify: false,
-    hasGrid: false
+    hasGrid: false,
+    onFinish: function (data) {
+      var prices = data.from+";"+data.to;
+      filterProduct(prices);
+    },
 });
 @endif
 </script>
 
 <script>
 
-
-
-$("#irs-1").click(function () {
-
-  // var category_id_filter = $("#category_id_filter").val();
-  // var prices = $("#price-slider").val();
-
-  // var filter_color = $("input[name='color']:checked").map(function(){return $(this).val();}).get();
-
-  // var filter_sellers = new Array();
-  // $("input:checkbox[name=sellers]:checked").each(function(){
-  //     filter_sellers.push($(this).val());
-  // });
-
-  // var filter_brands = new Array();
-  // $("input:checkbox[name=brand]:checked").each(function(){
-  //     filter_brands.push($(this).val());
-  // });
-  // console.log(filter_brands);
-  // console.log(filter_sellers);
-  // console.log(filter_color);
- 
+$(".iCheck-helper").click(function () { 
   filterProduct();
-  
-
-  // alert("category "+category_id_filter+" filter_color "+filter_color+" prices "+prices+" filter_sellers "+filter_sellers+" filter_brands "+filter_brands);
-
 })
 
+function sellersCheckbox() {
+  filterProduct();
+}
 
-  function filterProduct() {
+function brandsCheckbox() {
+  filterProduct();
+}
+
+$("#product_sort").change(function(){
+  filterProduct();
+})
+
+  function filterProduct(prices) {
       var category_id_filter = $("#category_id_filter").val();
-      var prices = $("#price-slider").val();
+
+      var sort = $("#product_sort").val();    
 
       var filter_color = $("input[name='color']:checked").map(function(){return $(this).val();}).get();
 
@@ -319,18 +312,11 @@ $("#irs-1").click(function () {
       $("input:checkbox[name=sellers]:checked").each(function(){
           filter_sellers.push($(this).val());
       });
-
+      console.log(filter_sellers);
       var filter_brands = new Array();
       $("input:checkbox[name=brand]:checked").each(function(){
           filter_brands.push($(this).val());
       });
-<<<<<<< HEAD
-      // console.log(filter_brands);
-      // console.log(filter_sellers);
-      // console.log(filter_color);
-=======
-
->>>>>>> working on filteration
 
     $.ajaxSetup({
         headers: {
@@ -347,38 +333,147 @@ $("#irs-1").click(function () {
           colors:filter_color,
           sellers:filter_sellers,
           brands:filter_brands,
+          sort:sort,
         },
-<<<<<<< HEAD
         beforeSend:function() { 
              $('#myModal').modal('show');
              $("#myModal").removeClass("mfp-hide");
 
 
         },
-=======
-        // beforeSend:function() { 
-        //      // $("<img src='http://miniontours.yzi.me/loading.gif'  style='position:relative;top:200px;left:200px;z-index:2000' id='loading-excel' />").appendTo("body");
-        // },
->>>>>>> working on filteration
-        // complete:function() {
-        //        $("#loading-excel").remove();
-        // },
-        success:function(data){
-           $('#myModal').modal('hide');
+        complete:function() {
+          $('#myModal').modal('hide');
           $("#myModal").addClass("mfp-hide");
+        },
+        success:function(data){
+           
             console.log(data);
-            // var cat = JSON.parse(data);
-            // $("#first_category").html("<option value=''>Please Select Sub Category</option>");
-
-            // $.each( cat, function( key, value ) {
-            //     $("#first_category").append("<option value='"+key+"'>"+value+"</option>");
-            // });
+            var response = data;
+            if (response.products) {
+              product_Html(response.products);
+            }       
+            if (response.product_min_max_price) {
+                 let my_range = $("#price-slider").data("ionRangeSlider");
+                 my_range.update({
+                    min: response.product_min_max_price.min_price,
+                    max: response.product_min_max_price.max_price,
+                });
+            }   
 
         }
     });
+  }
+
+
+
+  function product_Html(products){
+    var products_html = '';
+    if (products.length > 0) {
+      $.each(products, function(key,products){
+        var product_route = '{{route('web.product_details',['product_id' => encrypt(':id')])}}';
+        product_route = product_route.replace(':id', products.id);
+      products_html +='<div class="col-md-4">'+
+              '<div class="product ">'+
+                  '<ul class="product-labels"></ul>'+
+                  '<div class="product-img-wrap">'+
+                      '<img class="product-img-primary" src="{{asset('images/product/thumb/')}}'+'/'+products.main_image+'" alt="Image Alternative text" title="Image Title" />'+
+                      '<img class="product-img-alt" src="{{asset('images/product/thumb/')}}'+'/'+products.main_image+'" alt="Image Alternative text" title="Image Title" />'+
+                  '</div>'+
+                  '<a class="product-link" href="">'+
+                  '</a>'+
+                  '<div class="product-caption">'+
+                  '<h5 class="product-caption-title">'+products.name+'</h5>'+
+                      '<div class="product-caption-price">'+
+                          '<span class="product-caption-price-new">'+products.price+'</span>'+
+                      '</div>'+
+                      '<ul class="product-caption-feature-list">'+
+                          {{-- <li>3 left
+                          </li> --}}
+                          '<li>Free Shipping</li>'+
+                      '</ul>'+
+                  '</div>'+
+              '</div>'+
+            '</div>';
+      })
+
+    }
+    $("#products_div").html(products_html);
   }
 </script>
 
 
 
 @endsection
+
+
+<script type="text/javascript">
+   //*************Sellers Data Add In Html Seller Div***************
+           
+            // if (response.sellers && (response.sellers.length > 0)) {
+
+            // }
+            // if (response.brands) {
+            //   brands_html(response.brands);
+            // }
+            // if (response.colors) {
+            //   colors_html(response.colors);
+            // }
+            // if (response.sellers) {
+            //   sallers_html(response.sellers);
+            // }
+    // function brands_html(brands) {
+  //   if (brands.length > 0) {
+  //     var brand_html = '<div class="category-filters-section">'+
+  //         '<h3 class="widget-title-sm">Brands</h3>';
+  //     $.each(brands, function(key,brand){
+  //       brand_html +='<div class="checkbox">'+
+  //           '<label>'+
+  //             '<input class="i-check" style="    position: absolute;margin-left: 5px;margin-top: 1px;" type="checkbox"  name="brand" value="'+brand.brand_id+'" />'+brand.brand_name+''+
+  //             '<span class="category-filters-amount">('+brand.total+')</span>'+
+  //           '</label>'+
+  //         '</div>'; 
+  //     });
+  //     brand_html +='</div>';
+  //     $("#brands_div").html(brand_html);
+  //   }else{
+
+  //   }
+  // }
+
+  //  function colors_html(colors) {
+  //   if (colors.length > 0) {
+  //     var colors_html = '<div class="category-filters-section">'+
+  //         '<h3 class="widget-title-sm">Colors</h3>';
+  //     $.each(colors, function(key,color){
+  //       colors_html +='<div class="checkbox">'+
+  //           '<label>'+
+  //             '<input class="i-check" style="position: absolute;margin-left: 5px;margin-top: 1px;" type="checkbox"  name="brand" value="'+color.color_id+'" />'+color.color_name+''+
+  //             '<span style="height: 15px; width: 30px;   background-color: '+color.color_value+'; border-radius: 30%; display: inline-block;"></span><span class="category-filters-amount">('+color.total+')</span>'+
+  //           '</label>'+
+  //         '</div>'; 
+  //     });
+  //     colors_html +='</div>';
+  //     $("#colors_div").html(colors_html);
+  //   }else{
+
+  //   }
+  // }
+
+  //  function sallers_html(sellers) {
+  //   if (sellers.length > 0) {
+  //     var sellers_Html = '<div class="category-filters-section">'+
+  //         '<h3 class="widget-title-sm">Colors</h3>';
+  //     $.each(sellers, function(key,seller){
+  //       sellers_Html +='<div class="checkbox">'+
+  //           '<label>'+
+  //             '<input class="i-check" style="position: absolute;margin-left: 5px;margin-top: 1px;" type="checkbox"  name="brand" value="'+seller.seller_id+'" />'+seller.seller_name+
+  //           '</label>'+
+  //         '</div>'; 
+  //     });
+  //     sellers_Html +='</div>';
+  //     $("#sellers_div").html(sellers_Html);
+  //   }else{
+
+  //   }
+  // }
+</script>

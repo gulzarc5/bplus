@@ -54,6 +54,69 @@ class UserController extends Controller
 
     public function myProfileForm()
     {
-    	return view('web.profile.my_profile');
+        $user_id = Auth::guard('buyer')->id();
+        $states = DB::table('state')
+        ->whereNull('deleted_at')
+        ->get();
+
+        $user = DB::table('seller')
+        ->where('id',$user_id)
+        ->first();
+
+        $user_details = DB::table('seller_details')
+        ->where('seller_id',$user_id)
+        ->first();
+
+        $city = null;
+        if (!empty($user_details->state_id)) {
+            $city = DB::table('city')
+            ->where('state_id',$user_details->state_id)
+            ->get();
+        }
+        $user_data = [
+            'user' => $user,
+            'user_details' => $user_details,
+            'city_list' => $city,
+        ];
+        // dd($states);
+    	return view('web.profile.my_profile',compact('states','user_data'));
+    }
+
+    public function myProfileUpdate(Request $request)
+    {
+        $user_id = Auth::guard('buyer')->id();
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'dob' => 'required',
+            'gender' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'pin' => 'required',
+        ]);
+
+        $user_update = Seller::where('id',$user_id)
+            ->update([
+                'name' => $request->input('name'),
+            ]);
+        $user_profile_update = DB::table('seller_details')
+        ->where('seller_id',$user_id)
+        ->update([
+            'state_id' => $request->input('state'),
+            'city_id' => $request->input('city'),
+            'address' => $request->input('address'),
+            'dob' => $request->input('dob'),
+            'pin' => $request->input('pin'),
+        ]);
+
+        return redirect()->back()->with('message','Your Profile Has Been Updated Successfully');
+    }
+
+    public function changePassword(Request $request)
+    {
+         $validator = $request->validate([
+            'current_pass' => 'required',
+            'new_pass' => 'required|same:new_pass',
+            'confirm_pass' => 'required|same:new_pass',     
+          ]);
     }
 }

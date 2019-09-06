@@ -10,7 +10,14 @@ class CategoryController extends Controller
 {
     public function index()
     {
-    	 return view('web.index');
+        $newarrival = DB::table('products')->whereNull('deleted_at')->where('status','1')->orderBy('id','desc')->limit(10)->get();
+        $best_selling = DB::table('products')->whereNull('deleted_at')->where('status','1')->inRandomOrder()->limit(10)->get();
+
+        $data = [
+            'newarrival' => $newarrival,
+            'best_selling' => $best_selling,
+        ];
+    	 return view('web.index',compact('data'));
     }
 
     public function SecondCategory($first_Catgory)

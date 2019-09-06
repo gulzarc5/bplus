@@ -292,14 +292,7 @@
               <li class="dropdown">
                 <a href=""><i class="fa fa-user" style="font-size: 20px;"></i> User Account</a>
                 <ul class="dropdown-menu">
-                  <li><a href="{{route('web.userLoginForm')}}" data-effect="mfp-move-from-top" >Sign In</a></li>
-                  <br>
-
-                  <li><a href="{{route('web.userRegistrationForm')}}" data-effect="mfp-move-from-top" >Create Account</a></li>
-                  <br>
-
-                  <li><a href="{{url('seller_login')}}" data-effect="mfp-move-from-top" class="">Sell On Bplus</a></li>
-                  <br>
+                  
                   @if(Auth::guard('buyer')->id())
 
                     <li><a href="{{route('web.myprofile')}}" data-effect="mfp-move-from-top" >My Profile</a></li>
@@ -318,6 +311,15 @@
                           @csrf
                       </form>
                     <br>
+                  @else
+                      <li><a href="{{route('web.userLoginForm')}}" data-effect="mfp-move-from-top" >Sign In</a></li>
+                      <br>
+
+                      <li><a href="{{route('web.userRegistrationForm')}}" data-effect="mfp-move-from-top" >Create Account</a></li>
+                      <br>
+
+                      <li><a href="{{url('seller_login')}}" data-effect="mfp-move-from-top" class="">Sell On Bplus</a></li>
+                      <br>
                   @endif
 
                 </ul>
