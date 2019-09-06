@@ -66,7 +66,7 @@
   </h3>
   <div class="row row-sm-gap" data-gutter="15">
     <div class="col-md-2">
-      <a class="banner-category" href="{{url('product_subcategory')}}">
+      <a class="banner-category" href="{{url('product_subcategory_from_home')}}">
         <img class="banner-category-img" src="{{asset('src/img/test_icon/exterior.png')}}" alt="Image Alternative text" title="Image Title" />
         <h5 class="banner-category-title">Home & Garden
         </h5>
