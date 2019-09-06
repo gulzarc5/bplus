@@ -91,3 +91,7 @@ Route::get('/order_history', function () {
 Route::get('/sell_on_bplus1', function () {
     return view('web.seller.sell_on_bplus1');
 });
+
+Route::get('/checkout', function () {
+    return view('web.checkout');
+});

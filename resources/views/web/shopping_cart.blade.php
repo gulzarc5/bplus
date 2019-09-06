@@ -70,7 +70,7 @@
            {{--  <li><span>Taxes</span><span>₹0</span></li> --}}
             <li><span>Total</span><span>₹{{ number_format($total,2) }}</span></li>
          </ul>
-         <a class="btn btn-primary" href="#">Checkout</a>
+         <a class="btn btn-primary" href="{{url('checkout')}}">Checkout</a>
       </div>
    </div>
    <ul class="list-inline">
