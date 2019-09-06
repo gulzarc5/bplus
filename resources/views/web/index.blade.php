@@ -251,54 +251,57 @@
   <h3 class="widget-title">New Arrival
   </h3>
   <div class="owl-carousel owl-loaded owl-nav-out" data-options='{"items":5,"loop":true,"nav":true}'>
-    <div class="owl-item">
-      <div class="product  owl-item-slide">
-        <ul class="product-labels">
-          <li>stuff pick
-          </li>
-        </ul>
-        <div class="product-img-wrap">
-          <img class="product-img" src="{{asset('src/img/test_product/man_fashion/7.jpg')}}" alt="Image Alternative text" title="Image Title" />
-        </div>
-        <a class="product-link" href="product-Details">
-        </a>
-        <div class="product-caption">
-          <ul class="product-caption-rating">
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-          </ul>
-          <h5 class="product-caption-title">Hanes Ultimate Cotton&reg; Fleece Full-Zip Adult Hoodie style F280
-          </h5>
-          <div class="product-caption-price">
-            <span class="product-caption-price-new"><i class="fa fa-rupee" style="font-size: 16px;"></i>122
-            </span>
+    @if(isset($data['newarrival']) && !empty($data['newarrival']))
+      @foreach($data['newarrival'] as $newarrival)
+        <div class="owl-item">
+          <div class="product  owl-item-slide">
+            {{-- <ul class="product-labels">
+              <li>stuff pick
+              </li>
+            </ul> --}}
+            <div class="product-img-wrap">
+              <img class="product-img" src="{{asset('images/product/thumb/'.$newarrival->main_image.'')}}" alt="Image Alternative text" title="Image Title" />
+            </div>
+            <a class="product-link" href="{{ route('web.product_details',['product_id'=>encrypt($newarrival->id)]) }}">
+            </a>
+            <div class="product-caption">
+              {{-- <ul class="product-caption-rating">
+                <li class="rated">
+                  <i class="fa fa-star">
+                  </i>
+                </li>
+                <li class="rated">
+                  <i class="fa fa-star">
+                  </i>
+                </li>
+                <li class="rated">
+                  <i class="fa fa-star">
+                  </i>
+                </li>
+                <li class="rated">
+                  <i class="fa fa-star">
+                  </i>
+                </li>
+                <li class="rated">
+                  <i class="fa fa-star">
+                  </i>
+                </li>
+              </ul> --}}
+              <h5 class="product-caption-title">{{ $newarrival->name }}</h5>
+              <div class="product-caption-price">
+                <span class="product-caption-price-new"><i class="fa fa-rupee" style="font-size: 16px;"></i>{{ $newarrival->price }}
+                </span>
+              </div>
+              <ul class="product-caption-feature-list">
+                <li>Free Shipping
+                </li>
+              </ul>
+            </div>
           </div>
-          <ul class="product-caption-feature-list">
-            <li>Free Shipping
-            </li>
-          </ul>
         </div>
-      </div>
-    </div>
-    <div class="owl-item">
+      @endforeach
+    @endif
+    {{-- <div class="owl-item">
       <div class="product  owl-item-slide">
         <ul class="product-labels">
         </ul>
@@ -582,7 +585,7 @@
           </ul>
         </div>
       </div>
-    </div>
+    </div> --}}
   </div>
   <div class="gap">
   </div>
@@ -627,52 +630,55 @@
   <h3 class="widget-title">Best Selling
   </h3>
   <div class="owl-carousel owl-loaded owl-nav-out" data-options='{"items":5,"loop":true,"nav":true}'>
-    <div class="owl-item">
-      <div class="product  owl-item-slide">
-        <ul class="product-labels">
-        </ul>
-        <div class="product-img-wrap">
-          <img class="product-img" src="{{asset('src/img/test_product/man_fashion/4.jpg')}}" alt="Image Alternative text" title="Image Title" />
-        </div>
-        <a class="product-link" href="#">
-        </a>
-        <div class="product-caption">
-          <ul class="product-caption-rating">
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li class="rated">
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li>
-              <i class="fa fa-star">
-              </i>
-            </li>
-            <li>
-              <i class="fa fa-star">
-              </i>
-            </li>
-          </ul>
-          <h5 class="product-caption-title">Drifire Lightweight Tubular Short Sleeve Shirt - Made in USA
-          </h5>
-          <div class="product-caption-price">
-            <span class="product-caption-price-new"><i class="fa fa-rupee" style="font-size:16px"></i>115
-            </span>
+
+    @if(isset($data['best_selling']) && !empty($data['best_selling']))
+      @foreach($data['best_selling'] as $best_selling)
+        <div class="owl-item">
+          <div class="product  owl-item-slide">
+            <ul class="product-labels">
+            </ul>
+            <div class="product-img-wrap">
+              <img class="product-img" src="{{asset('images/product/thumb/'.$best_selling->main_image.'')}}" alt="Image Alternative text" title="Image Title" />
+            </div>
+            <a class="product-link" href="{{ route('web.product_details',['product_id'=>encrypt($best_selling->id)]) }}">
+            </a>
+            <div class="product-caption">
+              <ul class="product-caption-rating">
+                <li class="rated">
+                  <i class="fa fa-star">
+                  </i>
+                </li>
+                <li class="rated">
+                  <i class="fa fa-star">
+                  </i>
+                </li>
+                <li class="rated">
+                  <i class="fa fa-star">
+                  </i>
+                </li>
+                <li>
+                  <i class="fa fa-star">
+                  </i>
+                </li>
+                <li>
+                  <i class="fa fa-star">
+                  </i>
+                </li>
+              </ul>
+              <h5 class="product-caption-title">{{ $best_selling->name }}</h5>
+              <div class="product-caption-price">
+                <span class="product-caption-price-new"><i class="fa fa-rupee" style="font-size:16px"></i>{{ $best_selling->price }}</span>
+              </div>
+              <ul class="product-caption-feature-list">
+                <li>Free Shipping
+                </li>
+              </ul>
+            </div>
           </div>
-          <ul class="product-caption-feature-list">
-            <li>Free Shipping
-            </li>
-          </ul>
         </div>
-      </div>
-    </div>
-    <div class="owl-item">
+      @endforeach
+    @endif
+    {{-- <div class="owl-item">
       <div class="product  owl-item-slide">
         <ul class="product-labels">
           <li>hot
@@ -957,7 +963,7 @@
           </ul>
         </div>
       </div>
-    </div>
+    </div> --}}
   </div>
 </div>
 

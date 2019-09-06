@@ -39,6 +39,8 @@ Route::group(['namespace'=> 'Web'], function(){
      Route::group(['middleware'=>'auth:buyer','namespace'=> 'User','prefix'=>'User'], function(){
 
         Route::get('/my_profile', 'UserController@myProfileForm')->name('web.myprofile');
+        Route::post('/my_profile/Update', 'UserController@myProfileUpdate')->name('web.myprofile_update');
+        Route::post('/Chnage/Password', 'UserController@changePassword')->name('web.user_change_password');
      });
 });
 

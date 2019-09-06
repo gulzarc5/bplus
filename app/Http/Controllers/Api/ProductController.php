@@ -31,6 +31,7 @@ class ProductController extends Controller
 		$products = [];
 
     	foreach ($products_sellers as $products_Seller) {
+
     		$product_against_seller=DB::table('products')
 	    	->whereNull('deleted_at')
 	    	->where('status',1)
@@ -114,6 +115,14 @@ class ProductController extends Controller
 
         $limit = ($page*10)-10;
 
+        $product_min_max_price = DB::table('products')
+            ->select(DB::raw('min(price) as min_price'),DB::raw('max(price) as max_price'))
+            ->whereNull('deleted_at')
+            ->where('status',1)
+            ->where('second_category',$second_category)
+            ->where('seller_id',$seller_id)
+            ->first();
+
         $product_against_seller=DB::table('products')
             ->whereNull('deleted_at')
             ->where('status',1)
@@ -134,6 +143,7 @@ class ProductController extends Controller
 				'sellers' => $products_sellers,
 				'brands' => $products_brands,
 				'colors' => $product_colors,
+                'price_range' => $product_min_max_price,
 			],
 			'products' => $product_against_seller,
 		];
