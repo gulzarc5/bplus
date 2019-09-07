@@ -249,15 +249,20 @@ class UserController extends Controller
 
         $order_data = [];
         foreach ($order as $orders) {
-            $order_data[] =DB::table('order_details')
+            $order_details =DB::table('order_details')
                 ->select('order_details.*','products.name as p_name')
-                ->join('products')
+                ->join('products','products.id','=','order_details.product_id')
                 ->where('user_id',$user_id)
                 ->where('order_id',$orders->id)
                 ->get();
+            $order_id = $orders->id;
+            $order_data[] = [
+                'order_id' => $order_id,
+                'order_details' => $order_details,
+            ];
         }
        
-        dd($order_data);
-        return view('web.order_history');
+        // dd($order_data);
+        return view('web.order_history',compact('order_data'));
     }
 }

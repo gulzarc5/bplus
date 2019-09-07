@@ -19,20 +19,36 @@
                </tr>
             </thead>
             <tbody>
-               <tr>
-                  <td class="table-shopping-cart-img">
-                     <a href="#">
-                     <img src="img/cart/1.jpg" alt="Image Alternative text" title="Image Title" />
-                     </a>
-                  </td>
-                  <td class="table-shopping-cart-title"><a href="#">Gucci Patent Leather Open Toe Platform</a>
-                  </td>
-                  <td>₹499</td>
-                  <td>2</td>
-                  <td>₹499</td>
-                  <td><a class="order-status-pay">Pay</a></td>
-               </tr>
-               <tr>
+               @if (isset($order_data) && !empty($order_data))
+                   @foreach ($order_data as $order)
+                     <tr>
+                        <td class="table-shopping-cart-title" colspan="6">Order ID : {{ $order['order_id'] }}
+                           </td>
+                     </tr>
+                     @foreach ($order['order_details'] as $product)
+                        <tr>
+                           <td>{{ $product->product_id }}</td>
+                           <td class="table-shopping-cart-title"><a href="#">{{ $product->p_name }}</a></td>
+                           <td>₹{{ number_format($product->price,2) }}</td>
+                           <td>{{ $product->quantity }}</td>
+                           <td>₹{{ number_format(($product->price*$product->quantity),2) }}</td>
+                           <td>
+                              @if ($product->status == '1')
+                                  <button class="btn btn-warning">Waiting For Dispatch</button>
+                              @elseif( $product->status == '2' )
+                                 <button class="btn btn-info">Shipped</button>
+                              @elseif( $product->status == '3' )
+                                 <button class="btn btn-primary">Delivered</button>
+                              @else
+                                 <button class="btn btn-danger">Cancelled</button>
+                              @endif
+                           </td>
+                        </tr>
+                     @endforeach                     
+                   @endforeach
+               @endif
+               
+               {{-- <tr>
                   <td class="table-shopping-cart-img">
                      <a href="#">
                      <img src="img/cart/2.jpg" alt="Image Alternative text" title="Image Title" />
@@ -71,7 +87,7 @@
                   <td>3</td>
                   <td>₹250</td>
                   <td><a class="order-status-pending">Panding</a></td>
-               </tr>
+               </tr> --}}
             </tbody>
          </table>
          <div class="gap gap-small"></div>
