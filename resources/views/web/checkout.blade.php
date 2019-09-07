@@ -18,7 +18,7 @@
 
                     <div class="col-md-6">
                         @if(isset($user_data['shipping_adress']) && !empty($user_data['shipping_adress']) && (count($user_data['shipping_adress']) > 0) )
-                		<div class="col-md-12">
+                		<div class="col-md-12" id="address_div">
                             <h3 class="widget-title">Shipping Details</h3>
 
                             @foreach($user_data['shipping_adress'] as $address)
@@ -26,9 +26,14 @@
                                     $flag = true;
                                 @endphp
                                 <div class="box">
-                                    {{-- @if ()
-                                        
-                                    @endif --}}
+                                    @if ($flag)
+                                        <input type="radio" name="address_id" value="{{ $address->id }}" checked> 
+                                        @php
+                                            $flag = false;
+                                        @endphp                                       
+                                    @else
+                                        <input type="radio" name="address_id" value="{{ $address->id }}"> 
+                                    @endif
                                     
                                 	<p><b>State:</b> {{ $address->s_name}}</p>
                                     <p><b>City:</b> {{ $address->c_name}}</p>
@@ -36,8 +41,8 @@
                                     <p><b>Address:</b> {{ $address->address}} </p>
                                 </div>
                             @endforeach
-        					<div style="margin-top: 10px;">
-        					<a href="" style="background-color: #ccc;border: 1px #ccc solid;padding: 5px 10px 5px 10px;border-radius: 4px;">Add New Address</a>
+                            <div style="margin-top: 10px;">
+                                <button class="btn btn-info" type="button" id="add_new_address_button">New Address</button>
         					</div>
                         </div>
                         @else
@@ -159,13 +164,47 @@
             </div>
             </div>
         </div>
+
+        {{-- state list stored for jquey new address add --}}
+        <div id="state_div" style="display:none">
+                <select class="form-control" id="states" onchange="getCity()" name="state" required>
+                        <option selected value="">Select State</option>
+                        @if(isset($user_data['state']) && !empty($user_data['state']))
+                          @foreach($user_data['state'] as $state)
+                              <option value="{{ $state->id }}">{{ $state->name}}</option>
+                          @endforeach
+                        @endif
+                </select>
+        </div>
 @endsection
 
 @section('script')
 <script>
+    function getCity(){
+            var state = $("#states").val();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type:"GET",
+                    url:"{{ url('City/list/')}}"+"/"+state+"",
+                    success:function(data){
+                        // console.log(data);
+                        // var cat = JSON.parse(data);
+                        $("#city").html("<option value=''>Select City</option>");
 
+                        $.each( data, function( key, value ) {
+                            $("#city").append("<option value='"+key+"'>"+value+"</option>");
+                        });
+
+                    }
+                });
+    }
         $(document).ready(function(){
             $("#state").change(function(){
+                alert('hi');
                 var state = $(this).val();
                 $.ajaxSetup({
                     headers: {
@@ -186,6 +225,38 @@
 
                     }
                 });
+            });
+
+            $("#add_new_address_button").click(function(){
+                var state = $("#state_div").html();
+                var html = '<h3 class="widget-title">Shipping Details</h3>'+
+                            '<div class="col-md-12" >  '+                              
+                                '<div class="form-group">'+
+                                    '<label>State</label>'+
+                                    state+
+                                '</div>'+
+                                '<div class="row">'+
+                                    '<div class="col-md-8">'+
+                                        '<div class="form-group">'+
+                                            '<label>City</label>'+
+                                            '<select class="form-control" id="city" name="city" required>'+
+                                              '<option selected value="">Select City</option>'+
+                                           '</select>'+
+                                        '</div>'+
+                                    '</div>'+
+                                    '<div class="col-md-4">'+
+                                        '<div class="form-group">'+
+                                                '<label>Pin Code</label>'+
+                                            '<input class="form-control" type="text" name="pin" required/>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="form-group">'+
+                                    '<label>Address</label>'+
+                                    '<textarea class="form-control" name="address" required></textarea>'+
+                                '</div>'+
+                            '</div>';
+                $("#address_div").html(html);
             });
         });
 </script>

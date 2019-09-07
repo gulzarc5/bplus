@@ -289,9 +289,8 @@ class ProductController extends Controller
             }
         }
         $product_against_seller = $product_against_seller->get();
-
-      //    dd(str_replace_array('?', \DB::getQueryLog()[0]['bindings'], 
-      // \DB::getQueryLog()[0]['query']));
+                //    dd(str_replace_array('?', \DB::getQueryLog()[0]['bindings'], 
+                // \DB::getQueryLog()[0]['query']));
 
        
        $product_min_max_price = DB::table('products')
@@ -313,8 +312,8 @@ class ProductController extends Controller
                  }
             })
             ->first();
- // dd(str_replace_array('?', \DB::getQueryLog()[0]['bindings'], 
-      // \DB::getQueryLog()[0]['query']));
+            // dd(str_replace_array('?', \DB::getQueryLog()[0]['bindings'], 
+                // \DB::getQueryLog()[0]['query']));
 
 
         $response=[

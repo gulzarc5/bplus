@@ -302,7 +302,7 @@
                     <br>
                       
 
-                    <li><a href="{{url('order_history')}}" data-effect="mfp-move-from-top" class="">Your Orders</a></li>
+                    <li><a href="{{route('web.order_history')}}" data-effect="mfp-move-from-top" class="">Your Orders</a></li>
                     <br>
 
 

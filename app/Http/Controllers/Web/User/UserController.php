@@ -228,6 +228,10 @@ class UserController extends Controller
                     'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
                 ]);
 
+                if($order_update){
+                    DB::table('cart')->where('user_id',$user_id)->delete();
+                }
+
                 return redirect()->back()->with('message','Order Placed Successfully');
             }else{
                 return redirect()->back()->with('error','Something Went Wrong While Placing Your Order Please Try After Sometime');
@@ -236,5 +240,24 @@ class UserController extends Controller
             return redirect()->back()->with('error','Something Went Wrong While Placing Your Order Please Try After Sometime');
         }
 
+    }
+
+    public function orderList()
+    {
+        $user_id = Auth::guard('buyer')->id();
+        $order = DB::table('orders')->where('user_id',$user_id)->get();
+
+        $order_data = [];
+        foreach ($order as $orders) {
+            $order_data[] =DB::table('order_details')
+                ->select('order_details.*','products.name as p_name')
+                ->join('products')
+                ->where('user_id',$user_id)
+                ->where('order_id',$orders->id)
+                ->get();
+        }
+       
+        dd($order_data);
+        return view('web.order_history');
     }
 }
