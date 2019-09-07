@@ -10,7 +10,7 @@
          <table class="table table table-shopping-cart">
             <thead>
                <tr>
-                  <th>Product</th>
+                  <th>Product Id</th>
                   <th>Title</th>
                   <th>Price</th>
                   <th>Quantity</th>
