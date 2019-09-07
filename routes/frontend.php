@@ -41,6 +41,8 @@ Route::group(['namespace'=> 'Web'], function(){
         Route::get('/my_profile', 'UserController@myProfileForm')->name('web.myprofile');
         Route::post('/my_profile/Update', 'UserController@myProfileUpdate')->name('web.myprofile_update');
         Route::post('/Chnage/Password', 'UserController@changePassword')->name('web.user_change_password');
+        Route::get('/checkout', 'UserController@checkout')->name('web.checkout');
+        Route::post('/checkout', 'UserController@finalCheckout')->name('web.final_checkout');
      });
 });
 
@@ -92,9 +94,6 @@ Route::get('/sell_on_bplus1', function () {
     return view('web.seller.sell_on_bplus1');
 });
 
-Route::get('/checkout', function () {
-    return view('web.checkout');
-});
 
 Route::get('/product_subcategory_from_home', function () {
     return view('web.product.product_subcategory_from_home');

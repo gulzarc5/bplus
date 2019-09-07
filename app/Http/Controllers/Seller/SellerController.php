@@ -52,7 +52,22 @@ class SellerController extends Controller
     }
 
     public function index(){
-        return view('seller.seller_deshboard');
+        $user_id = Auth::guard('seller')->user()->id;
+        $last_10_product = DB::table('products')
+            ->select('products.*','category.name as c_name','first_category.name as first_c_name','second_category.name as second_c_name','brand_name.name as brand_name')
+            ->whereNull('products.deleted_at')
+            ->where('products.seller_id',$user_id)
+            ->join('category','products.category','=','category.id')
+            ->join('first_category','products.first_category','=','first_category.id')
+            ->join('second_category','products.second_category','=','second_category.id')
+            ->join('brand_name','products.brand_id','=','brand_name.id')
+            ->orderBy('products.id','desc')
+            ->limit(10)
+            ->get();
+        $data = [
+            'last_10_product' => $last_10_product,
+        ];
+        return view('seller.seller_deshboard',compact('data'));
     }
 
     public function myProfileForm()

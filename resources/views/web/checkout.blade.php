@@ -4,122 +4,189 @@
 <div class="container">
             <header class="page-header">
                 <h1 class="page-title">Checkout Order</h1>
+                    @if (Session::has('message'))
+                        <div class="alert alert-success" >{{ Session::get('message') }}</div>
+                    @endif
+                    @if (Session::has('error'))
+                        <div class="alert alert-danger">{{ Session::get('error') }}</div>
+                    @endif
             </header>
-            <p class="checkout-login-text">Sign in or Register to your TheBox profile to faster order checkout.</p>
+            {{-- <p class="checkout-login-text">Sign in or Register to your TheBox profile to faster order checkout.</p> --}}
             <div class="row row-col-gap" data-gutter="60">
             	<div class="col-md-12">
-            		 <div class="col-md-6">
-                    <h3 class="widget-title">Billng Details</h3>
-                    <div class="box">
-                    	<p><b>State:</b> Assam</p>
-                        <p><b>City:</b> Guwahati</p>
-                        <p><b>Pin Code:</b> 781022
-                        <p><b>Address:</b> Nupur Niwas, Purbanchal Path, Downtown, Dispur,
-						Guwahati </p>
-					</div>
-					<div style="margin-top: 10px;">
-					<a href="" style="background-color: #ccc;border: 1px #ccc solid;padding: 5px 10px 5px 10px;border-radius: 4px;">Edit</a>
-					</div>
-                </div>
-                <div class="col-md-6">
-                    <h3 class="widget-title">Order Info</h3>
-                    <div class="box">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>QTY</th>
-                                    <th>Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Gucci Patent Leather Open Toe Platform</td>
-                                    <td>1</td>
-                                    <td>₹499</td>
-                                </tr>
-                                <tr>
-                                    <td>Nikon D5200 24.1 MP Digital SLR Camera</td>
-                                    <td>1</td>
-                                    <td>₹350</td>
-                                </tr>
-                                <tr>
-                                    <td>Apple 11.6" MacBook Air Notebook</td>
-                                    <td>1</td>
-                                    <td>₹1100</td>
-                                </tr>
-                                <tr>
-                                    <td>Fossil Women's Original Boyfriend</td>
-                                    <td>1</td>
-                                    <td>₹250</td>
-                                </tr>
-                                <tr>
-                                    <td>Subtotal</td>
-                                    <td></td>
-                                    <td>₹2199</td>
-                                </tr>
-                                <tr>
-                                    <td>Shipping</td>
-                                    <td></td>
-                                    <td>₹0</td>
-                                </tr>
-                                <tr>
-                                    <td>Total</td>
-                                    <td></td>
-                                    <td>₹2199</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                {{ Form::open(['method' => 'post','route'=>'web.final_checkout']) }}
+
+                    <div class="col-md-6">
+                        @if(isset($user_data['shipping_adress']) && !empty($user_data['shipping_adress']) && (count($user_data['shipping_adress']) > 0) )
+                		<div class="col-md-12">
+                            <h3 class="widget-title">Shipping Details</h3>
+
+                            @foreach($user_data['shipping_adress'] as $address)
+                                @php
+                                    $flag = true;
+                                @endphp
+                                <div class="box">
+                                    {{-- @if ()
+                                        
+                                    @endif --}}
+                                    
+                                	<p><b>State:</b> {{ $address->s_name}}</p>
+                                    <p><b>City:</b> {{ $address->c_name}}</p>
+                                    <p><b>Pin Code:</b> {{ $address->pin}}
+                                    <p><b>Address:</b> {{ $address->address}} </p>
+                                </div>
+                            @endforeach
+        					<div style="margin-top: 10px;">
+        					<a href="" style="background-color: #ccc;border: 1px #ccc solid;padding: 5px 10px 5px 10px;border-radius: 4px;">Add New Address</a>
+        					</div>
+                        </div>
+                        @else
+                            <div class="col-md-12" >                                
+                                <div class="form-group">
+                                    <label>State</label>
+                                   <select class="form-control" id="state" name="state">
+                                      <option selected disabled>Select State</option>
+                                      @if(isset($user_data['state']) && !empty($user_data['state']))
+                                        @foreach($user_data['state'] as $state)
+                                            <option value="{{ $state->id }}">{{ $state->name}}</option>
+                                        @endforeach
+                                      @endif
+                                      
+                                   </select>
+                                   @if($errors->has('state'))
+                                        <span class="invalid-feedback" role="alert" style="color:red">
+                                            <strong>{{ $errors->first('state') }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label>City</label>
+                                            <select class="form-control" id="city" name="city">
+                                              <option selected disabled>Select City</option>
+                                           </select>
+                                            @if($errors->has('city'))
+                                                <span class="invalid-feedback" role="alert" style="color:red">
+                                                    <strong>{{ $errors->first('city') }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Pin Code</label>
+                                            <input class="form-control" type="text" name="pin" />
+                                            @if($errors->has('pin'))
+                                                <span class="invalid-feedback" role="alert" style="color:red">
+                                                    <strong>{{ $errors->first('pin') }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <textarea class="form-control" name="address"></textarea>
+                                    @if($errors->has('address'))
+                                        <span class="invalid-feedback" role="alert" style="color:red">
+                                            <strong>{{ $errors->first('address') }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                         @endif
                     </div>
-                    <div style="margin-top: 10px; margin-left: 80%;">
-					<a href="" style="background-color: green;border: 1px green solid;padding: 5px 10px 5px 10px;border-radius: 4px; color: #fff">Place Order</a>
-					</div>
-                </div>
+                    
+                    <div class="col-md-6">
+                        <h3 class="widget-title">Order Info</h3>
+                        <div class="box">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>QTY</th>
+                                        <th>Price</th>
+                                        <th>total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(isset($user_data['cart_data']) && !empty($user_data['cart_data']) && count($user_data['cart_data']) )
+                                    @php
+                                        $total = 0;
+                                    @endphp
+                                    @foreach($user_data['cart_data'] as $product)
+                                    <tr>
+                                        <td>{{ $product['title'] }}</td>
+                                        <td>{{ $product['quantity'] }}</td>
+                                        <td>₹{{ number_format($product['price'],2) }}</td>
+                                        <td>₹{{number_format($product['quantity']*$product['price'],2) }}</td>
+                                    </tr>
+
+                                    @php
+                                        $total += ($product['quantity']*$product['price']);
+                                    @endphp
+                                    @endforeach
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Subtotal</td>
+                                        <td>₹{{ number_format($total,2) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Shipping</td>
+                                        <td>₹0</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total</td>
+                                        <td>₹{{ number_format($total,2) }}</td>
+                                    </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="margin-top: 10px; margin-left: 80%;">
+                            <button type="submit" class="btn btn-primary">Place Order</button>
+    					{{-- <a href="" style="background-color: green;border: 1px green solid;padding: 5px 10px 5px 10px;border-radius: 4px; color: #fff">Place Order</a> --}}
+    					</div>
+                    </div>
+                {{ Form::close() }}  
                
-            
-                <div class="col-md-6" style="margin-top: -12%">
-                	<form>
-                    	<div class="form-group">
-                            <label>State</label>
-                           <select class="form-control" id="state">
-                              <option selected disabled>Select State</option>
-                              <option value="1">1</option>
-                              <option value="2">2</option>
-                              <option value="3">3</option>
-                              <option value="4">4</option>
-                              <option value="5">5</option>
-                              <option value="6">6</option>
-                           </select>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <label>City</label>
-                                    <select class="form-control" id="city">
-		                              <option selected disabled>Select City</option>
-		                              <option value="1">1</option>
-		                              <option value="2">2</option>
-		                              <option value="3">3</option>
-		                              <option value="4">4</option>
-		                              <option value="5">5</option>
-		                              <option value="6">6</option>
-		                           </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Pin Code</label>
-                                    <input class="form-control" type="text" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Address</label>
-                            <textarea class="form-control"></textarea>
-                        </div>
-                    </form>
-                </div>
             </div>
             </div>
         </div>
+@endsection
+
+@section('script')
+<script>
+
+        $(document).ready(function(){
+            $("#state").change(function(){
+                var state = $(this).val();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type:"GET",
+                    url:"{{ url('City/list/')}}"+"/"+state+"",
+                    success:function(data){
+                        // console.log(data);
+                        // var cat = JSON.parse(data);
+                        $("#city").html("<option value=''>Select City</option>");
+
+                        $.each( data, function( key, value ) {
+                            $("#city").append("<option value='"+key+"'>"+value+"</option>");
+                        });
+
+                    }
+                });
+            });
+        });
+</script>
 @endsection

@@ -45,6 +45,7 @@
 
 
 <div class="container">
+    <h3 class="widget-title"></h3>
    <div class="owl-carousel owl-loaded owl-nav-out" data-options='{"items":5,"loop":true,"nav":true}'>
 
 
