@@ -98,3 +98,8 @@ Route::get('/sell_on_bplus1', function () {
 Route::get('/product_subcategory_from_home', function () {
     return view('web.product.product_subcategory_from_home');
 });
+
+Route::get('/thankyou', function () {
+    return view('web.thankyou');
+});
+
