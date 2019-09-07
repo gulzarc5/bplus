@@ -22,13 +22,19 @@
                             <h3 class="widget-title">Shipping Details</h3>
 
                             @foreach($user_data['shipping_adress'] as $address)
+                                @php
+                                    $flag = true;
+                                @endphp
                                 <div class="box">
-                                    <input type="radio" name="address_id" value="{{ $address->id }}">
+                                    {{-- @if ()
+                                        
+                                    @endif --}}
+                                    
                                 	<p><b>State:</b> {{ $address->s_name}}</p>
                                     <p><b>City:</b> {{ $address->c_name}}</p>
                                     <p><b>Pin Code:</b> {{ $address->pin}}
                                     <p><b>Address:</b> {{ $address->address}} </p>
-            					</div>
+                                </div>
                             @endforeach
         					<div style="margin-top: 10px;">
         					<a href="" style="background-color: #ccc;border: 1px #ccc solid;padding: 5px 10px 5px 10px;border-radius: 4px;">Add New Address</a>
