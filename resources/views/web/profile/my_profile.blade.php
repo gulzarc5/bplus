@@ -8,10 +8,13 @@
             <div class="panel-heading" style="margin-top: 10px;">
                <div class="row">
                   <center>
-                     <div class="col-md-6">
+                     <div class="col-md-4">
                         <a href="#" class="active" id="myprofile-form-link">My Profile</a>
                      </div>
-                     <div class="col-md-6">
+                     <div class="col-md-4">
+                        <a href="#"  id="shippingaddress-form-link">Shipping Address</a>
+                     </div>
+                     <div class="col-md-4">
                         <a href="#" id="changepass-form-link">Change Password</a>
                      </div>
                   </center>
@@ -198,6 +201,51 @@
                <div class="gap gap-small">
                </div>
             </div>
+            <div class="mfp-with-anim " id="shippingaddress-form" style="margin-top: -20px; display: none;">
+                 
+                  <div class="row">
+                        <div class="col-lg-12">
+                          <div style="margin-top: 30px;">
+                              <div class="col-md-4">
+                                 <div class="form-group">
+                                    <label>State</label>
+                                    <select class="form-control" name="state" id="state" >
+                                       <option selected disabled>...Select State...</option>
+                                       <option >Assam</option>
+                                       <option >Assam</option>
+                                    </select>
+                                 </div>
+                              </div>
+                              <div class="col-md-4">
+                                 <div class="form-group">
+                                    <label>City</label>
+                                    <select class="form-control" name="city" id="city" >
+                                       <option selected disabled>...Select City...</option>
+                                       <option >Assam</option>
+                                       <option >Assam</option>
+                                    </select>
+                                 </div>
+                              </div>
+                              <div class="col-md-4">
+                                 <div class="form-group">
+                                    <label>Pin Code</label>
+                                    <input class="form-control" type="text" name="pin" value="" id="pin" />
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-12">
+                        <div class="form-group">
+                           <textarea rows="3" cols="45" class="form-control" placeholder="address" name="address" id="address" ></textarea>
+                        </div>
+                     </div>
+                     <center>
+                    <input class="btn btn-primary" type="button" value="Submit" id="pass_change" />
+                    </center>
+               <div class="gap gap-small">
+               </div>
+            </div>
          </div>
       </div>
    </div>
@@ -212,6 +260,8 @@
    		$("#myprofile-form").delay(100).fadeIn(100);
     		$("#changepass-form").fadeOut(100);
    		$('#changepass-form-link').removeClass('active');
+      $("#shippingaddress-form").fadeOut(100);
+      $('#shippingaddress-form-link').removeClass('active');
    		$(this).addClass('active');
    		e.preventDefault();
    	});
@@ -219,9 +269,21 @@
    		$("#changepass-form").delay(100).fadeIn(100);
     		$("#myprofile-form").fadeOut(100);
    		$('#myprofile-form-link').removeClass('active');
+      $("#shippingaddress-form").fadeOut(100);
+      $('#shippingaddress-form-link').removeClass('active');
    		$(this).addClass('active');
    		e.preventDefault();
    	});
+
+      $('#shippingaddress-form-link').click(function(e) {
+      $("#shippingaddress-form").delay(100).fadeIn(100);
+      $("#changepass-form").fadeOut(100);
+      $('#changepass-form-link').removeClass('active');
+      $("#myprofile-form").fadeOut(100);
+      $('#myprofile-form-link').removeClass('active');
+      $(this).addClass('active');
+      e.preventDefault();
+    });
    
    });
 </script>
