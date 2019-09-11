@@ -98,9 +98,9 @@
                   </li>
                   <li><a><i class="fa fa-table"></i> Orders <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="tables.html">New Orders</a></li>
-                      <li><a href="tables_dynamic.html">Pending Orders</a></li>
-                      <li><a href="tables_dynamic.html">Delivered Orders</a></li>
+                      <li><a href="{{ route('admin.all_orders') }}">All Orders</a></li>
+                      <li><a href="{{ route('admin.pending_orders') }}">Pending Orders</a></li>
+                      <li><a href="{{ route('admin.delivered_orders') }}">Delivered Orders</a></li>
                     </ul>
                   </li>
 

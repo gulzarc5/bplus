@@ -116,9 +116,32 @@ class UserController extends Controller
     {
          $validator = $request->validate([
             'current_pass' => 'required',
-            'new_pass' => 'required|same:new_pass',
-            'confirm_pass' => 'required|same:new_pass',     
+            'new_pass' => 'required',
+            'confirm_pass' => 'required',     
           ]);
+        if ($request->input('confirm_pass') != $request->input('new_pass')) {
+            return 2;
+        }
+        if ($request->input('confirm_pass') == $request->input('current_pass')) {
+            return 4;
+        }
+        if ( strlen($request->input('confirm_pass')) < 8) {
+            return 3;
+        }
+        $user_id = Auth::guard('buyer')->id();
+        $current_password = DB::table('seller')->where('id',$user_id)->first();
+        if(Hash::check($request->input('current_pass'), $current_password->password)){           
+            $password_change = DB::table('seller')
+            ->where('id',$user_id)
+            ->update([
+                'password' => Hash::make($request->input('confirm_pass')),
+            ]);
+
+            return 1;
+            
+        }else{           
+            return 0;
+        }
     }
 
     public function checkout()
@@ -203,12 +226,16 @@ class UserController extends Controller
                 ->join('products','cart.product_id','=','products.id')
                 ->where('user_id',$user_id)
                 ->get();
+               
 
                 $total_amount = 0;
                 foreach ($cart as $product) {
+                    $seller_id = null;
+                    $seller = DB::table('products')->where('id',$product->product_id)->first();
                     $cart = DB::table('order_details')
                     ->insert([
                         'user_id'=>$user_id,
+                        'seller_id' => $seller->seller_id,
                         'order_id' => $order,
                         'product_id' => $product->product_id,
                         'color_id' => $product->color_id,
@@ -232,7 +259,7 @@ class UserController extends Controller
                     DB::table('cart')->where('user_id',$user_id)->delete();
                 }
 
-                return redirect()->back()->with('message','Order Placed Successfully');
+                return redirect()->route('web.thankyou');
             }else{
                 return redirect()->back()->with('error','Something Went Wrong While Placing Your Order Please Try After Sometime');
             }
@@ -249,15 +276,94 @@ class UserController extends Controller
 
         $order_data = [];
         foreach ($order as $orders) {
-            $order_data[] =DB::table('order_details')
+            $order_details =DB::table('order_details')
                 ->select('order_details.*','products.name as p_name')
-                ->join('products')
+                ->join('products','products.id','=','order_details.product_id')
                 ->where('user_id',$user_id)
                 ->where('order_id',$orders->id)
                 ->get();
+            $order_id = $orders->id;
+            $order_data[] = [
+                'order_id' => $order_id,
+                'order_details' => $order_details,
+            ];
         }
        
-        dd($order_data);
-        return view('web.order_history');
+        // dd($order_data);
+        return view('web.order_history',compact('order_data'));
+    }
+
+    public function sellerRequestForm()
+    {
+        $user_id = Auth::guard('buyer')->id();
+        $states = DB::table('state')
+        ->whereNull('deleted_at')
+        ->get();
+
+        $user = DB::table('seller')
+        ->where('id',$user_id)
+        ->first();
+
+        $user_details = DB::table('seller_details')
+        ->where('seller_id',$user_id)
+        ->first();
+
+        $city = null;
+        if (!empty($user_details->state_id)) {
+            $city = DB::table('city')
+            ->where('state_id',$user_details->state_id)
+            ->get();
+        }
+        $user_data = [
+            'user' => $user,
+            'user_details' => $user_details,
+            'city_list' => $city,
+        ];
+        // dd($states);
+        return view('web.seller.sell_on_bplus1',compact('states','user_data'));
+    }
+
+    public function sellerApplicationSubmit(Request $request)
+    {
+        $user_id = Auth::guard('buyer')->id();
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'dob' => 'required',
+            'gender' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'pin' => 'required',
+            'bank_name' => 'required',
+            'branch_name' => 'required',
+            'account_no' => 'required',
+            'ifsc' => 'required',
+        ]);
+
+        $user_update = Seller::where('id',$user_id)
+            ->update([
+                'name' => $request->input('name'),
+                'user_role' => 2,
+                'verification_status' => 2,
+            ]);
+        $user_profile_update = DB::table('seller_details')
+            ->where('seller_id',$user_id)
+            ->update([
+                'state_id' => $request->input('state'),
+                'city_id' => $request->input('city'),
+                'address' => $request->input('address'),
+                'dob' => $request->input('dob'),
+                'gender' => $request->input('gender'),
+                'pin' => $request->input('pin'),
+            ]);
+        $user_bank = DB::table('seller_bank')
+            ->insert([
+                'seller_id' => $user_id,
+                'bank_name' => $request->input('bank_name'),
+                'branch_name' => $request->input('branch_name'),
+                'account' => $request->input('account_no'),
+                'ifsc' => $request->input('ifsc'),
+                'micr' => $request->input('micr'),
+            ]);
+        return redirect()->route('seller_application')->with('message','Seller Application Has Been Sent Successfully Please Login To See The Action');
     }
 }

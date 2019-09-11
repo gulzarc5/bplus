@@ -9,6 +9,7 @@ use Validator;
 use App\Seller;
 use DB;
 use Auth;
+use Carbon\Carbon;
 
 class SellerController extends Controller
 {
@@ -64,8 +65,37 @@ class SellerController extends Controller
             ->orderBy('products.id','desc')
             ->limit(10)
             ->get();
+        
+        $last_10_orders = DB::table('order_details')
+            ->select('order_details.*','products.name as p_name')
+            ->join('products','products.id','=','order_details.product_id')
+            ->where('order_details.seller_id',$user_id)
+            ->orderBy('order_details.id','desc')
+            ->limit(10)
+            ->get();
+        $total_products = DB::table('products')
+    		->whereNull('deleted_at')
+            ->where('status',1)
+            ->where('seller_id',$user_id)
+            ->count();
+        $total_orders = DB::table('order_details')
+            ->where('seller_id',$user_id)
+            ->count();
+        $pending_orders = DB::table('order_details')
+            ->where('seller_id',$user_id)
+            ->where('status',1)
+            ->count();
+        $delivered_orders = DB::table('order_details')
+            ->where('seller_id',$user_id)
+            ->where('status',3)
+			->count();
         $data = [
             'last_10_product' => $last_10_product,
+            'last_10_orders' => $last_10_orders,
+            'total_products' => $total_products,
+            'total_orders' => $total_orders,
+            'pending_orders' => $pending_orders,
+            'delivered_orders' => $delivered_orders,
         ];
         return view('seller.seller_deshboard',compact('data'));
     }
@@ -132,7 +162,7 @@ class SellerController extends Controller
             'gender' => $request->input('gender'),
         ]);
 
-         $seller_bank = DB::table('seller_bank')
+        $seller_bank = DB::table('seller_bank')
         ->where('seller_id',$seller_id)
         ->update([
             'bank_name' => $request->input('bank_name'),
@@ -176,4 +206,81 @@ class SellerController extends Controller
        }
     }
     
+    public function orderList()
+    {
+        return view('seller.orders.seller_order');
+    }
+
+    public function ajaxOrderList()
+    {
+        $seller_id = Auth::guard('seller')->id();
+        $query = DB::table('order_details')
+        ->select('order_details.*','products.name as p_name')
+        ->join('products','products.id','=','order_details.product_id')
+        ->where('products.seller_id',$seller_id)
+        ->orderBy('order_details.id','desc');
+            return datatables()->of($query->get())
+            ->addIndexColumn()
+            ->addColumn('action', function($row){
+                   $btn = '<a href="'.route('seller.product_view', ['product_id' =>encrypt($row->product_id)]).'" class="btn btn-info btn-sm" target="_blank">View Product</a>';
+                   if ($row->status == '1') {
+                       $btn .= '<a href="'.route('seller.orderUpdate',['order_details_id' =>encrypt($row->id),'status' =>encrypt(2)]).'" class="btn btn-warning btn-sm">Shipped</a>
+                       <a href="'.route('seller.orderUpdate', ['order_details_id' =>encrypt($row->id),'status' =>encrypt(4)]).'" class="btn btn-danger btn-sm">Cancel</a>';
+                        return $btn;
+                    }elseif($row->status == '2'){
+                        $btn .= '<a href="'.route('seller.orderUpdate',['order_details_id' =>encrypt($row->id),'status' =>encrypt(3)]).'" class="btn btn-primary btn-sm">Delivered</a>
+                        <a href="'.route('seller.orderUpdate', ['order_details_id' =>encrypt($row->id),'status' =>encrypt(4)]).'" class="btn btn-danger btn-sm">Cancel</a>';
+                         return $btn;
+                    }else{
+                        $btn .= '<a  class="btn btn-success btn-sm">Order Processed</a>';
+                         return $btn;
+                     }
+                    return $btn;
+            })
+            ->addColumn('status_tab', function($row){
+                if ($row->status == '1') {
+                   $btn = '<a href="#" class="btn btn-warning btn-sm">Pending</a>';
+                    return $btn;
+                }elseif($row->status == '2'){
+                   $btn = '<a href="#" class="btn btn-info btn-sm">Dispatched</a>';
+                    return $btn;
+                }elseif($row->status == '3'){
+                    $btn = '<a href="#" class="btn btn-primary btn-sm">Delivered</a>';
+                     return $btn;
+                 }else{
+                    $btn = '<a href="#" class="btn btn-danger btn-sm">Cancelled</a>';
+                     return $btn;
+                 }
+            })
+            ->addColumn('total', function($row){
+                $total = $row->price * $row->quantity;
+                return $total;
+            })
+            ->addColumn('date', function($row){
+                $date = $row->created_at;
+                $date = Carbon::parse($row->created_at)->toDayDateTimeString();
+                return $date;
+            })
+            ->rawColumns(['action','status_tab'])
+            ->toJson();
+    }
+
+    public function orderUpdate($order_details_id,$status)
+    {
+       
+        try {
+            $order_details_id = decrypt($order_details_id);
+            $status = decrypt($status);
+        }catch(DecryptException $e) {
+            return redirect()->back();
+        }
+        
+        $update_order = DB::table('order_details')
+            ->where('id',$order_details_id)
+            ->update([
+                'status' => $status,
+                'updated_at' =>  Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
+            ]);
+        return redirect()->back()->with('message','Order Status Updated Successfully');
+    }
 }

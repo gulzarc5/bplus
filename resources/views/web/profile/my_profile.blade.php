@@ -57,7 +57,7 @@
                               </div>
                               <div class="col-md-4">
                                  <div class="form-group">
-                                    <label>DOB</label>
+                                    <label>Date of Birth</label>
                                     <input class="form-control" type="date" name="dob" id="dob" value="{{ $user_data['user_details']->dob }}" disabled/>
                                     @if($errors->has('dob'))
                                         <span class="invalid-feedback" role="alert" style="color:red">
@@ -70,7 +70,7 @@
                                  <div class="form-group">
                                     <label>Gender</label>
                                     <div style="display: flex;">
-                                        @if(!empty($user_data['user_details']->dob) && ($user_data['user_details']->dob == 'F') )
+                                       @if(!empty($user_data['user_details']->dob) && ($user_data['user_details']->dob == 'F') )
                                        <label class="container">
                                           <input type="radio" checked="checked" name="gender" value="M" disabled id="m" > Male
                                           <span class="checkmark"></span>
@@ -140,8 +140,7 @@
                                                 <option  value="{{ $city->id }}" selected>{{ $city->name }}</option>
                                              @else
                                                 <option  value="{{ $city->id }}">{{ $city->name }}</option>
-                                             @endif
-                                             
+                                             @endif                                             
                                           @endforeach
                                        @endif
                                     </select>
@@ -181,7 +180,7 @@
                </div>
             </div>
             <div class="mfp-with-anim mfp-dialog clearfix" id="changepass-form" style="margin-top: -20px; display: none;">
-                
+                  <div id="err_msg"></div>
                   <div class="form-group">
                      <label>Current Password</label>
                      <input class="form-control" type="text" name="current_pass" />
@@ -260,7 +259,7 @@
                var current_pass = $("input[name='current_pass']").val();
                var new_pass = $("input[name='new_pass']").val();
                var confirm_pass = $("input[name='confirm_pass']").val();
-               alert(current_pass);
+               // alert(current_pass);
                 $.ajax({
                     type:"POST",
                      url:"{{ route('web.user_change_password')}}",
@@ -271,13 +270,18 @@
                         confirm_pass:confirm_pass
                      },
                     success:function(data){
-                        console.log(data);
-                        // var cat = JSON.parse(data);
-                        // $("#city").html("<option value=''>Select City</option>");
-
-                        // $.each( data, function( key, value ) {
-                        //     $("#city").append("<option value='"+key+"'>"+value+"</option>");
-                        // });
+                        // console.log(data);
+                        if (data == 0) {
+                           $("#err_msg").html("<div class='alert alert-danger'>Sorry !! Current Password Does Not Matched</div>");
+                        }else if (data == 1) {
+                           $("#err_msg").html("<div class='alert alert-success'>Password Changed Successfully</div>");
+                        }else if (data == 3) {
+                           $("#err_msg").html("<div class='alert alert-danger'>Password Must Be 8 Character Long</div>");
+                        }else if (data == 4) {
+                           $("#err_msg").html("<div class='alert alert-danger'>Sorry!! New Password is Same With Previous Password</div>");
+                        }else{
+                           $("#err_msg").html("<div class='alert alert-danger'>Confirm Password Does Not Matched</div>");
+                        }
 
                     }
                 });

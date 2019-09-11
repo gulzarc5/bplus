@@ -49,6 +49,19 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'admin','namespace'=>'Admin']
 		Route::get('/Seller/Status/{seller_id}/{status}','UsersController@sellerUpdateStatus')->name('admin.sellerUpdateStatus');
 	});
 
+	Route::group(['namespace'=> 'Orders'], function(){
+		Route::get('/seller/Orders','OrderController@allOrders')->name('admin.all_orders');
+		Route::get('/ajax/seller/Orders','OrderController@ajaxAllOrders')->name('admin.ajax_all_orders');
+		Route::get('/Orders/Update/{order_details_id}/{status}','OrderController@orderUpdate')->name('admin.order_update');
+		Route::get('/Single/Order/{order_id}','OrderController@singleOrderView')->name('admin.single_order_view');
+
+		Route::get('/Pending/Orders','OrderController@pendingOrders')->name('admin.pending_orders');
+		Route::get('/ajax/Pending/Orders','OrderController@ajaxPendingOrders')->name('admin.ajax_pending_orders');
+
+		Route::get('/Delivered/Orders','OrderController@deliveredOrders')->name('admin.delivered_orders');
+		Route::get('/ajax/Delivered/Orders','OrderController@ajaxDeliveredOrders')->name('admin.ajax_delivered_orders');
+	});
+
 	 
 	Route::get('/deshboard', 'AdminDeshboardController@index')->name('admin.deshboard');
 	///////////////////////////////All Category////////////////////////////////
