@@ -65,6 +65,7 @@ class ProductController extends Controller
             'mrp'=> $request->input('mrp'),
             'price'=> $request->input('price'),
             'min_ord_qtty'=> $request->input('min_quantity'),
+            'status' => 2,
         ]);
 
 
@@ -155,7 +156,7 @@ class ProductController extends Controller
                    <a href="'.route('seller.product_images', [encrypt($row->id)]).'" class="btn btn-warning btn-sm">Images</a>
                    <a href="'.route('seller.product_Color_edit', [encrypt($row->id)]).'" class="btn btn-warning btn-sm">Colors</a>                  
                    ';
-                   if ($row->status == '1') {
+                   if ($row->seller_status == '1') {
                        $btn .= '<a href="'.route('seller.product_status_update', [encrypt($row->id),encrypt(2)]).'" class="btn btn-danger btn-sm">Disable</a>';
                         return $btn;
                     }else{
@@ -165,7 +166,7 @@ class ProductController extends Controller
                     return $btn;
             })
             ->addColumn('status_tab', function($row){
-                if ($row->status == '1') {
+                if ($row->seller_status == '1') {
 
                    $btn = '<a href="#" class="btn btn-success btn-sm">Enabled</a>';
                     return $btn;
@@ -175,7 +176,18 @@ class ProductController extends Controller
                     return $btn;
                 }
             })
-            ->rawColumns(['action','status_tab'])
+            ->addColumn('approval', function($row){
+                if ($row->status == '1') {
+
+                   $btn = '<a href="#" class="btn btn-success btn-sm">Approved</a>';
+                    return $btn;
+                }else{
+
+                   $btn = '<a href="#" class="btn btn-warning btn-sm">Waiting For Approval</a>';
+                    return $btn;
+                }
+            })
+            ->rawColumns(['action','status_tab','approval'])
             ->toJson();
     }
 
@@ -836,7 +848,7 @@ class ProductController extends Controller
         $product_status_update = DB::table('products')
         ->where('id',$product_id)
         ->update([
-            'status' => $status,
+            'seller_status' => $status,
         ]);
         return redirect()->back();
     }

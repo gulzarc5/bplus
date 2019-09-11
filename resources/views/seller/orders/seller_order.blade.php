@@ -8,7 +8,7 @@
     	    <div class="x_panel">
 
     	        <div class="x_title">
-    	            <h2>Product List</h2>
+    	            <h2>Order List</h2>
     	            <div class="clearfix"></div>
     	        </div>
     	        <div>
@@ -17,14 +17,15 @@
                           <thead>
                             <tr>
                               <th>Sl</th>
+                              <th>Order Details Id</th>
+                              <th>Order Id</th>
                               <th>Product Id</th>
                               <th>Product Name</th>
-                              <th>Category</th>
-                              <th>FirstCategory</th>
-                              <th>SecondCategory</th>
-                              <th>Brand</th>
+                              <th>Quantity</th>
+                              <th>Price</th>
+                              <th>Total</th>
                               <th>Status</th>
-                              <th>Approval Status</th>
+                              <th>Date</th>
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -49,17 +50,18 @@
             var table = $('#size_list').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('seller.ajax.get_product_list') }}",
+                ajax: "{{ route('seller.ajax_order_list') }}",
                 columns: [
                     {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                     {data: 'id', name: 'id',searchable: true},
-                    {data: 'name', name: 'name',searchable: true},
-                    {data: 'c_name', name: 'c_name' ,searchable: true},
-                    {data: 'first_c_name', name: 'first_c_name' ,searchable: true},       
-                    {data: 'second_c_name', name: 'second_c_name' ,searchable: true},
-                    {data: 'brand_name', name: 'brand_name' ,searchable: true},             
-                    {data: 'status_tab', name: 'status_tab',orderable: false, searchable: false},
-                    {data: 'approval', name: 'approval',orderable: false, searchable: false},                    
+                    {data: 'order_id', name: 'order_id',searchable: true},
+                    {data: 'product_id', name: 'product_id' ,searchable: true},
+                    {data: 'p_name', name: 'p_name' ,searchable: true},       
+                    {data: 'quantity', name: 'quantity' ,searchable: true},
+                    {data: 'price', name: 'price' ,searchable: true},  
+                    {data: 'total', name: 'total' ,searchable: true},            
+                    {data: 'status_tab', name: 'status_tab',orderable: false, searchable: false},  
+                    {data: 'date', name: 'date' ,searchable: true},                   
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });

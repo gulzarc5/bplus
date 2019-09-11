@@ -22,7 +22,9 @@ Route::group(['prefix'=>'Seller','namespace'=>'Seller'],function(){
 		Route::post('/MyProfile', 'SellerController@sellerUpdate')->name('seller.MyprofileUpdate');
 		Route::get('/change/Password', 'SellerController@viewChangePasswordForm')->name('seller.change_password_form');
 		Route::post('/change/Password', 'SellerController@ChangePassword')->name('seller.change_password');
-
+		Route::get('/Orders', 'SellerController@orderList')->name('seller.order_list');
+		Route::get('/ajax/Orders', 'SellerController@ajaxOrderList')->name('seller.ajax_order_list');
+		Route::get('/Orders/Status/{order_details_id}/{status}', 'SellerController@orderUpdate')->name('seller.orderUpdate');
 
 	});
 });

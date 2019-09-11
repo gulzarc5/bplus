@@ -297,9 +297,14 @@
 
                     <li><a href="{{route('web.myprofile')}}" data-effect="mfp-move-from-top" >My Profile</a></li>
                     <br>
-
-                    <li><a href="{{url('sell_on_bplus1')}}" data-effect="mfp-move-from-top" class="">Become A seller</a></li>
+                    @if (Auth::guard('buyer')->user()->user_role == '1')
+                      <li><a href="{{route('seller_application')}}" data-effect="mfp-move-from-top" class="">Become A seller</a></li>
+                      <br>
+                    @else
+                      <li><a href="{{url('seller_login')}}" data-effect="mfp-move-from-top" target="_blank" class="">Login To Seller Panel</a></li>
                     <br>
+                    @endif
+                    
                       
 
                     <li><a href="{{route('web.order_history')}}" data-effect="mfp-move-from-top" class="">Your Orders</a></li>

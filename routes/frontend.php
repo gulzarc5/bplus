@@ -6,6 +6,8 @@ Route::group(['namespace'=> 'Web'], function(){
         Route::get('/', 'CategoryController@index')->name('index_page');
 
         Route::get('Sub/Category/{first_id}', 'CategoryController@SecondCategory')->name('web.sub_category');
+        Route::get('/First/Category/{main_category_id}', 'CategoryController@firstCategory')->name('web.first_category');
+        
     });
 
      Route::group(['namespace'=> 'Product','prefix'=>'Product'], function(){
@@ -33,6 +35,8 @@ Route::group(['namespace'=> 'Web'], function(){
 
         Route::post('Add', 'UserController@userRegistration')->name('web.user_registration');
 
+        Route::get('/Application', 'UserController@sellerRequestForm')->name('seller_application');
+        Route::post('/Application/Submit', 'UserController@sellerApplicationSubmit')->name('web.seller_application_submit');
 
      });
 
@@ -44,6 +48,9 @@ Route::group(['namespace'=> 'Web'], function(){
         Route::get('/checkout', 'UserController@checkout')->name('web.checkout');
         Route::post('/checkout', 'UserController@finalCheckout')->name('web.final_checkout');
         Route::get('/order_history', 'UserController@orderList')->name('web.order_history');
+        Route::get('/thankyou', function () {
+            return view('web.thankyou');
+        })->name('web.thankyou');
      });
 });
 
@@ -76,18 +83,5 @@ Route::get('seller_register', function () {
 
 Route::get('/forgot_password', function () {
     return view('web.profile.forgot_password');
-});
-
-Route::get('/sell_on_bplus1', function () {
-    return view('web.seller.sell_on_bplus1');
-});
-
-
-Route::get('/product_subcategory_from_home', function () {
-    return view('web.product.product_subcategory_from_home');
-});
-
-Route::get('/thankyou', function () {
-    return view('web.thankyou');
 });
 

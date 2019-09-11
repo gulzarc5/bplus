@@ -24,7 +24,15 @@ class AdminDeshboardController extends Controller
     	$total_products = DB::table('products')
     		->whereNull('deleted_at')
     		->where('status',1)
-    		->count();
+			->count();
+		$total_pending_orders = DB::table('order_details')
+			->where('status',1)
+			->distinct('order_id')
+			->count('order_id');
+		$total_delivered_orders = DB::table('order_details')
+			->where('status',3)
+			->distinct('order_id')
+			->count('order_id');
     	$last_10_product = DB::table('products')
             ->select('products.*','category.name as c_name','first_category.name as first_c_name','second_category.name as second_c_name','brand_name.name as brand_name')
             ->whereNull('products.deleted_at')
@@ -47,6 +55,12 @@ class AdminDeshboardController extends Controller
             ->join('first_category','brand_name.first_category','=','first_category.id')
             ->orderBy('brand_name.id','desc')
             ->limit(10)
+			->get();
+		$last_10_orders = DB::table('order_details')
+			->select('order_details.*','products.name as p_name')
+			->join('products','products.id','=','order_details.product_id')
+			->orderBy('order_details.id','desc')
+            ->limit(10)
             ->get();
     	$data = [
     		'total_buyers'=>$total_buyers,
@@ -55,7 +69,10 @@ class AdminDeshboardController extends Controller
     		'total_products' => $total_products,
     		'last_10_product' => $last_10_product,
     		'last_10_users' => $last_10_users,
-    		'last_10_Brands' => $last_10_Brands,
+			'last_10_Brands' => $last_10_Brands,
+			'total_delivered_orders' => $total_delivered_orders,
+			'total_pending_orders' => $total_pending_orders,
+			'last_10_orders' => $last_10_orders,
     	];
     	return view('admin.admindeshboard',compact('data'));
     }

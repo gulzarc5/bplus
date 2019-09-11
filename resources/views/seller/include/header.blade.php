@@ -106,9 +106,7 @@
                   </li>
                   <li><a><i class="fa fa-table"></i> Orders <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="tables.html">New Orders</a></li>
-                      <li><a href="tables_dynamic.html">Pending Orders</a></li>
-                      <li><a href="tables_dynamic.html">Delivered Orders</a></li>
+                      <li><a href="{{route('seller.order_list')}}">Orders List</a></li>
                     </ul>
                   </li>
                 </ul>

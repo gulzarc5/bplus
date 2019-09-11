@@ -66,57 +66,49 @@
   </h3>
   <div class="row row-sm-gap" data-gutter="15">
     <div class="col-md-2">
-      <a class="banner-category" href="{{url('product_subcategory_from_home')}}">
+      <a class="banner-category" href="{{route('web.first_category',['main_category_id'=>encrypt(1)])}}">
         <img class="banner-category-img" src="{{asset('src/img/test_icon/exterior.png')}}" alt="Image Alternative text" title="Image Title" />
-        <h5 class="banner-category-title">Home & Garden
+        <h5 class="banner-category-title">Home & Furniture
         </h5>
-        <p class="banner-category-desc">173 products
-        </p>
+        {{-- <p class="banner-category-desc">173 products
+        </p> --}}
       </a>
     </div>
     <div class="col-md-2">
-      <a class="banner-category" href="#">
+      <a class="banner-category" href="{{route('web.first_category',['main_category_id'=>encrypt(4)])}}">
         <img class="banner-category-img" src="{{asset('src/img/test_icon/tech.png')}}" alt="Image Alternative text" title="Image Title" />
-        <h5 class="banner-category-title">Electronics
-        </h5>
-        <p class="banner-category-desc">599 products
-        </p>
+        <h5 class="banner-category-title">Electronics & Appliances</h5>
+        {{-- <p class="banner-category-desc">599 products</p> --}}
       </a>
     </div>
     <div class="col-md-2">
-      <a class="banner-category" href="#">
+      <a class="banner-category" href="{{route('web.first_category',['main_category_id'=>encrypt(6)])}}">
         <img class="banner-category-img" src="{{asset('src/img/test_icon/clothes.png')}}" alt="Image Alternative text" title="Image Title" />
-        <h5 class="banner-category-title">Clothes & Accessories
+        <h5 class="banner-category-title">Women Clothes & Accessories
         </h5>
-        <p class="banner-category-desc">534 products
-        </p>
+        {{-- <p class="banner-category-desc">534 products</p> --}}
       </a>
     </div>
     <div class="col-md-2">
-      <a class="banner-category" href="#">
+      <a class="banner-category" href="{{route('web.first_category',['main_category_id'=>encrypt(9)])}}">
         <img class="banner-category-img" src="{{asset('src/img/test_icon/art.png')}}" alt="Image Alternative text" title="Image Title" />
-        <h5 class="banner-category-title">Stationery & Office Supplies
+        <h5 class="banner-category-title">Sports, Books & More
         </h5>
-        <p class="banner-category-desc">453 products
-        </p>
+        {{-- <p class="banner-category-desc">453 products</p> --}}
       </a>
     </div>
     <div class="col-md-2">
-      <a class="banner-category" href="#">
+      <a class="banner-category" href="{{route('web.first_category',['main_category_id'=>encrypt(7)])}}">
         <img class="banner-category-img" src="{{asset('src/img/test_icon/garage.png')}}" alt="Image Alternative text" title="Image Title" />
-        <h5 class="banner-category-title">Footwear
-        </h5>
-        <p class="banner-category-desc">251 products
-        </p>
+        <h5 class="banner-category-title">TVs & Appliances</h5>
+        {{-- <p class="banner-category-desc">251 products</p> --}}
       </a>
     </div>
     <div class="col-md-2">
-      <a class="banner-category" href="#">
+      <a class="banner-category" href="{{route('web.first_category',['main_category_id'=>encrypt(8)])}}">
         <img class="banner-category-img" src="{{asset('src/img/test_icon/baby-room.png')}}" alt="Image Alternative text" title="Image Title" />
-        <h5 class="banner-category-title">Toy & Baby Care
-        </h5>
-        <p class="banner-category-desc">437 products
-        </p>
+        <h5 class="banner-category-title">Baby & Kids</h5>
+        {{-- <p class="banner-category-desc">437 products</p> --}}
       </a>
     </div>
   </div>
@@ -129,8 +121,7 @@
   <div class="row" data-gutter="15">
     <div class="col-md-4">
       <div class="banner banner-o-hid" style="background-image:url(src/img/test_banner/landscape.jpg);">
-        <a class="banner-link" href="{{url('product_saller')}}">
-        </a>
+        <a class="banner-link" href="#"></a>
         <div class="banner-caption-left">
           <h5 class="banner-title">Discover The Mountains
           </h5>
@@ -146,8 +137,7 @@
     </div>
     <div class="col-md-8">
       <div class="banner banner-o-hid" style="background-image:url(src/img/test_banner/sofa.jpg);">
-        <a class="banner-link" href="product-saller">
-        </a>
+        <a class="banner-link" href="#"></a>
         <div class="banner-caption-left">
           <h5 class="banner-title">Sofas
           </h5>
@@ -162,8 +152,7 @@
     </div>
     <div class="col-md-6">
       <div class="banner banner-o-hid" style="background-color:#EA873B;">
-        <a class="banner-link" href="product-saller">
-        </a>
+        <a class="banner-link" href="#"></a>
         <div class="banner-caption-left">
           <h5 class="banner-title">Top Selling Kitchen Accessories
           </h5>
@@ -179,8 +168,7 @@
     </div>
     <div class="col-md-6">
       <div class="banner banner-o-hid" style="background-image:url(src/img/test_banner/19.jpg);">
-        <a class="banner-link" href="product-saller">
-        </a>
+        <a class="banner-link" href="#"></a>
         <div class="banner-caption-left">
           <h5 class="banner-title">Smartphones Under <i class="fa fa-rupee" style="font-size:24px"></i>8000
           </h5>
@@ -196,8 +184,7 @@
     </div>
     <div class="col-md-4">
       <div class="banner banner-o-hid" style="background-image:url(src/img/test_banner/26.jpg);">
-        <a class="banner-link" href="product-saller">
-        </a>
+        <a class="banner-link" href="#"></a>
         <div class="banner-caption-left">
           <h5 class="banner-title">Top Rated Laptops
           </h5>
@@ -213,8 +200,7 @@
     </div>
     <div class="col-md-4">
       <div class="banner banner-o-hid" style="background-image:url(src/img/test_banner/22.jpg);">
-        <a class="banner-link" href="product-saller">
-        </a>
+        <a class="banner-link" href="#"></a>
         <div class="banner-caption-left">
           <h5 class="banner-title">New Jeans Collection
           </h5>
@@ -230,8 +216,7 @@
     </div>
     <div class="col-md-4">
       <div class="banner banner-o-hid" style="background-image:url(src/img/test_banner/light.jpg);">
-        <a class="banner-link" href="product-saller">
-        </a>
+        <a class="banner-link" href="#"></a>
         <div class="banner-caption-left">
           <h5 class="banner-title">Top Office Furniture
           </h5>
