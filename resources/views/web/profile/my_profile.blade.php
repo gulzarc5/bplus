@@ -73,7 +73,7 @@
                                  <div class="form-group">
                                     <label>Gender</label>
                                     <div style="display: flex;">
-                                       @if(!empty($user_data['user_details']->dob) && ($user_data['user_details']->dob == 'F') )
+                                       @if(!empty($user_data['user_details']->gender) && ($user_data['user_details']->gender == 'F') )
                                        <label class="container">
                                           <input type="radio" checked="checked" name="gender" value="M" disabled id="m" > Male
                                           <span class="checkmark"></span>
