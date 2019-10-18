@@ -95,7 +95,7 @@
       
    </div>
    <ul class="list-inline">
-      <li><a class="btn btn-default" href="#">Continue Shopping</a>
+      <li><a class="btn btn-default" href="{{route('index_page')}}">Continue Shopping</a>
       </li>
    </ul>
 </div>

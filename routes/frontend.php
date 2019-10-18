@@ -51,6 +51,13 @@ Route::group(['namespace'=> 'Web'], function(){
         Route::get('/thankyou', function () {
             return view('web.thankyou');
         })->name('web.thankyou');
+
+        Route::post('shipping/address/update','UserController@shippingAddressUpdate')->name('web.shipping_address_update');
+
+        Route::get('shipping/address/delete/{address_id}','UserController@shippingAddressDelete')->name('web.shipping_address_delete');
+
+        Route::post('shipping/address/add','UserController@shippingAddressAdd')->name('web.shipping_address_add');
+
      });
 });
 

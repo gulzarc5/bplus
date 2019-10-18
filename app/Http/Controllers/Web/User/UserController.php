@@ -9,6 +9,7 @@ use DB;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Validator;
 
 
 class UserController extends Controller
@@ -80,7 +81,15 @@ class UserController extends Controller
             'city_list' => $city,
         ];
         // dd($states);
-    	return view('web.profile.my_profile',compact('states','user_data'));
+        $shipping_adress = DB::table('shipping_address')
+            ->select('shipping_address.*','state.name as s_name','city.name as c_name')
+            ->join('state','shipping_address.state_id','=','state.id')
+            ->join('city','shipping_address.city_id','=','city.id')
+            ->where('shipping_address.user_id',$user_id)
+            ->whereNull('shipping_address.deleted_at')
+            ->get();
+
+    	return view('web.profile.my_profile',compact('states','user_data','shipping_adress'));
     }
 
     public function myProfileUpdate(Request $request)
@@ -365,5 +374,80 @@ class UserController extends Controller
                 'micr' => $request->input('micr'),
             ]);
         return redirect()->route('seller_application')->with('message','Seller Application Has Been Sent Successfully Please Login To See The Action');
+    }
+
+    public function shippingAddress()
+    {
+        $user_id = Auth::guard('buyer')->id();
+
+        $shipping_adress = DB::table('shipping_address')
+            ->select('shipping_address.*','state.name as s_name','city.name as c_name')
+            ->join('state','shipping_address.state_id','=','state.id')
+            ->join('city','shipping_address.city_id','=','city.id')
+            ->where('shipping_address.user_id',$user_id)
+            ->whereNull('shipping_address.deleted_at')
+            ->get();
+    }
+
+    public function shippingAddressUpdate(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'state' => 'required',
+            'city' => 'required',
+            'pin' => 'required',
+            'address' => 'required',
+            'address_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return 2;
+        }
+
+        $update = DB::table('shipping_address')
+            ->where('id',$request->input('address_id'))
+            ->update([
+                'state_id' => $request->input('state'),
+                'city_id' => $request->input('city'),
+                'pin' => $request->input('pin'),
+                'address' => $request->input('address'),
+                'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
+            ]);
+        return 1;
+    }
+
+    public function shippingAddressDelete($address_id)
+    {
+        try{
+            $address_id  = decrypt($address_id);
+        }catch(DecryptException $e) {
+            return redirect()->back();
+        }
+        DB::table('shipping_address')
+            ->where('id',$address_id)
+            ->update([
+                'deleted_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
+            ]);
+        return redirect()->back();
+    }
+
+    public function shippingAddressAdd(Request $request)
+    {
+        $validatedData = $request->validate([
+            'state' => 'required',
+            'city' => 'required',
+            'pin' => 'required',
+            'address' => 'required',
+        ]);
+        
+        $user_id = Auth::guard('buyer')->id();
+        DB::table('shipping_address')
+            ->insert([
+                'user_id' => $user_id,
+                'state_id' => $request->input('state'),
+                'city_id' => $request->input('city'),
+                'pin' => $request->input('pin'),
+                'address' => $request->input('address'),
+            ]);
+        return redirect()->back();
     }
 }

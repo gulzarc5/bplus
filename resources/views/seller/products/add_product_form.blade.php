@@ -140,7 +140,18 @@
                                 
                                 <div class="col-md-12 col-sm-12 col-xs-12 mb-3">
                                     <label for="size">Type Product Long Descrition</label>
-                                    <textarea class="form-control" rows="6" name="long_description"></textarea>
+                                    <textarea class="form-control" rows="6" id="long_description" name="long_description">
+                                        <div class="table-responsive">
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sl</th>
+                                                        <th>dfsds</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </textarea>
                                 </div>
 
                             </div>
@@ -303,6 +314,17 @@
 
     </script>
     <script src="{{ asset('admin/javascript/product.js') }}"></script>
+
+    <script src="{{ asset('admin/ckeditor_4/cdeditor/ckeditor.js')}}"></script>
+
+    <script>
+        CKEDITOR.replace( 'long_description' );
+    </script>
+    <style>
+        .ck-editor__editable_inline {
+            min-height: 250px !important;
+        }   
+    </style>
  @endsection
 
 
