@@ -170,10 +170,10 @@
           <a href="#tab-2" data-toggle="tab">Additional Information
           </a>
         </li>
-        <li>
+        {{-- <li>
           <a href="#tab-3" data-toggle="tab">Rating and Reviews
           </a>
-        </li>
+        </li> --}}
       </ul>
       <div class="tab-content">
         <div class="tab-pane fade in active" id="tab-1">
@@ -209,7 +209,7 @@
             </tbody>
           </table>
         </div>
-        <div class="tab-pane fade" id="tab-3">
+        {{-- <div class="tab-pane fade" id="tab-3">
           <div class="row">
             <div class="col-md-8">
               <article class="product-review">
@@ -453,7 +453,7 @@
               </nav>
             </div>
           </div>
-        </div>
+        </div> --}}
       </div>
     </div>
     <div class="gap">
