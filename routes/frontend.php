@@ -62,6 +62,11 @@ Route::group(['namespace'=> 'Web'], function(){
 });
 
 
+Route::group(['namespace'=>'Mobile','prefix'=>'m'],function(){
+    Route::get('/', function () {
+        return view('mobile.index');
+    })->name('mobile.index');
+});
 
 
 
@@ -80,15 +85,16 @@ Route::get('chat_history', function () {
 Route::get('chat', function () {
     return view('web.chat.chat');
 });
-
 Route::get('product_details', function () {
     return view('web.product.product_details');
 });
 Route::get('seller_register', function () {
     return view('web.seller.seller_register');
 });
-
 Route::get('/forgot_password', function () {
     return view('web.profile.forgot_password');
+});
+Route::get('/Mobile-index', function () {
+    return view('mobile.index');
 });
 

@@ -10,7 +10,7 @@
     <meta name="author" content="Tsoy">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='http://fonts.googleapis.com/css?family=Roboto:500,300,700,400italic,400' rel='stylesheet' type='text/css'>
-    <link rel="shortcut icon" href="{{asset('src/img/logo-ww.png')}}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{asset('src/img/logo-wwfav.png')}}">
     <!-- <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'> -->
     <!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'> -->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,600' rel='stylesheet' type='text/css'>
@@ -34,7 +34,11 @@
     <link rel="alternate stylesheet" type="text/css" href="{{asset('src/css/schemes/leather.css')}}" title="leather" media="all" />
     <link rel="alternate stylesheet" type="text/css" href="{{asset('src/css/schemes/denim.css')}}" title="denim" media="all" />
     <link rel="alternate stylesheet" type="text/css" href="{{asset('src/css/schemes/scarlet.css')}}" title="scarlet" media="all" />
-    
+    <script type="text/javascript">      
+      if (screen.width <= 699) {
+      document.location = "{{route('mobile.index')}}";
+      }      
+    </script>
   </head>
   <body>
     <div class="global-wrapper clearfix" id="global-wrapper">

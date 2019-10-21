@@ -1,1 +1,15 @@
-/*YOUR CUSTOM STYLES*/
+/*---------------------
+	CUSTOMIZE STYLE
+-----------------------*/
+/*== START MEDIA QUERY Width= <425px ===*/
+	
+/*== END MEDIA QUERY ===*/ 
+
+/*== START MEDIA QUERY Width= >425px ===*/
+@media (max-width: 425px){
+	.slider-item, .slider-item-sm {
+	    height: 133px;
+	    width:100%;
+	}
+}   
+/*== END MEDIA QUERY ===*/ 

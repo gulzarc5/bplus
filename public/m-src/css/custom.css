@@ -1,0 +1,34 @@
+/*----- Custom ------*/
+.mobile-menu--open .mobile-menu__close, .mobile-menu--open .mobile-menu__panel-back{
+    background: #365271;
+}
+.mobile-menu--open .mobile-menu__panel-title{
+	color: #fff;
+}
+.mobile-menu--open .mobile-menu__contacts{
+	background-color: #eee;
+}
+.heading a .block-slideshow__item-title{
+	margin-left: -196px;
+	font-size: 18px;
+    color: #fff;
+}
+.heading .lft{
+	margin-left: 196px!important;
+}
+.heading .block-slideshow__item-button{
+    margin-left: -220px;
+    background: #e0dddd;
+    color: #1f1f1f;
+}
+.heading .block-slideshow__item-button{
+    margin-left: -220px;
+    background: #e0dddd;
+    color: #1f1f1f;
+}
+.heading .btn-lft{
+    margin-left: 194px;
+}
+.newjch .product-card--layout--grid:nth-child(1){
+	margin-right: 15px;
+}   

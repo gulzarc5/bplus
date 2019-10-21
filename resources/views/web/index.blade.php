@@ -1,8 +1,6 @@
 @extends('web.templet.master')
 
-@section('title', 'home')
-
-
+@section('title', 'Bplus || OnLine Shoping For Branded Electronics, Fashion and Household items')
 
 @section('content')
 
@@ -11,15 +9,15 @@
     <div class="slider-item" style="background-image:url('src/img/slider/slider1.jpg');">
       <div class="container">
         <div class="slider-item-inner">
-          <div class="slider-item-caption-left">
-            <h4 class="slider-item-caption-title" style="font-size: 40px;">Last Chance to Grab These Clearance Items
+           <div class="slider-item-caption-left">
+            <h4 class="slider-item-caption-title" style="color: #fff;font-size: 40px">Clearance Sale
             </h4>
-            <p class="slider-item-caption-desc">Better Living , Better Price
+            <p class="slider-item-caption-desc" style="color: #fff;">Better Living , Better Price
             </p>
-            <a class="btn btn-lg btn-ghost btn-black" href="#">Shop Now
+            <a class="btn btn-lg btn-ghost btn-black" href="#" style="border-color: #fff;
+            color: #fff">Shop Now
             </a>
           </div>
-         <!--  <img class="slider-item-img-right" src="img/headphone.jpg" alt="Image Alternative text" title="Image Title" style="top: 60%; width: 56%;" /> -->
         </div>
       </div>
     </div>
@@ -47,7 +45,7 @@
           <div class="slider-item-caption-left">
             <h4 class="slider-item-caption-title" style="color: #fff;">Sale! Sale! Sale!
             </h4>
-            <p class="slider-item-caption-desc" style="color: #fff;">Your Top Model Leptops, Right Away.
+            <p class="slider-item-caption-desc" style="color: #fff;">Your Top Model Laptops, Right Away.
             </p>
             <a class="btn btn-lg btn-ghost btn-black" href="#" style="border-color: #fff;
             color: #fff">Shop Now
