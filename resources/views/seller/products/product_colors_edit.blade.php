@@ -39,10 +39,10 @@
                                             <option value="">Please Select Color</option>
 
                                             @foreach($color_options as $value1)
-                                              @if($value->color_id == $value1->color_id)
-                                                    <option value="{{ $value1->color_id }}" style="background-color: {{$value1->color_value}}" selected>{{ $value1->color_name }}</option>
+                                              @if($value->color_id == $value1->id)
+                                                    <option value="{{ $value1->id }}" style="background-color: {{$value1->value}}" selected>{{ $value1->name }}</option>
                                                 @else
-                                                    <option value="{{ $value1->color_id }}" style="background-color: {{$value1->color_value}}">{{ $value1->color_name }}</option>
+                                                    <option value="{{ $value1->id }}" style="background-color: {{$value1->value}}">{{ $value1->name }}</option>
                                                 @endif
                                             @endforeach
 
@@ -107,7 +107,7 @@
                                           <option value="">Select Color</option>
                                           @if(isset($color_options) && !empty($color_options))
                                              @foreach($color_options as $value1)
-                                                    <option value="{{ $value1->color_id }}" style="background-color: {{$value1->color_value}}">{{ $value1->color_name }}</option>
+                                                    <option value="{{ $value1->id }}" style="background-color: {{$value1->value}}">{{ $value1->name }}</option>
                                                
                                             @endforeach
                                           @endif

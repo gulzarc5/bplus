@@ -183,12 +183,12 @@
               </a>
             </form>
             <ul class="nav navbar-nav navbar-right">
-              <li>
+              {{-- <li>
                 <a href="{{url('chat_history')}}" data-effect="mfp-move-from-top" class="">
                   <i class="fa fa-comments-o" aria-hidden="true" style="font-size: 20px;">
                   </i> Chat
                 </a>
-              </li>
+              </li> --}}
               <!-- <li>
 <a href="#nav-login-dialog" data-effect="mfp-move-from-top" class="popup-text">Sign In
 </a>

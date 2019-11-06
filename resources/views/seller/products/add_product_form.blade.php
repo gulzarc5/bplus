@@ -2,11 +2,11 @@
 
 @section('content')
 <style>@media(max-width:425px){.new{width: 100%!important;left: 0!important;}}</style>
+@section('content')
+
 <div class="right_col" role="main">
     <div class="row">
     	{{-- <div class="col-md-2"></div> --}}
-        @if(Auth::guard('seller')->user()->verification_status == 3)
-
     	<div class="col-md-12" style="margin-top:50px;">
     	    <div class="x_panel">
 
@@ -28,7 +28,7 @@
     	           
     	            	{{ Form::open(['method' => 'post','route'=>'seller.add_new_product' , 'enctype'=>'multipart/form-data']) }}
     	            	
-                       <div class="well" style="overflow: auto">
+                        <div class="well" style="overflow: auto">
                             <div class="form-row mb-10">
                                 <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
                                   <label for="name">Product name</label>
@@ -43,8 +43,20 @@
                                   <label for="tag_name">Tag Name</label>
                                   <input type="text" class="form-control" name="tag_name"  placeholder="Enter Tag Name" >
 
-                                </div>                                                            
+                                </div>
+                                {{-- <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+                                  <label for="size_wearing">Size Wearing</label>
+                                  <input type="text" class="form-control" name="size_wearing"  placeholder="Enter Size Wearing" >
+                                </div>  --}}
+                                                            
                             </div>
+
+                            {{-- <div class="form-row mb-3">
+                                <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+                                  <label for="fit_wearing">Fit Wearing</label>
+                                  <input type="text" class="form-control" name="fit_wearing"  placeholder="Enter Fit Wearing" >
+                                </div>
+                            </div> --}}
 
                             <div class="form-row mb-3">
                                 <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
@@ -127,8 +139,20 @@
                             </div>
                         </div>
 
-                        <div id="colors_div">
-
+                        <div class="well" style="overflow: auto">
+                            <div id="color_div">
+                                <div class="form-row mb-3" >
+                                    <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+                                        <label for="color">Select Color</label>
+                                        <select class="form-control color" name="color[]" id="color_list">
+                                          <option value="">Please Select Color</option>
+                                        </select>
+                                    </div>    
+                                    <div class="col-md-2 col-sm-12 col-xs-12 mb-3">
+                                       <a class="btn btn-sm btn-primary" style="margin-top: 25px;" onclick="addMoreColor()">Add More</a>
+                                    </div>                     
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="well" style="overflow: auto">
@@ -140,18 +164,7 @@
                                 
                                 <div class="col-md-12 col-sm-12 col-xs-12 mb-3">
                                     <label for="size">Type Product Long Descrition</label>
-                                    <textarea class="form-control" rows="6" id="long_description" name="long_description">
-                                        <div class="table-responsive">
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th>Sl</th>
-                                                        <th>dfsds</th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
-                                    </textarea>
+                                    <textarea class="form-control" rows="6" name="long_description" id="editor1"></textarea>
                                 </div>
 
                             </div>
@@ -193,16 +206,6 @@
     	        </div>
     	    </div>
     	</div>
-
-        @else
-            <div class="x_content bs-example-popovers new" style=" position: absolute;top: 43%;width: 48%;    left: 37%;">
-                <div class="alert alert-danger alert-dismissible fade in" role="alert"style="font-size: 19px;padding: 38px 15px;text-align: center;">
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="    top: -29px;right: -6px;color: #000;"><span aria-hidden="true">×</span></button>
-                  <strong>Sorry !!</strong>  We are Unable to Process Your Request .<br> Your Account is Under Verification 
-
-                </div>
-              </div>
-        @endif
     	{{-- <div class="col-md-2"></div> --}}
     </div>
 </div>
@@ -213,6 +216,7 @@
   @section('script')
      <script type="text/javascript">
         var color_html = null;
+
          var size={};
         $(document).ready(function(){
             $("#category").change(function(){
@@ -261,11 +265,9 @@
                 });
             });
 
-             $("#second_category").change(function(){
-                        
+            $("#first_category").change(function(){
                 var category = $('#category').val();
                 var first_category = $('#first_category').val();
-                var second_category = $(this).val();
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -273,40 +275,38 @@
                 });
                 $.ajax({
                     type:"GET",
-                    url:"{{ url('/admin/Products/ajax/form/load/data')}}"+"/"+category+"/"+first_category+"/"+second_category+"",
+                    url:"{{ url('/admin/Products/ajax/form/load/data')}}"+"/"+category+"/"+first_category+"/",
                     success:function(data){
-                        // console.log(data.varients);
-                        if (data.brands.length > 0) {                           
-                            $("#brand").html("<option value=''>Please Select Second Category</option>");
+                        console.log(data);
+                        $("#second_category").html("<option value=''>Please Select Second Category</option>");
+                        $("#brand").html("<option value=''>Please Select Designer</option>");
+                        $(".color").html("<option value=''>Please Select Color</option>");
+                        $(".size").html("<option value=''>Please Select Size</option>");
+                        
+                        if (data.second_category.length > 0) {  
+                            $.each( data.second_category, function( key, value ) {
+                                $("#second_category").append("<option value='"+value.id+"'>"+value.name+"</option>");
+                            });
+                        }
+
+                        if (data.brands.length > 0) {  
                             $.each( data.brands, function( key, value ) {
-                                $("#brand").append("<option value='"+value.brand_id+"'>"+value.brand_name+"</option>");
+                                $("#brand").append("<option value='"+value.id+"'>"+value.name+"</option>");
                             });
                         }
 
-                        if (data.colors.length > 0) {          
-                          var  color_htmls = '<div class="well" style="overflow: auto">'+
-                            '<div id="color_div">'+
-                                '<div class="form-row mb-3" >'+
-                                    '<div class="col-md-4 col-sm-12 col-xs-12 mb-3">'+
-                                        '<label for="color">Select Color</label>'+
-                                        '<select class="form-control color" name="color[]" id="color"><option value="">Please Select Color</option>';
-                         
-                             color_html += "<option value=''>Please Select Color</option>";
+                        if (data.colors.length > 0) {  
                             $.each( data.colors, function( key, value ) {
-                               color_htmls += "<option value='"+value.color_id+"' style='background-color:"+value.color_value+"'>"+value.color_name+"</option>";
-                                color_html +="<option value='"+value.color_id+"' style='background-color:"+value.color_value+"'>"+value.color_name+"</option>";
+                                $(".color").append("<option value='"+value.id+"' style='background-color:"+value.value+"'>"+value.name+"</option>");
                             });
-
-                            color_htmls +='</select>'+
-                                    '</div>'+
-                                    '<div class="col-md-2 col-sm-12 col-xs-12 mb-3">'+
-                                       '<a class="btn btn-sm btn-primary" style="margin-top: 25px;" onclick="addMoreColor()">Add More</a>'+
-                                    '</div>'+                     
-                                '</div>'+
-                            '</div>'+
-                        '</div>';
-                        $("#colors_div").html(color_htmls);
                         }
+
+                        if (data.sizes.length > 0) {  
+                            $.each( data.sizes, function( key, value ) {
+                                $(".size").append("<option value='"+value.id+"'>"+value.name+"</option>");
+                            });
+                        }
+
                     }
                 });
             });
@@ -315,16 +315,12 @@
     </script>
     <script src="{{ asset('admin/javascript/product.js') }}"></script>
 
-    <script src="{{ asset('admin/ckeditor_4/cdeditor/ckeditor.js')}}"></script>
+
+    <script src="{{ asset('admin/ckeditor_4/ckeditor/ckeditor.js')}}"></script>
 
     <script>
-        CKEDITOR.replace( 'long_description' );
+        CKEDITOR.replace( 'editor1' );
     </script>
-    <style>
-        .ck-editor__editable_inline {
-            min-height: 250px !important;
-        }   
-    </style>
  @endsection
 
 

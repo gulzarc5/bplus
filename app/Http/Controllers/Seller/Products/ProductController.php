@@ -96,7 +96,6 @@ class ProductController extends Controller
                 $image_array = $request->file('image');
                 foreach($image_array as $image)
                 {
-                    // $image = $request->file('img');
                     $destination = base_path().'/public/images/product/';
                     $image_extension = $image->getClientOriginalExtension();
                     $image_name = md5(date('now').time())."-".$request->input('category_name')."."."$image_extension";
@@ -139,13 +138,14 @@ class ProductController extends Controller
     {
     	$seller_id = Auth::guard('seller')->id();
         $query = DB::table('products')
-        ->select('products.*','category.name as c_name','first_category.name as first_c_name','second_category.name as second_c_name','brand_name.name as brand_name')
+        ->select('products.*','category.name as c_name','first_category.name as first_c_name','second_category.name as second_c_name','brands.name as brand_name')
         ->join('category','products.category','=','category.id')
         ->join('first_category','products.first_category','=','first_category.id')
         ->join('second_category','products.second_category','=','second_category.id')
-        ->join('brand_name','products.brand_id','=','brand_name.id')
+        ->join('brands','products.brand_id','=','brands.id')
         ->where('products.seller_id',$seller_id)
-        ->whereNull('products.deleted_at');
+        ->whereNull('products.deleted_at')
+        ->orderBy('products.id','desc');
        
             return datatables()->of($query->get())
             ->addIndexColumn()
@@ -188,7 +188,7 @@ class ProductController extends Controller
                 }
             })
             ->rawColumns(['action','status_tab','approval'])
-            ->toJson();
+            ->make(true);
     }
 
 
@@ -201,19 +201,19 @@ class ProductController extends Controller
             return redirect()->back();
         }
         $product = DB::table('products')
-        ->select('products.*','category.name as c_name','first_category.name as first_c_name','second_category.name as second_c_name','brand_name.name as brand_name')
+        ->select('products.*','category.name as c_name','first_category.name as first_c_name','second_category.name as second_c_name','brands.name as brand_name')
         ->join('category','products.category','=','category.id')
         ->join('first_category','products.first_category','=','first_category.id')
         ->join('second_category','products.second_category','=','second_category.id')
-        ->join('brand_name','products.brand_id','=','brand_name.id')
+        ->join('brands','products.brand_id','=','brands.id')
         ->where('products.id','=',$product_id)
         ->first();
 
 
 
         $colors = DB::table('product_colors')
-        ->select('product_colors.*','color.name as c_name','color.value as c_value')
-        ->join('color','product_colors.color_id','=','color.id')
+        ->select('product_colors.*','colors.name as c_name','colors.value as c_value')
+        ->join('colors','product_colors.color_id','=','colors.id')
         ->where('product_colors.product_id',$product_id)
         ->whereNull('product_colors.deleted_at')
         ->get();
@@ -250,14 +250,11 @@ class ProductController extends Controller
         ->whereNull('deleted_at')
         ->get();
 
-        $brands = DB::table('map_brand')
-        ->select('brand_name.name as brand_name','map_brand.*')
-        ->join('brand_name','map_brand.brand_id','=','brand_name.id')
-        ->where('map_brand.category',$product->category)
-        ->where('map_brand.first_category',$product->first_category)
-        ->where('map_brand.second_category',$product->second_category)
-        ->where('map_brand.status','1')
-        ->whereNull('map_brand.deleted_at')
+        $brands = DB::table('brands')
+        ->where('category',$product->category)
+        ->where('first_category',$product->first_category)
+        ->where('status','1')
+        ->whereNull('deleted_at')
         ->get();
 
         return view('seller.products.edit_product',compact('category','product','first_category','second_category','brands'));
@@ -311,7 +308,7 @@ class ProductController extends Controller
     }
 
 
-   public function productImages($product_id)
+    public function productImages($product_id)
     {
         try {
             $product_id = decrypt($product_id);
@@ -465,7 +462,7 @@ class ProductController extends Controller
         }
     }
 
-    public function productSizes($product_id)
+    public function productColorEdit($product_id)
     {
         try {
             $product_id = decrypt($product_id);
@@ -477,297 +474,11 @@ class ProductController extends Controller
         ->where('id',$product_id)
         ->first();
 
-       $size_id_fetch = DB::table('add_size')
+        $color_options = DB::table('colors')
         ->where('category',$product->category)
         ->where('first_category',$product->first_category)
-        ->where('second_category',$product->second_category)
         ->where('status','1')
-        ->whereNull('deleted_at')    
-        ->distinct()    
-        ->get(['size_id']);
-
-        $sizes_options =[];
-
-        foreach ($size_id_fetch as $size_id) {
-            $size_name = DB::table('size_name')->where('id',$size_id->size_id)->first();
-            // print $size_name->name;
-            $sizes_options [$size_name->name] =  DB::table('add_size')
-            ->select('size_name.name as size_name','size_value.value as size_value','add_size.*')
-            ->join('size_name','add_size.size_id','=','size_name.id')
-            ->join('size_value','add_size.size_value_id','=','size_value.id')
-            ->where('add_size.category',$product->category)
-            ->where('add_size.first_category',$product->first_category)
-            ->where('add_size.second_category',$product->second_category)
-            ->where('add_size.status','1')
-            ->where('add_size.size_id', $size_id->size_id)
-            ->whereNull('add_size.deleted_at')
-            ->get();
-        }
-
-
-        $product_size_id_fetch = DB::table('product_sizes')
-        ->where('product_id',$product_id)
-        ->whereNull('deleted_at')    
-        ->distinct()    
-        ->get(['size_name_id']);
-
-        $sizes =[];
-        foreach ($product_size_id_fetch as $product_size_id) {
-            $size_name = DB::table('size_name')->where('id',$product_size_id->size_name_id)->first();
-            // print $size_name->name;
-            $sizes [$size_name->name] =  DB::table('product_sizes')
-            ->select('product_sizes.*','size_name.name as s_name','size_value.value as s_value')
-            ->join('size_name','product_sizes.size_name_id','=','size_name.id')
-            ->join('size_value','product_sizes.size_value_id','=','size_value.id')
-            ->where('product_sizes.product_id',$product_id)
-            ->where('size_name_id',$size_name->id)
-            ->whereNull('product_sizes.deleted_at')
-            ->get();
-        }
-
-
-        $size_id_fetch_add = DB::table('add_size')
-        ->where('category',$product->category)
-        ->where('first_category',$product->first_category)
-        ->where('second_category',$product->second_category)
-        ->where('status','1')
-        ->whereNull('deleted_at')    
-        ->distinct()    
-        ->get(['size_id']);
-
-        $sizes_add =[];
-        foreach ($size_id_fetch_add as $size_id_add) {
-            $size_name = DB::table('size_name')->where('id',$size_id_add->size_id)->first();
-            // print $size_name->name;
-            $sizes_add [$size_name->name] =  DB::table('add_size')
-            ->select('size_name.name as size_name','size_value.value as size_value','add_size.*')
-            ->join('size_name','add_size.size_id','=','size_name.id')
-            ->join('size_value','add_size.size_value_id','=','size_value.id')
-            ->where('add_size.category',$product->category)
-            ->where('add_size.first_category',$product->first_category)
-            ->where('add_size.second_category',$product->second_category)
-            ->where('add_size.status','1')
-            ->where('add_size.size_id', $size_id_add->size_id)
-            ->whereNull('add_size.deleted_at')
-            ->get();
-        }
-
-        // dd($sizes_add);
-        return view('seller.products.product_sizes',compact('sizes','sizes_options','sizes_add'));
-    }
-
-
-     public function productSizeUpdate(Request $request)
-    {
-
-        $size_id = $request->input('size_id');
-        $size = $request->input('size');
-        $mrp = $request->input('mrp');
-        $price = $request->input('price');
-        $stock = $request->input('stock');
-
-        if (isset($size_id) && !empty($size_id) && isset($size) && !empty($size)  && isset($price) && !empty($price)) {
-            
-            $size_check = DB::table('product_sizes')
-            ->where('product_id',$request->input('product_id'))
-            ->where('size_name_id',$request->input('size_name_id'))
-            ->where('size_value_id',$request->input('size'))
-            ->where('id','!=',$size_id)
-            ->whereNull('deleted_at')
-            ->count();
-
-            if ($size_check > 0) {
-                return 4;
-
-            }
-
-            $size_update = DB::table('product_sizes')
-            ->where('id',$size_id)
-            ->update([
-                'size_value_id' => $size,
-                'mrp' => $mrp,
-                'price' => $price,
-                'stock' => $stock,
-            ]);
-
-            if ($size_update) {
-               // return 2;
-            }else{
-                return 3;
-            }
-        }else{
-            return 1;
-        }
-    }
-
-    public function productSizeStatusUpdate($id,$status,$product_id)
-    {
-        try {
-            $size_id = decrypt($id);
-            $status = decrypt($status);
-            $product_id = decrypt($product_id);
-        }catch(DecryptException $e) {
-            return redirect()->back();
-        }
-
-        $size_status_update = DB::table('product_sizes')
-        ->where('id',$size_id)
-        ->update([
-            'status'=>$status,
-        ]);
-
-       return redirect()->route('seller.product_sizes', ['product_id' => encrypt($product_id)]);
-    }
-
-    public function productNewSizeAdd(Request $request)
-    {
-        $product_id = $request->input('product_id');
-
-        $size_name_id = $request->input('size_name_id');
-        $size = $request->input('size');
-        $mrp = $request->input('mrp');
-        $price = $request->input('price');
-        $stock = $request->input('stock');
-
-        $blade_product_id = $product_id[0];
-
-        for($i = 0; $i < count($size_name_id); $i++){
-            if (isset($product_id[$i]) && !empty($product_id[$i]) && isset($size_name_id[$i]) && !empty($size_name_id[$i]) && isset($size[$i]) && !empty($size[$i]) && isset($price[$i]) && !empty($price[$i]) && isset($stock[$i]) && !empty($stock[$i])) {
-
-                $blade_product_id = $product_id[$i];
-
-                $size_check = DB::table('product_sizes')
-                ->where('product_id',$product_id[$i])
-                ->where('size_name_id',$size_name_id[$i])
-                ->where('size_value_id',$size[$i])
-                ->whereNull('deleted_at')
-                ->count();
-
-                if ($size_check == 0) {                    
-                    $sizes_insert = DB::table('product_sizes')
-                    ->insert([
-                        'product_id' => $product_id[$i],
-                        'size_name_id' => $size_name_id[$i],
-                        'size_value_id' => $size[$i],
-                        'mrp' => $mrp[$i],
-                        'price' => $price[$i],
-                        'stock' => $stock[$i],
-                    ]);
-                }
-            }
-        }
-
-        return redirect()->route('seller.product_sizes',['product_id' => encrypt($blade_product_id)]);
-    }
-
-    public function productVarientEdit($product_id)
-    {
-        try {
-            $product_id = decrypt($product_id);
-        }catch(DecryptException $e) {
-            return redirect()->back();
-        }
-
-        $product = DB::table('products')
-        ->where('id',$product_id)
-        ->first();
-
-       $varient_id_fetch = DB::table('varient_map')
-        ->where('category',$product->category)
-        ->where('first_category',$product->first_category)
-        ->where('second_category',$product->second_category)
-        ->where('status','1')
-        ->whereNull('deleted_at')    
-        ->distinct()    
-        ->get(['varient_id']);
-
-        $varients =[];
-        foreach ($varient_id_fetch as $varient_id) {
-            $varient_name = DB::table('varient_name')->where('id',$varient_id->varient_id)->first();
-            // print $size_name->name;
-            $varients [$varient_name->name] =  DB::table('varient_map')
-            ->select('varient_name.name as varient_name','varient_value.value as varient_value','varient_map.*')
-            ->join('varient_name','varient_map.varient_id','=','varient_name.id')
-            ->join('varient_value','varient_map.varient_value_id','=','varient_value.id')
-            ->where('varient_map.category',$product->category)
-            ->where('varient_map.first_category',$product->first_category)
-            ->where('varient_map.second_category',$product->second_category)
-            ->where('varient_map.status','1')
-            ->where('varient_map.varient_id', $varient_id->varient_id)
-            ->whereNull('varient_map.deleted_at')
-            ->get();
-        }
-
-
-        $product_varient_id_fetch = DB::table('product_varients')
-        ->where('product_id',$product_id)
-        ->whereNull('deleted_at')    
-        ->distinct()    
-        ->get(['varient_name_id']);
-
-        $product_varients =[];
-        foreach ($product_varient_id_fetch as $varient_id) {
-
-        $varient_names = DB::table('varient_name')->where('id',$varient_id->varient_name_id)->first();
-
-        $product_varients[$varient_names->name] = DB::table('product_varients')
-        ->select('product_varients.*','varient_name.name as v_name','varient_value.value as v_value')
-        ->join('varient_name','product_varients.varient_name_id','=','varient_name.id')
-        ->join('varient_value','product_varients.varient_value_id','=','varient_value.id')
-        ->where('product_varients.product_id',$product_id)
-        ->where('varient_name_id',$varient_names->id)
-        ->whereNull('product_varients.deleted_at')
-        ->get();
-        }
-
-        return view('seller.products.product_varients_edit',compact('product_varients','varients'));
-
-    }
-
-
-    public function productVarientUpdate(Request $request)
-    {
-        $product_varient_id = $request->input('product_varient_id');
-        $varient_value_id = $request->input('varient_value_id');
-        if (isset($product_varient_id) && !empty($product_varient_id) && isset($varient_value_id) && !empty($varient_value_id)) {
-            
-            $update_varient = DB::table('product_varients')
-            ->where('id',$product_varient_id)
-            ->update([
-                'varient_value_id'=> $varient_value_id,
-            ]);
-
-            if ($update_varient) {
-               return 2;
-            }else{
-                return 3;
-            }
-
-        }else{
-            return 1;
-        }
-    }
-
-      public function productColorEdit($product_id)
-    {
-        try {
-            $product_id = decrypt($product_id);
-        }catch(DecryptException $e) {
-            return redirect()->back();
-        }
-
-        $product = DB::table('products')
-        ->where('id',$product_id)
-        ->first();
-
-        $color_options = DB::table('color_map')
-        ->select('color.name as color_name','color.value as color_value','color_map.*')
-        ->join('color','color_map.color_id','=','color.id')
-        ->where('color_map.category',$product->category)
-        ->where('color_map.first_category',$product->first_category)
-        ->where('color_map.second_category',$product->second_category)
-        ->where('color_map.status','1')
-        ->whereNull('color_map.deleted_at')
+        ->whereNull('deleted_at')
         ->get();
 
         $product_colors = DB::table('product_colors')

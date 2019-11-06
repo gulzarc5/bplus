@@ -115,15 +115,45 @@
                                             <option value="">Select Brand</option>
                                              @if(isset($brands) && !empty($brands))
                                                 @foreach($brands as $brand)
-                                                    @if($product->brand_id  == $brand->brand_id)
-                                                        <option value="{{ $brand->brand_id }}" selected>{{ $brand->brand_name }}</option>
+                                                    @if($product->brand_id  == $brand->id)
+                                                        <option value="{{ $brand->id }}" selected>{{ $brand->name }}</option>
                                                     @else
-                                                        <option value="{{ $brand->brand_id }}">{{ $brand->brand_name }}</option>
+                                                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                                                     @endif
                                                 @endforeach
                                             @endif
                                         </select>
                                     </div>                        
+                                </div>
+
+                                <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+                                    <label for="mrp">M.R.P</label>
+                                <input type="number" step="any" class="form-control" name="mrp"  placeholder="Enter Product M.R.P" value="{{$product->mrp}}" >
+                                    @if($errors->has('mrp'))
+                                        <span class="invalid-feedback" role="alert" style="color:red">
+                                            <strong>{{ $errors->first('mrp') }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+    
+                                <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+                                    <label for="price">Sell Price</label>
+                                    <input type="number" step="any" class="form-control" name="price"  placeholder="Enter Product Sell Price" value="{{$product->price}}">
+                                    @if($errors->has('price'))
+                                        <span class="invalid-feedback" role="alert" style="color:red">
+                                            <strong>{{ $errors->first('price') }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+    
+                                <div class="col-md-4 col-sm-12 col-xs-12 mb-3">
+                                    <label for="min_quantity">Min Order Quantity</label>
+                                    <input type="number" class="form-control" name="min_quantity"  placeholder="Enter Min Order Quantity" value="{{$product->min_ord_qtty}}">
+                                    @if($errors->has('min_quantity'))
+                                        <span class="invalid-feedback" role="alert" style="color:red">
+                                            <strong>{{ $errors->first('min_quantity') }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -136,7 +166,7 @@
                                     
                                     <div class="col-md-12 col-sm-12 col-xs-12 mb-3">
                                         <label for="size">Type Product Long Descrition</label>
-                                        <textarea class="form-control" rows="6" name="long_description">{{$product->long_description}}</textarea>
+                                        <textarea class="form-control" rows="6" id="editor1" name="long_description">{{$product->long_description}}</textarea>
                                     </div>
 
                                 </div>
@@ -241,6 +271,12 @@
                 });
             });
     </script>
+
+<script src="{{ asset('admin/ckeditor_4/ckeditor/ckeditor.js')}}"></script>
+
+<script>
+    CKEDITOR.replace( 'editor1' );
+</script>
  @endsection
 
 

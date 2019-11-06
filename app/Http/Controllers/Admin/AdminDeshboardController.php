@@ -17,7 +17,7 @@ class AdminDeshboardController extends Controller
     		->whereNull('deleted_at')
     		->where('user_role',2)
     		->count();
-    	$total_brands = DB::table('brand_name')
+    	$total_brands = DB::table('brands')
     		->whereNull('deleted_at')
     		->where('status',1)
     		->count();
@@ -34,12 +34,12 @@ class AdminDeshboardController extends Controller
 			->distinct('order_id')
 			->count('order_id');
     	$last_10_product = DB::table('products')
-            ->select('products.*','category.name as c_name','first_category.name as first_c_name','second_category.name as second_c_name','brand_name.name as brand_name')
+            ->select('products.*','category.name as c_name','first_category.name as first_c_name','second_category.name as second_c_name','brands.name as brand_name')
             ->whereNull('products.deleted_at')
             ->join('category','products.category','=','category.id')
             ->join('first_category','products.first_category','=','first_category.id')
             ->join('second_category','products.second_category','=','second_category.id')
-            ->join('brand_name','products.brand_id','=','brand_name.id')
+            ->join('brands','products.brand_id','=','brands.id')
             ->orderBy('products.id','desc')
             ->limit(10)
             ->get();
@@ -48,12 +48,12 @@ class AdminDeshboardController extends Controller
             ->orderBy('id','desc')
             ->limit(10)
             ->get();
-        $last_10_Brands = DB::table('brand_name')
-        	->select('brand_name.*','category.name as c_name','first_category.name as first_c_name')
-            ->whereNull('brand_name.deleted_at')
-            ->join('category','brand_name.category','=','category.id')
-            ->join('first_category','brand_name.first_category','=','first_category.id')
-            ->orderBy('brand_name.id','desc')
+        $last_10_Brands = DB::table('brands')
+        	->select('brands.*','category.name as c_name','first_category.name as first_c_name')
+            ->whereNull('brands.deleted_at')
+            ->join('category','brands.category','=','category.id')
+            ->join('first_category','brands.first_category','=','first_category.id')
+            ->orderBy('brands.id','desc')
             ->limit(10)
 			->get();
 		$last_10_orders = DB::table('order_details')

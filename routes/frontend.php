@@ -12,6 +12,7 @@ Route::group(['namespace'=> 'Web'], function(){
 
      Route::group(['namespace'=> 'Product','prefix'=>'Product'], function(){
         Route::get('Sellers/{second_category}', 'ProductController@productSellerWithSecondCategory')->name('web.product_sellers');
+        Route::get('Sellers/ajax/{second_category}', 'ProductController@ajaxproductSellerWithSecondCategory')->name('web.ajax_product_sellers');
 
         Route::get('/All/{seller_id}/{second_category}','ProductController@productView')->name('web.product_view');
         Route::get('/Details/{product_id}','ProductController@productDetails')->name('web.product_details');

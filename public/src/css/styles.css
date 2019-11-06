@@ -3071,7 +3071,6 @@ header.main {
   font-size: 11px;
 }
 .product-caption-price {
-  margin-top: 10px;
   margin-bottom: 0;
   font-size: 12px;
 }
@@ -3123,13 +3122,13 @@ header.main {
 }
 .product-sm-left .product-img-wrap {
   float: left;
-  width: 40%;
+  width: 34%;
   padding: 7px;
   margin: 0;
 }
 .product-sm-left .product-caption {
   float: left;
-  width: 60%;
+  width: 66%;
   padding: 0 15px;
 }
 .product-sm-left .product-caption-feature-list {
@@ -3143,15 +3142,18 @@ header.main {
   font-size: 14px;
 }
 .product-sm-left .product-caption-price {
-  margin-top: 6px;
+  margin-top: 2px;
 }
 .product-sm-left .product-caption-title {
   font-size: 13px;
   height: 35px;
 }
 .product-sm-left .product-caption-price > span {
-  font-size: 15px;
+  font-size: 12px;
 }
+.product-sm-left .product-caption-old-price > span {
+  font-size: 12px;
+} 
 .product-sm {
   padding: 10px;
 }
@@ -3318,10 +3320,11 @@ header.main {
   width: 25%;
 }
 .product-page-price {
-  font-size: 40px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 500;
   line-height: 1em;
   margin-bottom: 1px;
+  margin-top: 10px;
 }
 .product-page-price-list {
   font-size: 25px;

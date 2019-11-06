@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Auth;
 use Intervention\Image\Facades\Image;
 use File;
+use Carbon\Carbon;
 
 class ProductController extends Controller
 {
@@ -20,36 +21,36 @@ class ProductController extends Controller
     	->get();
     	return view('admin.products.add_product_form',compact('category'));
     }
-
-    public function ajaxGetLoadFormData($category,$first_category,$second_category)
+    public function ajaxGetLoadFormData($category,$first_category)
     {
-    	$brands = DB::table('map_brand')
-    	->select('brand_name.name as brand_name','map_brand.*')
-    	->join('brand_name','map_brand.brand_id','=','brand_name.id')
-    	->where('map_brand.category',$category)
-    	->where('map_brand.first_category',$first_category)
-    	->where('map_brand.second_category',$second_category)
-    	->where('map_brand.status','1')
-    	->whereNull('map_brand.deleted_at')
-    	->get();
+        $second_category = DB::table('second_category')->where('first_category_id',$first_category)
+            ->where('status','1')
+            ->whereNull('deleted_at')
+            ->get();
 
-    	$colors = DB::table('color_map')
-    	->select('color.name as color_name','color.value as color_value','color_map.*')
-    	->join('color','color_map.color_id','=','color.id')
-    	->where('color_map.category',$category)
-    	->where('color_map.first_category',$first_category)
-    	->where('color_map.second_category',$second_category)
-    	->where('color_map.status','1')
-    	->whereNull('color_map.deleted_at')
-    	->get();
+    	$brands = DB::table('brands')
+            ->where('category',$category)
+            ->where('first_category',$first_category)
+            ->where('status','1')
+            ->whereNull('deleted_at')
+            ->get();
+
+    	$colors = DB::table('colors')
+            ->where('category',$category)
+            ->where('first_category',$first_category)
+            ->where('status','1')
+            ->whereNull('deleted_at')
+            ->get();
 
     	$data = [
-    		'brands' => $brands,
-    		'colors' => $colors,
+            'second_category' => $second_category,
+            'brands' => $brands,
+            'colors' => $colors,
     	];
     	return $data;
 
     }
+
 
     public function addNewProduct(Request $request)
     {
@@ -59,6 +60,9 @@ class ProductController extends Controller
             'category' => 'required',
             'first_category' => 'required',
             'second_category' => 'required',
+            'mrp' => 'required',
+            'price' => 'required',
+            'min_quantity' => 'required',
             'brand' => 'required',
             'image.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -71,8 +75,6 @@ class ProductController extends Controller
         $second_category = $request->input('second_category');
         $brand = $request->input('brand');
         $color = $request->input('color'); ///This Is An Array Of Color
-
-
         $short_description = $request->input('short_description');
         $long_description = $request->input('long_description');
         $image = $request->file('image');
@@ -87,8 +89,13 @@ class ProductController extends Controller
             'category' => $category,
             'first_category' => $first_category,
             'second_category' => $second_category,
+            'mrp'=> $request->input('mrp'),
+            'price'=> $request->input('price'),
+            'min_ord_qtty'=> $request->input('min_quantity'),    
             'short_description' => $short_description,
             'long_description' => $long_description,
+            'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
+            'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
         ]);
 
         if ($product_insert) {
@@ -153,12 +160,13 @@ class ProductController extends Controller
     public function ajaxGetProductList()
     {
         $query = DB::table('products')
-        ->select('products.*','category.name as c_name','first_category.name as first_c_name','second_category.name as second_c_name','brand_name.name as brand_name')
+        ->select('products.*','category.name as c_name','first_category.name as first_c_name','second_category.name as second_c_name','brands.name as brand_name')
         ->join('category','products.category','=','category.id')
         ->join('first_category','products.first_category','=','first_category.id')
         ->join('second_category','products.second_category','=','second_category.id')
-        ->join('brand_name','products.brand_id','=','brand_name.id')
-        ->whereNull('products.deleted_at');
+        ->join('brands','products.brand_id','=','brands.id')
+        ->whereNull('products.deleted_at')
+        ->orderBy('products.id','desc');
        
             return datatables()->of($query->get())
             ->addIndexColumn()
@@ -190,7 +198,7 @@ class ProductController extends Controller
                 }
             })
             ->rawColumns(['action','status_tab'])
-            ->toJson();
+            ->make(true);
     }
 
     public function productView($product_id)
@@ -201,22 +209,30 @@ class ProductController extends Controller
             return redirect()->back();
         }
         $product = DB::table('products')
-        ->select('products.*','category.name as c_name','first_category.name as first_c_name','second_category.name as second_c_name','brand_name.name as brand_name')
+        ->select('products.*','category.name as c_name','first_category.name as first_c_name','second_category.name as second_c_name','brands.name as brand_name')
         ->join('category','products.category','=','category.id')
         ->join('first_category','products.first_category','=','first_category.id')
         ->join('second_category','products.second_category','=','second_category.id')
-        ->join('brand_name','products.brand_id','=','brand_name.id')
+        ->join('brands','products.brand_id','=','brands.id')
         ->where('products.id','=',$product_id)
         ->first();
 
         $colors = DB::table('product_colors')
-        ->select('product_colors.*','color.name as c_name','color.value as c_value')
-        ->join('color','product_colors.color_id','=','color.id')
+        ->select('product_colors.*','colors.name as c_name','colors.value as c_value')
+        ->join('colors','product_colors.color_id','=','colors.id')
         ->where('product_colors.product_id',$product_id)
         ->whereNull('product_colors.deleted_at')
         ->get();
 
-        return view('admin.products.product_details',compact('product','colors'));
+        $seller = DB::table('seller')
+            ->select('seller.name as name','seller.email as email','seller.mobile as mobile','seller_details.address as address','seller_details.pin as pin','state.name as s_name','city.name as c_name')
+            ->leftjoin('seller_details','seller_details.seller_id','=','seller.id')
+            ->leftjoin('state','state.id','=','seller_details.state_id')
+            ->leftjoin('city','city.id','=','seller_details.city_id')
+            ->where('seller.id',$product->seller_id)
+            ->first();
+
+        return view('admin.products.product_details',compact('product','colors','seller'));
     }
 
     public function productEdit($product_id)
@@ -248,14 +264,11 @@ class ProductController extends Controller
         ->whereNull('deleted_at')
         ->get();
 
-        $brands = DB::table('map_brand')
-        ->select('brand_name.name as brand_name','map_brand.*')
-        ->join('brand_name','map_brand.brand_id','=','brand_name.id')
-        ->where('map_brand.category',$product->category)
-        ->where('map_brand.first_category',$product->first_category)
-        ->where('map_brand.second_category',$product->second_category)
-        ->where('map_brand.status','1')
-        ->whereNull('map_brand.deleted_at')
+        $brands = DB::table('brands')
+        ->where('brands.category',$product->category)
+        ->where('brands.first_category',$product->first_category)
+        ->where('brands.status','1')
+        ->whereNull('brands.deleted_at')
         ->get();
 
         return view('admin.products.edit_product',compact('category','product','first_category','second_category','brands'));
@@ -270,6 +283,9 @@ class ProductController extends Controller
             'first_category' => 'required',
             'second_category' => 'required',
             'brand' => 'required',
+            'mrp' => 'required',
+            'price' => 'required',
+            'min_quantity' => 'required',
         ]);
 
         try {
@@ -287,8 +303,12 @@ class ProductController extends Controller
             'first_category' => $request->input('first_category'),
             'second_category' => $request->input('second_category'),
             'brand_id' => $request->input('brand'),
+            'mrp' => $request->input('mrp'),
+            'price' => $request->input('price'),
+            'min_ord_qtty' => $request->input('min_quantity'),
             'short_description' => $request->input('short_description'),
             'long_description' => $request->input('long_description'),
+            'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
         ]);
 
         if ($product_update) {
@@ -468,21 +488,18 @@ class ProductController extends Controller
         ->where('id',$product_id)
         ->first();
 
-        $color_options = DB::table('color_map')
-        ->select('color.name as color_name','color.value as color_value','color_map.*')
-        ->join('color','color_map.color_id','=','color.id')
-        ->where('color_map.category',$product->category)
-        ->where('color_map.first_category',$product->first_category)
-        ->where('color_map.second_category',$product->second_category)
-        ->where('color_map.status','1')
-        ->whereNull('color_map.deleted_at')
+        $color_options = DB::table('colors')
+        ->where('colors.category',$product->category)
+        ->where('colors.first_category',$product->first_category)
+        ->where('colors.status','1')
+        ->whereNull('colors.deleted_at')
         ->get();
 
         $product_colors = DB::table('product_colors')
         ->where('product_id',$product_id)
         ->whereNull('deleted_at')
         ->get();
-
+        // dd($product_colors);
         $product_id_color_add = $product_id;
         
         return view('admin.products.product_colors_edit',compact('color_options','product_colors','product_id_color_add'));
@@ -491,14 +508,16 @@ class ProductController extends Controller
 
     public function productColorUpdate(Request $request)
     {
-        $product_color_id = $request->input('product_color_id');
+        $product_color_id = $request->input('color_id');
         $color = $request->input('color');
+        $product_id = $request->input('coproduct_idlor_id');
 
         if (isset($product_color_id) && !empty($product_color_id) && isset($color) && !empty($color)) {
             $color_update = DB::table('product_colors')
             ->where('id',$product_color_id)
             ->update([
                 'color_id' => $color,
+                'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
             ]);
 
             if ($color_update) {
@@ -535,6 +554,9 @@ class ProductController extends Controller
                     ->insert([
                         'product_id' => $product_id,
                         'color_id' => $colors[$i],
+                        'created_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
+                        'updated_at' => Carbon::now()->setTimezone('Asia/Kolkata')->toDateTimeString(),
+
                     ]);
                 }
            }

@@ -204,7 +204,6 @@
     }
         $(document).ready(function(){
             $("#state").change(function(){
-                alert('hi');
                 var state = $(this).val();
                 $.ajaxSetup({
                     headers: {

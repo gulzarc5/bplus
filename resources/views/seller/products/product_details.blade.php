@@ -46,6 +46,19 @@
                       <td> {{ $product->second_c_name }} </td>
                     </tr>
 
+                    <tr>
+                      <th>M.R.P : </th>
+                      <td>{{ number_format( $product->mrp,2,".",'')}}</td>
+                    </tr>
+                    <tr>
+                      <th>Selling Price : </th>
+                      <td> {{ number_format($product->price,2,".",'')}} </td>
+                    </tr>
+                    <tr>
+                      <th>Minimum Order Quantity : </th>
+                      <td> {{ $product->min_ord_qtty }} </td>
+                    </tr>
+
                     @if(!empty($product->short_description))
                     <tr>
                       <th>Short Description : </th>
@@ -56,38 +69,18 @@
                     @if(!empty($product->long_description))
                     <tr>
                       <th>Long Description : </th>
-                      <td>{{ $product->long_description }}</td>
+                      <td>{!! $product->long_description !!}</td>
                     </tr>
                     @endif
 
                   </table>
                 </div>
                 <div class="col-sm-6 invoice-col">
-                   <table class="table table-striped">
-                    <caption>Seller Deails</caption>
-                    <tr>
-                      <th>Seller Name : </th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Mobile No : </th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Email : </th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Address : </th>
-                      <td></td>
-                    </tr>
-                  </table>
-
                   @if(!empty($product->main_image))
                     <table class="table table-striped">
                       <caption>Product Image</caption>                     
                         <tr>
-                          <td colspan="2"><img src="{{ asset('images/product/'.$product->main_image.'')}}" height="100px" width="100px"></td>
+                          <td colspan="2"><img src="{{ asset('images/product/'.$product->main_image.'')}}" height="400px" width="300px"></td>
                         </tr>                   
                     </table>
                   @endif

@@ -33,7 +33,7 @@
 
   @if(isset($product) && !empty($product))
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div class="product-page-product-wrap jqzoom-stage">
           <div class="clearfix">
             <a href="{{ asset('images/product/'. $product->main_image.'')}}" id="jqzoom" data-rel="gal-1">
@@ -89,19 +89,22 @@
       </div>
       {{ Form::open(['method' => 'post','route'=>'web.add_cart']) }}
                 
-      <div class="col-md-6">
+      <div class="col-md-8">
         <div class="_box-highlight">
-          <ul class="product-page-product-rating">
+          {{-- <ul class="product-page-product-rating">
             <li class="rated"><i class="fa fa-star"></i></li>
             <li class="rated"><i class="fa fa-star"></i></li>
             <li class="rated"><i class="fa fa-star"></i></li>
             <li class="rated"><i class="fa fa-star"></i></li>
             <li class="rated"><i class="fa fa-star"></i></li>
           </ul>
-          <p class="product-page-product-rating-sign"><a href="#">238 customer reviews</a></p>
+          <p class="product-page-product-rating-sign"><a href="#">238 customer reviews</a></p> --}}
           <h1> {{$product->name}}</h1>
-          <p class="product-page-price">Rs {{ number_format($product->price,2)}}</p>
-          <p class="text-muted text-sm">Free Shipping</p>
+          <hr>
+          <div class="flex-spc-betw" style="justify-content:flex-start;margin-bottom:20px;">
+              <p class="product-page-price">Rs {{ number_format($product->price,2)}}</p>
+              <p class="product-page-price product-caption-old-price ml-20">Rs {{ number_format($product->mrp,2)}}</p>
+          </div>
           <p class="product-page-desc-lg">{{$product->short_description}}</p>
 
           @if(isset($product_color) && !empty($product_color) && count($product_color) > 0)
@@ -166,10 +169,10 @@
           <a href="#tab-1" data-toggle="tab">Description
           </a>
         </li>
-        <li>
+        {{-- <li>
           <a href="#tab-2" data-toggle="tab">Additional Information
           </a>
-        </li>
+        </li> --}}
         {{-- <li>
           <a href="#tab-3" data-toggle="tab">Rating and Reviews
           </a>
@@ -179,7 +182,7 @@
         <div class="tab-pane fade in active" id="tab-1">
           <p>{{$product->long_description}}</p>
         </div>
-        <div class="tab-pane fade" id="tab-2">
+        {{-- <div class="tab-pane fade" id="tab-2">
           <table class="table">
             <tbody>
               <tr>
@@ -208,7 +211,7 @@
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> --}}
         {{-- <div class="tab-pane fade" id="tab-3">
           <div class="row">
             <div class="col-md-8">
@@ -461,52 +464,62 @@
     <h3 class="widget-title">You Might Also Like
     </h3>
     <div class="row" data-gutter="15">
-      <div class="col-md-3">
-        <div class="product product-sm-left ">
-          <ul class="product-labels">
-          </ul>
-          <div class="product-img-wrap">
-            <img class="product-img" src="{{asset('src/img/test_product/woman_bags/1.jpg')}}" alt="Image Alternative text" title="Image Title" />
-          </div>
-          <a class="product-link" href="product-Details">
-          </a>
-          <div class="product-caption">
-            <ul class="product-caption-rating">
-              <li class="rated">
-                <i class="fa fa-star">
-                </i>
-              </li>
-              <li class="rated">
-                <i class="fa fa-star">
-                </i>
-              </li>
-              <li class="rated">
-                <i class="fa fa-star">
-                </i>
-              </li>
-              <li class="rated">
-                <i class="fa fa-star">
-                </i>
-              </li>
-              <li>
-                <i class="fa fa-star">
-                </i>
-              </li>
-            </ul>
-            <h5 class="product-caption-title">Dooney & Bourke Chevron Large Slim Wristlet
-            </h5>
-            <div class="product-caption-price">
-              <span class="product-caption-price-new">Rs 103
-              </span>
+      @if (isset($related_products) && !empty($related_products))
+        @foreach ($related_products as $item)
+          <div class="col-md-3">
+            <div class="product product-sm-left ">
+              <ul class="product-labels">
+              </ul>
+              <div class="product-img-wrap">
+                <img class="product-img" src="{{asset('images/product/thumb/'.$item->main_image.'')}}" alt="Image Alternative text" title="Image Title" />
+              </div>
+              <a class="product-link" href="product-Details">
+              </a>
+              <div class="product-caption">
+                {{-- <ul class="product-caption-rating">
+                  <li class="rated">
+                    <i class="fa fa-star">
+                    </i>
+                  </li>
+                  <li class="rated">
+                    <i class="fa fa-star">
+                    </i>
+                  </li>
+                  <li class="rated">
+                    <i class="fa fa-star">
+                    </i>
+                  </li>
+                  <li class="rated">
+                    <i class="fa fa-star">
+                    </i>
+                  </li>
+                  <li>
+                    <i class="fa fa-star">
+                    </i>
+                  </li>
+                </ul> --}}
+                
+                <h3 class="product-caption-title">{{$item->name}}
+                </h3>
+                <div>
+                    <p class="lineclamp3">{{$item->short_description}}</p>
+                </div>
+                <div class="flex-spc-betw" style="justify-content:flex-start;">
+                    <div class="product-caption-price">
+                        <span class="product-caption-price-new">{{ number_format($item->price,2)}}</span>
+                    </div>
+                    <div class="product-caption-old-price">
+                        <span class="product-caption-old-price ml-20">{{ number_format($item->mrp,2)}}</span>
+                    </div>
+                </div>
+                </ul>
+              </div>
             </div>
-            <ul class="product-caption-feature-list">
-              <li>Free Shipping
-              </li>
-            </ul>
           </div>
-        </div>
-      </div>
-      <div class="col-md-3">
+        @endforeach          
+      @endif
+      
+      {{-- <div class="col-md-3">
         <div class="product product-sm-left ">
           <ul class="product-labels">
           </ul>
@@ -642,7 +655,8 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> --}}
+      
     </div>
   @endif
 

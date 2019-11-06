@@ -112,7 +112,7 @@
             <div class="checkbox">
               <label onclick="brandsCheckbox()">
                 <input class="i-check" type="checkbox"  name="brand" value="{{$products_brand->brand_id}}" />{{$products_brand->brand_name}}
-                <span class="category-filters-amount">({{$products_brand->total}})</span>
+                {{-- <span class="category-filters-amount">({{$products_brand->total}})</span> --}}
               </label>
             </div>
             @endforeach
@@ -129,8 +129,8 @@
             <div class="checkbox">
               <label>
                 <input class="i-check" type="checkbox" name="color"  value="{{ $product_color->color_id }}" />{{ $product_color->color_name }}<span style="height: 15px; width: 30px;   background-color: {{ $product_color->color_value }}; border-radius: 30%; display: inline-block;"></span>
-                <span class="category-filters-amount">({{ $product_color->total }})
-                </span>
+                {{-- <span class="category-filters-amount">({{ $product_color->total }})
+                </span> --}}
               </label>
             </div>
             @endforeach
@@ -142,106 +142,9 @@
 
     </aside>
     </div>
-    <div class="col-md-9">
-      <div class="row" data-gutter="15" id="products_div">
-        @if(isset($product_against_seller) && !empty($product_against_seller))
-          @foreach($product_against_seller as $products)
-            <div class="col-md-4">
-              <div class="product ">
-                  <ul class="product-labels">
-                  </ul>
-                  <div class="product-img-wrap">
-                      <img class="product-img-primary" src="{{asset('images/product/thumb/'. $products->main_image.'')}}" alt="Image Alternative text" title="Image Title" />
-                      <img class="product-img-alt" src="{{asset('images/product/thumb/'. $products->main_image.'')}}" alt="Image Alternative text" title="Image Title" />
-                  </div>
-                  <a class="product-link" href="{{route('web.product_details',['product_id' => encrypt($products->id)])}}">
-                  </a>
-                  <div class="product-caption">
-                      {{-- <ul class="product-caption-rating">
-                          <li class="rated">
-                              <i class="fa fa-star">
-                                </i>
-                          </li>
-                          <li class="rated">
-                              <i class="fa fa-star">
-                                </i>
-                          </li>
-                          <li class="rated">
-                              <i class="fa fa-star">
-                                </i>
-                          </li>
-                          <li class="rated">
-                              <i class="fa fa-star">
-                                </i>
-                          </li>
-                          <li>
-                              <i class="fa fa-star">
-                                </i>
-                          </li>
-                      </ul> --}}
-                      <h5 class="product-caption-title">{{$products->name}}
-                            </h5>
-                      <div class="product-caption-price">
-                          <span class="product-caption-price-new">{{ number_format($products->price,2)}}
-                              </span>
-                      </div>
-                      <ul class="product-caption-feature-list">
-                          {{-- <li>3 left
-                          </li> --}}
-                          <li>Free Shipping
-                          </li>
-                      </ul>
-                  </div>
-              </div>
-            </div>
-          @endforeach
-        @endif
-      </div>
-      <div class="row">
-        @if(isset($pagination))
-          <div class="col-md-6">
-            <p class="category-pagination-sign">{{$pagination['total_product']}} items found in Cell Phones. Showing {{$pagination['current_page']}} - {{$pagination['total_page']}}
-            </p>
-          </div>
-          <div class="col-md-6">
-            <nav>
-              <ul class="pagination category-pagination pull-right">
-
-                @if(!empty($pagination['total_page']))
-                  @for($i = 1; $i <= $pagination['total_page']; $i++ )
-
-                    @if($i == $pagination['current_page'])
-                      <li class="active">
-                        <a href="#">{{$i}}
-                        </a>
-                      </li>
-                    @elseif($i == $pagination['total_page'])
-                      <li class="last">
-                        <a href="#">
-                           <i class="fa fa-long-arrow-right"></i>
-                        </a>
-                      </li>
-                    @else
-                      <li class="active">
-                        <a href="#">{{$i}}
-                        </a>
-                      </li>
-                    @endif
-                  @endfor
-                @endif
-                
-                </li>
-                <li class="last">
-                  <a href="#">
-                    <i class="fa fa-long-arrow-right">
-                    </i>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        @endif
-      </div>
+    <div class="col-md-9" id="pagination_div">
+      {{-- //product list Page --}}
+      @include('web.product.pagination.product_with_category')
     </div>
   </div>
 </div>
@@ -250,9 +153,11 @@
 
 @section('script')
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js"></script>
+
 @if(isset($product_min_max_price) && !empty($product_min_max_price) && !empty($product_min_max_price->min_price) && !empty($product_min_max_price->max_price))
 <script type="text/javascript">
+ var prices = null;
   $("#price-slider").ionRangeSlider({
     min: {{ $product_min_max_price->min_price }},
     max: {{ $product_min_max_price->max_price }},
@@ -261,7 +166,7 @@
     prettify: false,
     hasGrid: false,
      onFinish: function (data) {
-      var prices = data.from+";"+data.to;
+      prices = data.from+";"+data.to;
       filterProduct(prices);
     },
 });
@@ -276,7 +181,7 @@
     prettify: false,
     hasGrid: false,
     onFinish: function (data) {
-      var prices = data.from+";"+data.to;
+      prices = data.from+";"+data.to;
       filterProduct(prices);
     },
 });
@@ -301,7 +206,18 @@ $("#product_sort").change(function(){
   filterProduct();
 })
 
-  function filterProduct(prices) {
+
+
+$(document).ready(function () {
+    $(document).on('click','.pagination a',function(event){
+      event.preventDefault();
+      var page = $(this).attr('href').split('page=')[1];
+      filterProduct(prices,page);
+    });
+  });
+
+
+  function filterProduct(prices,page) {
       var category_id_filter = $("#category_id_filter").val();
 
       var sort = $("#product_sort").val();    
@@ -323,9 +239,16 @@ $("#product_sort").change(function(){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
         }
     });
+    var url_route = null;
+    if (page) {
+       url_route = "{{ route('web.product_filter')}}?page="+page;
+    } else {
+      url_route = "{{ route('web.product_filter')}}";
+    }
+
     $.ajax({
         type:"POST",
-        url:"{{ route('web.product_filter')}}",
+        url:url_route,
         data:{
           "_token": "{{ csrf_token() }}",
           category:category_id_filter,
@@ -346,59 +269,46 @@ $("#product_sort").change(function(){
           $("#myModal").addClass("mfp-hide");
         },
         success:function(data){
-           
-            console.log(data);
-            var response = data;
-            if (response.products) {
-              product_Html(response.products);
-            }       
-            if (response.product_min_max_price) {
-                 let my_range = $("#price-slider").data("ionRangeSlider");
-                 my_range.update({
-                    min: response.product_min_max_price.min_price,
-                    max: response.product_min_max_price.max_price,
-                });
-            }   
-
+           $("#pagination_div").html(data);
         }
     });
   }
 
 
 
-  function product_Html(products){
-    var products_html = '';
-    if (products.length > 0) {
-      $.each(products, function(key,products){
-        var product_route = '{{route('web.product_details',['product_id' => encrypt(':id')])}}';
-        product_route = product_route.replace(':id', products.id);
-      products_html +='<div class="col-md-4">'+
-              '<div class="product ">'+
-                  '<ul class="product-labels"></ul>'+
-                  '<div class="product-img-wrap">'+
-                      '<img class="product-img-primary" src="{{asset('images/product/thumb/')}}'+'/'+products.main_image+'" alt="Image Alternative text" title="Image Title" />'+
-                      '<img class="product-img-alt" src="{{asset('images/product/thumb/')}}'+'/'+products.main_image+'" alt="Image Alternative text" title="Image Title" />'+
-                  '</div>'+
-                  '<a class="product-link" href="">'+
-                  '</a>'+
-                  '<div class="product-caption">'+
-                  '<h5 class="product-caption-title">'+products.name+'</h5>'+
-                      '<div class="product-caption-price">'+
-                          '<span class="product-caption-price-new">'+products.price+'</span>'+
-                      '</div>'+
-                      '<ul class="product-caption-feature-list">'+
-                          {{-- <li>3 left
-                          </li> --}}
-                          '<li>Free Shipping</li>'+
-                      '</ul>'+
-                  '</div>'+
-              '</div>'+
-            '</div>';
-      })
+  // function product_Html(products){
+  //   var products_html = '';
+  //   if (products.length > 0) {
+  //     $.each(products, function(key,products){
+  //       var product_route = '{{route('web.product_details',['product_id' => encrypt(':id')])}}';
+  //       product_route = product_route.replace(':id', products.id);
+  //     products_html +='<div class="col-md-4">'+
+  //             '<div class="product ">'+
+  //                 '<ul class="product-labels"></ul>'+
+  //                 '<div class="product-img-wrap">'+
+  //                     '<img class="product-img-primary" src="{{asset('images/product/thumb/')}}'+'/'+products.main_image+'" alt="Image Alternative text" title="Image Title" />'+
+  //                     '<img class="product-img-alt" src="{{asset('images/product/thumb/')}}'+'/'+products.main_image+'" alt="Image Alternative text" title="Image Title" />'+
+  //                 '</div>'+
+  //                 '<a class="product-link" href="">'+
+  //                 '</a>'+
+  //                 '<div class="product-caption">'+
+  //                 '<h5 class="product-caption-title">'+products.name+'</h5>'+
+  //                     '<div class="product-caption-price">'+
+  //                         '<span class="product-caption-price-new">'+products.price+'</span>'+
+  //                     '</div>'+
+  //                     '<ul class="product-caption-feature-list">'+
+  //                         {{-- <li>3 left
+  //                         </li> --}}
+  //                         '<li>Free Shipping</li>'+
+  //                     '</ul>'+
+  //                 '</div>'+
+  //             '</div>'+
+  //           '</div>';
+  //     })
 
-    }
-    $("#products_div").html(products_html);
-  }
+  //   }
+  //   $("#products_div").html(products_html);
+  // }
 </script>
 
 

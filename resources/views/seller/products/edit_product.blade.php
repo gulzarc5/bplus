@@ -115,10 +115,10 @@
                                             <option value="">Select Brand</option>
                                              @if(isset($brands) && !empty($brands))
                                                 @foreach($brands as $brand)
-                                                    @if($product->brand_id  == $brand->brand_id)
-                                                        <option value="{{ $brand->brand_id }}" selected>{{ $brand->brand_name }}</option>
+                                                    @if($product->brand_id  == $brand->id)
+                                                        <option value="{{ $brand->id }}" selected>{{ $brand->name }}</option>
                                                     @else
-                                                        <option value="{{ $brand->brand_id }}">{{ $brand->brand_name }}</option>
+                                                        <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                                                     @endif
                                                 @endforeach
                                             @endif
@@ -166,7 +166,7 @@
                                     
                                     <div class="col-md-12 col-sm-12 col-xs-12 mb-3">
                                         <label for="size">Type Product Long Descrition</label>
-                                        <textarea class="form-control" rows="6" name="long_description">{{$product->long_description}}</textarea>
+                                        <textarea class="form-control" rows="6" id="editor1" name="long_description">{{$product->long_description}}</textarea>
                                     </div>
 
                                 </div>
@@ -194,82 +194,110 @@
  @endsection
 
   @section('script')
-     <script type="text/javascript">
-        var color_html = null;
-         var size={};
-        $(document).ready(function(){
-            $("#category").change(function(){
-                var category = $(this).val();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type:"GET",
-                    url:"{{ url('/admin/first/Category/')}}"+"/"+category+"",
-                    success:function(data){
-                        // console.log(data);
-                        var cat = JSON.parse(data);
-                        $("#first_category").html("<option value=''>Please Select First Category</option>");
+  <script type="text/javascript">
+    var color_html = null;
 
-                        $.each( cat, function( key, value ) {
-                            $("#first_category").append("<option value='"+key+"'>"+value+"</option>");
-                        });
-
-                    }
-                });
+     var size={};
+    $(document).ready(function(){
+        $("#category").change(function(){
+            var category = $(this).val();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
+            $.ajax({
+                type:"GET",
+                url:"{{ url('/admin/first/Category/')}}"+"/"+category+"",
+                success:function(data){
+                    // console.log(data);
+                    var cat = JSON.parse(data);
+                    $("#first_category").html("<option value=''>Please Select First Category</option>");
 
-            $("#first_category").change(function(){
-                var category = $(this).val();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type:"GET",
-                    url:"{{ url('/admin/second/Category/')}}"+"/"+category+"",
-                    success:function(data){
-                        // console.log(data);
-                        var cat = JSON.parse(data);
-                        $("#second_category").html("<option value=''>Please Select Second Category</option>");
+                    $.each( cat, function( key, value ) {
+                        $("#first_category").append("<option value='"+key+"'>"+value+"</option>");
+                    });
 
-                        $.each( cat, function( key, value ) {
-                            $("#second_category").append("<option value='"+key+"'>"+value+"</option>");
-                        });
-
-                    }
-                });
+                }
             });
         });
 
-
-         $("#second_category").change(function(){
-                        
-                var category = $('#category').val();
-                var first_category = $('#first_category').val();
-                var second_category = $(this).val();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type:"GET",
-                    url:"{{ url('/admin/Products/ajax/Get/Brands')}}"+"/"+category+"/"+first_category+"/"+second_category+"",
-                    success:function(data){
-                        if (data.brands.length > 0) {                           
-                            $("#brand").html("<option value=''>Please Select Second Category</option>");
-                            $.each( data.brands, function( key, value ) {
-                                $("#brand").append("<option value='"+value.brand_id+"'>"+value.brand_name+"</option>");
-                            });
-                        }
-
-                    }
-                });
+        $("#first_category").change(function(){
+            var category = $(this).val();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
+            $.ajax({
+                type:"GET",
+                url:"{{ url('/admin/second/Category/')}}"+"/"+category+"",
+                success:function(data){
+                    // console.log(data);
+                    var cat = JSON.parse(data);
+                    $("#second_category").html("<option value=''>Please Select Second Category</option>");
+
+                    $.each( cat, function( key, value ) {
+                        $("#second_category").append("<option value='"+key+"'>"+value+"</option>");
+                    });
+
+                }
+            });
+        });
+
+        $("#first_category").change(function(){
+            var category = $('#category').val();
+            var first_category = $('#first_category').val();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type:"GET",
+                url:"{{ url('/admin/Products/ajax/form/load/data')}}"+"/"+category+"/"+first_category+"/",
+                success:function(data){
+                    console.log(data);
+                    $("#second_category").html("<option value=''>Please Select Second Category</option>");
+                    $("#brand").html("<option value=''>Please Select Designer</option>");
+                    $(".color").html("<option value=''>Please Select Color</option>");
+                    $(".size").html("<option value=''>Please Select Size</option>");
+                    
+                    if (data.second_category.length > 0) {  
+                        $.each( data.second_category, function( key, value ) {
+                            $("#second_category").append("<option value='"+value.id+"'>"+value.name+"</option>");
+                        });
+                    }
+
+                    if (data.brands.length > 0) {  
+                        $.each( data.brands, function( key, value ) {
+                            $("#brand").append("<option value='"+value.id+"'>"+value.name+"</option>");
+                        });
+                    }
+
+                    if (data.colors.length > 0) {  
+                        $.each( data.colors, function( key, value ) {
+                            $(".color").append("<option value='"+value.id+"' style='background-color:"+value.value+"'>"+value.name+"</option>");
+                        });
+                    }
+
+                    if (data.sizes.length > 0) {  
+                        $.each( data.sizes, function( key, value ) {
+                            $(".size").append("<option value='"+value.id+"'>"+value.name+"</option>");
+                        });
+                    }
+
+                }
+            });
+        });
+    });
+
+</script>
+
+    <script src="{{ asset('admin/ckeditor_4/ckeditor/ckeditor.js')}}"></script>
+
+    <script>
+        CKEDITOR.replace( 'editor1' );
     </script>
  @endsection
 

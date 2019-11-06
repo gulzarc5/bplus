@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
 use Auth;
+use Illuminate\Pagination\Paginator;
 
 class ProductController extends Controller
 {
@@ -17,15 +18,18 @@ class ProductController extends Controller
             return redirect()->back();
         }
 
-    	$products_sellers=DB::table('products')
-    	->select('products.seller_id as seller_id', 'seller.name as seller_name')
-    	->join('seller','products.seller_id','=','seller.id')
+    	$products_sellers_query=DB::table('products')
+    	->leftjoin('seller','products.seller_id','=','seller.id')
     	->whereNull('products.deleted_at')
     	->where('products.status',1)
-    	->where('products.second_category',$second_category)
-    	->distinct()
-    	->get();
-        
+        ->where('products.second_category',$second_category)
+        ->select('products.seller_id as seller_id')
+        ->groupBy('products.seller_id')
+        ->orderby('products.seller_id', 'ASC');
+        $products_sellers = $products_sellers_query->paginate(10);
+
+        $total_data =  $products_sellers_query->distinct('products.seller_id')->count('products.seller_id');
+
     	$products = [];
 
     	foreach ($products_sellers as $products_Seller) {
@@ -37,7 +41,8 @@ class ProductController extends Controller
 	    	->get();
 
             $seller_address = DB::table('seller_details')
-            ->select('state.name as state_name','city.name as city_name')
+            ->select('state.name as state_name','city.name as city_name','seller.name as seller_name')
+            ->leftjoin('seller','seller.id','=','seller_details.seller_id')
             ->join('state','seller_details.state_id','=','state.id')
             ->join('city','seller_details.city_id','=','city.id')
             ->whereNull('seller_details.deleted_at')
@@ -48,14 +53,14 @@ class ProductController extends Controller
     		$products[]=[
     			'seller_id' => $products_Seller->seller_id,
                 'second_category' => $second_category,
-    			'seller_name' => $products_Seller->seller_name,
+    			'seller_name' => $seller_address->seller_name,
                 'seller_state' => $seller_address->state_name,
                 'seller_city' => $seller_address->city_name,
     			'product' => $product_against_seller,
     		];
     	}
 
-    	return view('web.product.product_saller',compact('products'));
+    	return view('web.product.product_saller',compact('products','products_sellers','second_category','paginator'));
     }
 
     public function productView($seller_id,$second_category)
@@ -88,41 +93,25 @@ class ProductController extends Controller
 
 
         $products_brands=DB::table('products')
-            ->select('brand_name.id as brand_id', 'brand_name.name as brand_name',DB::raw('count(*) as total'))
-            ->join('brand_name','products.brand_id','=','brand_name.id')
+            ->select('brands.id as brand_id', 'brands.name as brand_name',DB::raw('count(*) as total'))
+            ->join('brands','products.brand_id','=','brands.id')
             ->whereNull('products.deleted_at')
             ->where('products.status',1)
             ->where('products.second_category',$second_category)
             ->distinct()
-            ->groupBy('brand_name.id','brand_name.name')
+            ->groupBy('brands.id','brands.name')
             ->get();
 
         $product_colors = DB::table('products')
-            ->select('color.id as color_id','color.name as color_name','color.value as color_value',DB::raw('count(*) as total'))
+            ->select('colors.id as color_id','colors.name as color_name','colors.value as color_value',DB::raw('count(*) as total'))
             ->join('product_colors','products.id','=','product_colors.product_id')
-            ->join('color','product_colors.color_id','=','color.id')
+            ->join('colors','product_colors.color_id','=','colors.id')
             ->where('products.second_category',$second_category)
-            ->distinct('color.id')
-            ->groupBy('color.id','color.name','color.value')
+            ->distinct('colors.id')
+            ->groupBy('colors.id','colors.name','colors.value')
             ->get();
 
-        /// Pagination
-        $current_page = 1;
-        $product_count = DB::table('products')
-            ->whereNull('deleted_at')
-            ->where('status',1)
-            ->where('second_category',$second_category)
-            ->where('seller_id',$seller_id)
-            ->count();
-            
-        $total_page = intval(ceil($product_count / 12 ));
-        $limit = ($current_page*12)-12;
-
-        $pagination = [
-            'current_page' => $current_page,
-            'total_page' => $total_page,
-            'total_product' => $product_count,
-        ];
+  
 
         $product_min_max_price = DB::table('products')
             ->select(DB::raw('min(price) as min_price'),DB::raw('max(price) as max_price'))
@@ -138,12 +127,10 @@ class ProductController extends Controller
             ->where('status',1)
             ->where('second_category',$second_category)
             ->where('seller_id',$seller_id)
-            ->skip($limit)
-            ->take(12)
-            ->get();
+            ->paginate(12);
          
         $second_category_name = DB::table('second_category')->where('id',$second_category)->first();
-        return view('web.product.product_category',compact('seller_second_category','products_sellers','products_brands','product_colors','product_against_seller','second_category_name','pagination','product_min_max_price','seller_id'));
+        return view('web.product.product_category',compact('seller_second_category','products_sellers','products_brands','product_colors','product_against_seller','second_category_name','product_min_max_price','seller_id'));
     }
 
     public function productFilter(Request $request)
@@ -159,51 +146,6 @@ class ProductController extends Controller
         $prices = $request->input('prices');
         $colors = $request->input('colors');
         $sort = $request->input('sort');
-        
-
-        // $products_sellers=DB::table('products')
-        //     ->select('products.seller_id as seller_id', 'seller.name as seller_name')
-        //     ->join('seller','products.seller_id','=','seller.id')
-        //     ->whereNull('products.deleted_at')
-        //     ->where('products.status',1)
-        //     ->where('products.second_category',$second_category)
-        //     ->distinct()
-        //     ->get();
-
-        // $seller_second_category = DB::table('products')
-        //     ->select('products.seller_id as seller_id','products.second_category as second_category','second_category.name as category_name')
-        //     ->join('second_category','products.second_category','=','second_category.id')
-        //     ->whereNull('products.deleted_at')
-        //     ->where('products.status',1);
-        // if (isset($sellers) && !empty($sellers) && count($sellers) > 0 ) {
-        //     foreach ($sellers as $key => $seller) {
-        //        $seller_second_category->where('products.seller_id',$seller);
-        //     }            
-        //  }
-        //  $seller_second_category->distinct()
-        //     ->get();
-
-        // $products_brands=DB::table('products')
-        //     ->select('brand_name.id as brand_id', 'brand_name.name as brand_name',DB::raw('count(*) as total'))
-        //     ->join('brand_name','products.brand_id','=','brand_name.id')
-        //     ->whereNull('products.deleted_at')
-        //     ->where('products.status',1)
-        //     ->where('products.second_category',$second_category)
-        //     ->distinct()
-        //     ->groupBy('brand_name.id','brand_name.name')
-        //     ->get();
-
-        // $product_colors = DB::table('products')
-        //     ->select('color.id as color_id','color.name as color_name','color.value as color_value',DB::raw('count(*) as total'))
-        //     ->join('product_colors','products.id','=','product_colors.product_id')
-        //     ->join('color','product_colors.color_id','=','color.id')
-        //     ->where('products.second_category',$second_category)
-        //     ->distinct('color.id')
-        //     ->groupBy('color.id','color.name','color.value')
-        //     ->get();
-
-        // dd($sellers);
-        $current_page = 1;
         
         $product_count = DB::table('products')
             ->select('products.*')
@@ -258,22 +200,10 @@ class ProductController extends Controller
             $product_count->whereBetween('products.price',[$prices[0],$prices[1]]);                     
          }
 
-        $product_Query = clone $product_count;
-        $total_product = $product_count->count();
-
-        $total_page = intval(ceil($total_product / 12 ));
-        $limit = ($current_page*12)-12;
-        $pagination = [
-            'current_page' => $current_page,
-            'total_page' => $total_page,
-            'total_product' => $total_product,
-        ];
-
               // DB::enableQueryLog();
-        $product_against_seller=$product_Query            
-            ->distinct('products.id')
-            ->skip($limit)
-            ->take(12);
+        $product_against_seller=$product_count            
+            ->distinct('products.id');
+            
         if (isset($sort) && !empty($sort)) {
             if ($sort == 'newest') {
                 $product_against_seller->orderBy('products.id', 'asc');
@@ -288,9 +218,7 @@ class ProductController extends Controller
                 $product_against_seller->orderBy('products.name', 'desc');
             }
         }
-        $product_against_seller = $product_against_seller->get();
-                //    dd(str_replace_array('?', \DB::getQueryLog()[0]['bindings'], 
-                // \DB::getQueryLog()[0]['query']));
+        $product_against_seller = $product_against_seller->paginate(12);
 
        
        $product_min_max_price = DB::table('products')
@@ -316,13 +244,13 @@ class ProductController extends Controller
                 // \DB::getQueryLog()[0]['query']));
 
 
-        $response=[
-            'pagination'=> $pagination,
-            'products' => $product_against_seller,
-            'product_min_max_price' => $product_min_max_price,
-        ];
+        // $response=[
+        //     'pagination'=> $pagination,
+        //     'products' => $product_against_seller,
+        //     'product_min_max_price' => $product_min_max_price,
+        // ];
 
-        return response()->json($response, 200);
+        return view('web.product.pagination.product_with_category',compact('product_against_seller'));
 
     }
 
@@ -354,14 +282,21 @@ class ProductController extends Controller
         ->where('status',1)
         ->get();
         $product_color = DB::table('product_colors')
-        ->select('product_colors.id as color_id','color.name as color_name','color.value as color_value')
-        ->join('color','product_colors.color_id','color.id')
-        ->where('product_colors.product_id',$product_id)
-        ->where('product_colors.status','1')
-        ->whereNull('product_colors.deleted_at')
-        ->get();
+            ->select('product_colors.id as color_id','colors.name as color_name','colors.value as color_value')
+            ->join('colors','product_colors.color_id','colors.id')
+            ->where('product_colors.product_id',$product_id)
+            ->where('product_colors.status','1')
+            ->whereNull('product_colors.deleted_at')
+            ->get();
         
-        return view('web.product.product_details',compact('product','seller_details','product_images','product_color'));
+        $related_products = DB::table('products')
+            ->whereNull('deleted_at')
+            ->where('status',1)
+            ->where('second_category',$product->second_category)
+            ->inRandomOrder()
+            ->limit(8)
+            ->get();
+        return view('web.product.product_details',compact('product','seller_details','product_images','product_color','related_products'));
 
     }
 }
